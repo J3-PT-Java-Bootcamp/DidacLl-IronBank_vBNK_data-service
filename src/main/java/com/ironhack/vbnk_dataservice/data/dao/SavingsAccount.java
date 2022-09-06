@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Entity
 @NoArgsConstructor
 @Getter @Setter
-public class SavingsAccount extends Account {
+public class SavingsAccount extends VBAccount {
     BigDecimal interestRate,penaltyFee;
     @Convert(converter = MoneyConverter.class)
     Money minimumBalance;

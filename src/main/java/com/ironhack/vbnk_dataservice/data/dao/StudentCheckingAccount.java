@@ -9,6 +9,6 @@ import javax.persistence.Entity;
 @Entity
 @NoArgsConstructor
 @Getter @Setter
-public class StudentCheckingAccount extends Account {
+public class StudentCheckingAccount extends VBAccount {
 
 }

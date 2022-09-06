@@ -20,7 +20,7 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor
 @Getter @Setter
-public abstract class Account {
+public abstract class VBAccount {
     @Id
     @GeneratedValue
     UUID id;

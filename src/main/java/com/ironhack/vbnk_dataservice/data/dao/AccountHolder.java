@@ -1,6 +1,7 @@
 package com.ironhack.vbnk_dataservice.data.dao;
 
 import com.ironhack.vbnk_dataservice.data.Address;
+import com.ironhack.vbnk_dataservice.data.dto.AccountHolderDTO;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,4 +29,11 @@ public class AccountHolder extends VBUser{
     })
     Address mailingAddress;
 
+    public static AccountHolder fromDTO(AccountHolderDTO dto){
+        var retVal= new AccountHolder().setDateOfBirth(dto.getDateOfBirth())
+                .setPrimaryAddress(dto.getPrimaryAddress())
+                .setMailingAddress(dto.getMailingAddress());
+        retVal.setId(dto.getId()).setName(dto.getName());
+        return retVal;
+    }
 }

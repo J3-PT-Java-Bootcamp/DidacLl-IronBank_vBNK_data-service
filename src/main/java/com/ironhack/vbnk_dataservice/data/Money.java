@@ -1,12 +1,12 @@
 package com.ironhack.vbnk_dataservice.data;
 
-import java.math.RoundingMode;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Currency;
 
 public class Money {
 
-    private static final Currency USD = Currency.getInstance("USD");
+    private static final Currency EUR = Currency.getInstance("EUR");
     private static final RoundingMode DEFAULT_ROUNDING = RoundingMode.HALF_EVEN;
 
     private final Currency currency;
@@ -32,7 +32,7 @@ public class Money {
      * Class constructor specifying amount. Uses default RoundingMode HALF_EVEN and default currency USD.
      **/
     public Money(BigDecimal amount) {
-        this(amount, USD, DEFAULT_ROUNDING);
+        this(amount, EUR, DEFAULT_ROUNDING);
     }
 
     public BigDecimal increaseAmount(Money money) {
