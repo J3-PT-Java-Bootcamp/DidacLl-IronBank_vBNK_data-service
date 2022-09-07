@@ -1,4 +1,4 @@
-package com.ironhack.vbnk_dataservice.controllers;
+package com.ironhack.vbnk_dataservice.controllers.impl;
 
 import com.ironhack.vbnk_dataservice.data.Address;
 import com.ironhack.vbnk_dataservice.data.dto.AccountHolderDTO;
@@ -43,7 +43,7 @@ public class UserControllerWeb {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<VBUserDTO> get(@RequestParam String id) throws HttpResponseException {
-        return new ResponseEntity<>((VBUserDTO) service.getUnknown(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(service.getUnknown(id), HttpStatus.FOUND);
     }
 
     @GetMapping("/admin")

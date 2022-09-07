@@ -11,12 +11,12 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long>, JpaSpecificationExecutor<Notification> {
-    List<Notification> getAllByOwnerId(String id);
+    List<Notification> findAllByOwnerId(String id);
 
-    List<Notification> getAllByOwnerIdAndState(String id, NotificationState state);
+    List<Notification> findAllByOwnerIdAndState(String id, NotificationState state);
 
-    List<Notification> getAllByOwnerIdAndType(String id, NotificationType type);
+    List<Notification> findAllByOwnerIdAndType(String id, NotificationType type);
 
-    List<Notification> getAllByOwnerIdAndTypeAndState(String id, NotificationType type, NotificationState state);
+    List<Notification> findAllByOwnerIdAndTypeAndState(String id, NotificationType type, NotificationState state);
 
 }

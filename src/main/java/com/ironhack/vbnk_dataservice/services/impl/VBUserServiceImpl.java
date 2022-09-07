@@ -1,4 +1,4 @@
-package com.ironhack.vbnk_dataservice.services;
+package com.ironhack.vbnk_dataservice.services.impl;
 
 import com.ironhack.vbnk_dataservice.data.dao.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.ThirdParty;
@@ -11,6 +11,7 @@ import com.ironhack.vbnk_dataservice.data.dto.VBUserDTO;
 import com.ironhack.vbnk_dataservice.repositories.AccountHolderRepository;
 import com.ironhack.vbnk_dataservice.repositories.AdminRepository;
 import com.ironhack.vbnk_dataservice.repositories.ThirdPartyRepository;
+import com.ironhack.vbnk_dataservice.services.VBUserService;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

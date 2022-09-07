@@ -1,11 +1,17 @@
 package com.ironhack.vbnk_dataservice.data.dao;
 
+import com.ironhack.vbnk_dataservice.data.dto.AccountHolderDTO;
+import com.ironhack.vbnk_dataservice.data.dto.AdminDTO;
+import com.ironhack.vbnk_dataservice.data.dto.ThirdPartyDTO;
+import com.ironhack.vbnk_dataservice.data.dto.VBUserDTO;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.http.client.HttpResponseException;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.http.HttpStatus;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -26,4 +32,13 @@ public abstract class VBUser {
     Instant creationDate;
     @UpdateTimestamp
     Instant updateDate;
+
+    public static VBUser fromUnknownDTO(VBUserDTO unknown) throws HttpResponseException {
+        return switch (unknown.getClass().getSimpleName()){
+            case "AccountHolderDTO"->AccountHolder.fromDTO((AccountHolderDTO) unknown);
+            case "AdminDTO"->VBAdmin.fromDTO((AdminDTO) unknown);
+            case "ThirdPartyDTO"->ThirdParty.fromDTO((ThirdPartyDTO) unknown);
+            default -> throw new HttpResponseException(HttpStatus.I_AM_A_TEAPOT.value(),HttpStatus.I_AM_A_TEAPOT.getReasonPhrase());
+        };
+    }
 }
