@@ -29,4 +29,6 @@ public interface VBUserService {
     List<ThirdPartyDTO> getAllThirdParty();
 
     List<AdminDTO> getAllAdmin();
+
+    AdminDTO getRandomAdmin();
 }

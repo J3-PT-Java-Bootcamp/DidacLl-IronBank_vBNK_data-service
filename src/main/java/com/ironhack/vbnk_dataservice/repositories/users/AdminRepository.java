@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AdminRepository extends com.ironhack.vbnk_dataservice.repositories.users.UserRepository, JpaRepository<VBAdmin, String> {
+public interface AdminRepository extends UserRepository, JpaRepository<VBAdmin, String> {
 }

@@ -2,8 +2,8 @@ package com.ironhack.vbnk_dataservice.data.dao.accounts;
 
 import com.ironhack.vbnk_dataservice.data.AccountStatus;
 import com.ironhack.vbnk_dataservice.data.Money;
+import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
-import com.ironhack.vbnk_dataservice.data.dao.users.VBUser;
 import com.ironhack.vbnk_dataservice.utils.CryptoConverter;
 import com.ironhack.vbnk_dataservice.utils.MoneyConverter;
 import com.sun.istack.NotNull;
@@ -37,12 +37,12 @@ public abstract class VBAccount {
     @ManyToOne
     @JoinColumn(name = "primary_owner_id")
     @NotNull
-    VBUser primaryOwner;
+    AccountHolder primaryOwner;
 
     @ManyToOne
     @JoinColumn(name = "secondary_owner_id")
     @Nullable
-    VBUser secondaryOwner;
+    AccountHolder secondaryOwner;
 
     @CreationTimestamp
     Instant creationDate;

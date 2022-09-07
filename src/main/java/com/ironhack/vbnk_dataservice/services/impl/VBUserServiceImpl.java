@@ -115,6 +115,12 @@ public class VBUserServiceImpl implements VBUserService {
         return adminRepository.findAll().stream().map(AdminDTO::fromEntity).collect(Collectors.toCollection(ArrayList::new));
     }
 
+    @Override
+    public AdminDTO getRandomAdmin() {
+        // TODO: 07/09/2022  
+        return null;
+    }
+
     //-------------------------------------------------------------------------------------------------CREATE METHODS
     @Override
     public void create(VBUserDTO dto) throws HttpResponseException {

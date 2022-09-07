@@ -3,8 +3,8 @@ package com.ironhack.vbnk_dataservice.data.dto.accounts;
 import com.ironhack.vbnk_dataservice.data.AccountStatus;
 import com.ironhack.vbnk_dataservice.data.Money;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.VBAccount;
+import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
-import com.ironhack.vbnk_dataservice.data.dao.users.VBUser;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +15,8 @@ public class AccountDTO {
     UUID id;
     Money balance;
     String secretKey;
-    VBUser primaryOwner;
-    VBUser secondaryOwner;
+    AccountHolder primaryOwner;
+    AccountHolder secondaryOwner;
     AccountStatus status;
     VBAdmin administratedBy;
 
