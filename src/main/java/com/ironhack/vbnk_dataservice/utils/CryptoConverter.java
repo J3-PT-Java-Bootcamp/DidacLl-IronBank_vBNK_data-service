@@ -15,13 +15,13 @@ public class CryptoConverter implements AttributeConverter<String, String> {
     private static final byte[] KEY = "MySuperSecretKey".getBytes();
 
     @Override
-    public String convertToDatabaseColumn(String ccNumber) {
+    public String convertToDatabaseColumn(String secretKey) {
         // do some encryption
         Key key = new SecretKeySpec(KEY, "AES");
         try {
             Cipher c = Cipher.getInstance(ALGORITHM);
             c.init(Cipher.ENCRYPT_MODE, key);
-            return Base64.toBase64String(c.doFinal(ccNumber.getBytes()));
+            return Base64.toBase64String(c.doFinal(secretKey.getBytes()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

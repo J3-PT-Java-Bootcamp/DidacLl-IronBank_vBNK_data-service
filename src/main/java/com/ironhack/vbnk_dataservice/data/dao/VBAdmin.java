@@ -17,8 +17,11 @@ public class VBAdmin extends VBUser{
     List<Notification> pendingNotifications;
 
     public static VBAdmin fromDTO(AdminDTO dto) {
-        var retVal = new VBAdmin();
-        retVal.setId(dto.getId()).setName(dto.getName());
-        return retVal;
+        return newVBAdmin(dto.getName(), dto.getId());
+    }
+    public static VBAdmin newVBAdmin(String name, String id){
+        var user= new VBAdmin();
+        user.setId(id).setName(name);
+        return user;
     }
 }

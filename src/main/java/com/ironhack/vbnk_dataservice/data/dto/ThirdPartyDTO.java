@@ -13,9 +13,12 @@ public class ThirdPartyDTO extends VBUserDTO{
     boolean trusted;
 
     public static ThirdPartyDTO fromEntity(ThirdParty entity) {
-        var retVal = new ThirdPartyDTO().setHashKey(entity.getHashKey()).setTrusted(entity.isTrusted());
-        retVal.setName(entity.getName())
-                .setId(entity.getId());
-        return retVal;
+      return newThirdPartyDTO(entity.getName(), entity.getId()).setHashKey(entity.getHashKey()).setTrusted(entity.isTrusted());
+    }
+
+    public static ThirdPartyDTO newThirdPartyDTO(String name, String id){
+        var user= new ThirdPartyDTO();
+        user.setId(id).setName(name);
+        return user;
     }
 }

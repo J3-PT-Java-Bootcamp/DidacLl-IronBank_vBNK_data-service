@@ -70,4 +70,7 @@ public class Money {
     public String toString() {
         return getCurrency().getSymbol() + " " + getAmount();
     }
+    public String toParseableString(){
+        return amount+"//"+currency.getCurrencyCode();
+    }
 }

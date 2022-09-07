@@ -9,7 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -18,8 +18,7 @@ import java.util.UUID;
 public abstract class VBUser {
 
     @Id
-    @GeneratedValue
-    UUID id;
+    String id;
     @NotNull
     String name;
 

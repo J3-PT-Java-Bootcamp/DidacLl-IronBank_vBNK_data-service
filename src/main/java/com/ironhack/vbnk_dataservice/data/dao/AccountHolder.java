@@ -30,10 +30,13 @@ public class AccountHolder extends VBUser{
     Address mailingAddress;
 
     public static AccountHolder fromDTO(AccountHolderDTO dto){
-        var retVal= new AccountHolder().setDateOfBirth(dto.getDateOfBirth())
+       return newAccountHolder(dto.getName(), dto.getId()).setDateOfBirth(dto.getDateOfBirth())
                 .setPrimaryAddress(dto.getPrimaryAddress())
                 .setMailingAddress(dto.getMailingAddress());
-        retVal.setId(dto.getId()).setName(dto.getName());
-        return retVal;
+    }
+    public static AccountHolder newAccountHolder(String name, String id){
+        var user= new AccountHolder();
+        user.setId(id).setName(name);
+        return user;
     }
 }

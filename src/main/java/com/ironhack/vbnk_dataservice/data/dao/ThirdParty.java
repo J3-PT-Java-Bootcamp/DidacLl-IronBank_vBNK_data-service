@@ -1,5 +1,6 @@
 package com.ironhack.vbnk_dataservice.data.dao;
 
+import com.ironhack.vbnk_dataservice.data.dto.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.ThirdPartyDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,8 +18,12 @@ public class ThirdParty extends VBUser{
 
 
     public static ThirdParty fromDTO(ThirdPartyDTO dto) {
-        var retVal = new ThirdParty().setHashKey(dto.getHashKey()).setTrusted(dto.isTrusted());
-        retVal.setId(dto.getId()).setName(dto.getName());
-        return retVal;
+        return newThirdParty(dto.getName(), dto.getId()).setHashKey(dto.getHashKey()).setTrusted(dto.isTrusted());
+    }
+
+    public static ThirdParty newThirdParty(String name, String id){
+        var user= new ThirdParty();
+        user.setId(id).setName(name);
+        return user;
     }
 }

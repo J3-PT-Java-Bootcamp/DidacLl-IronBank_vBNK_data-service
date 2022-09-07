@@ -18,11 +18,13 @@ public class AccountHolderDTO extends VBUserDTO {
 
 
     public static AccountHolderDTO fromEntity(AccountHolder entity) {
-        var retVal = new AccountHolderDTO().setDateOfBirth(entity.getDateOfBirth())
+        return newAccountHolderDTO(entity.getName(), entity.getId()).setDateOfBirth(entity.getDateOfBirth())
                 .setMailingAddress(entity.getMailingAddress())
                 .setPrimaryAddress(entity.getPrimaryAddress());
-        retVal.setName(entity.getName())
-                .setId(entity.getId());
-        return retVal;
+    }
+    public static AccountHolderDTO newAccountHolderDTO(String name, String id){
+        var user= new AccountHolderDTO();
+        user.setId(id).setName(name);
+        return user;
     }
 }
