@@ -8,8 +8,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @SpringBootApplication
 public class VBnkDataServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(VBnkDataServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(VBnkDataServiceApplication.class, args);
+    }
 
 }

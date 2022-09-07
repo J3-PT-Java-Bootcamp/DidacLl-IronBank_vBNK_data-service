@@ -1,5 +1,6 @@
 package com.ironhack.vbnk_dataservice.utils;
 
+
 import org.bouncycastle.util.encoders.Base64;
 
 import javax.crypto.Cipher;
@@ -8,7 +9,7 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.security.Key;
 
-@Converter(autoApply = true)
+@Converter()
 public class CryptoConverter implements AttributeConverter<String, String> {
 
     private static final String ALGORITHM = "AES/ECB/PKCS5Padding";
@@ -24,6 +25,7 @@ public class CryptoConverter implements AttributeConverter<String, String> {
             return Base64.toBase64String(c.doFinal(secretKey.getBytes()));
         } catch (Exception e) {
             throw new RuntimeException(e);
+//            return secretKey;
         }
     }
 

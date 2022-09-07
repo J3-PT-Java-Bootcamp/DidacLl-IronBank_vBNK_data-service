@@ -1,40 +1,86 @@
 package com.ironhack.vbnk_dataservice.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ironhack.vbnk_dataservice.data.Address;
+import com.ironhack.vbnk_dataservice.repositories.AccountHolderRepository;
+import com.ironhack.vbnk_dataservice.repositories.AdminRepository;
+import com.ironhack.vbnk_dataservice.repositories.ThirdPartyRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.ironhack.vbnk_dataservice.data.dao.AccountHolder.newAccountHolder;
+import static com.ironhack.vbnk_dataservice.data.dao.ThirdParty.newThirdParty;
+import static com.ironhack.vbnk_dataservice.data.dao.VBAdmin.newVBAdmin;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
 class UserControllerWebTest {
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    AccountHolderRepository accountHolderRepository;
+    @Autowired
+    AdminRepository adminRepository;
+    @Autowired
+    ThirdPartyRepository thirdPartyRepository;
     @Autowired
     WebApplicationContext webApplicationContext;
-
     private MockMvc mockMvc;
 
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
     @BeforeEach
     void setUp() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(webApplicationContext)
+                .build();
+        var address = new Address().setAdditionalInfo("KJSGD").setCity("Oklahoma").setCountry("India")
+                .setStreet("Main street").setStreetNumber(45).setZipCode(8080);
+
+        accountHolderRepository.saveAll(List.of(
+                newAccountHolder("Antonio", "aaa").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antonia", "aab").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antonino", "aac").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antoine", "aad").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address)
+        ));
+        adminRepository.saveAll(List.of(
+                newVBAdmin("Antonio", "bbb"),
+                newVBAdmin("Antonia", "bba"),
+                newVBAdmin("Antonino", "bbc"),
+                newVBAdmin("Antoine", "bbd")
+        ));
+        thirdPartyRepository.saveAll(List.of(
+                newThirdParty("Antonio", "abb"),
+                newThirdParty("Antonia", "aba"),
+                newThirdParty("Antonino", "abc"),
+                newThirdParty("Antoine", "abd")
+        ));
     }
 
     @AfterEach
     void tearDown() {
+        accountHolderRepository.deleteAll();
+        thirdPartyRepository.deleteAll();
+        adminRepository.deleteAll();
     }
 
     @Test
-    void get_test() {
+    void get_test() throws Exception {
+        var result = mockMvc
+                .perform(get("/v1/users?id=aaa"))
+                .andExpect(status().isFound()) // check status code 200
+                .andReturn();
+
+        assertTrue(result.getResponse().getContentAsString().contains("Antonio"));
     }
 
     @Test

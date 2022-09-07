@@ -8,11 +8,12 @@ import lombok.Setter;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Address {
-    String street,city,country, additionalInfo;
-    Integer streetNumber,zipCode;
+    String street, city, country, additionalInfo;
+    Integer streetNumber, zipCode;
 
 }

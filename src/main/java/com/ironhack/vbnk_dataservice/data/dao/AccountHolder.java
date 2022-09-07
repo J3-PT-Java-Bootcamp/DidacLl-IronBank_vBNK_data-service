@@ -1,5 +1,6 @@
 package com.ironhack.vbnk_dataservice.data.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ironhack.vbnk_dataservice.data.Address;
 import com.ironhack.vbnk_dataservice.data.dto.AccountHolderDTO;
 import com.sun.istack.NotNull;
@@ -9,14 +10,17 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-public class AccountHolder extends VBUser{
+public class AccountHolder extends VBUser {
     @NotNull
     LocalDate dateOfBirth;
-    @NotNull @Embedded
+    @NotNull
+    @Embedded
     Address primaryAddress;
     @Embedded
     @AttributeOverrides({
@@ -28,14 +32,18 @@ public class AccountHolder extends VBUser{
             @AttributeOverride(name = "zipCode", column = @Column(name = "mail_zip_code")),
     })
     Address mailingAddress;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @JsonIgnore
+    List<Notification> pendingNotifications;
 
-    public static AccountHolder fromDTO(AccountHolderDTO dto){
-       return newAccountHolder(dto.getName(), dto.getId()).setDateOfBirth(dto.getDateOfBirth())
+    public static AccountHolder fromDTO(AccountHolderDTO dto) {
+        return newAccountHolder(dto.getName(), dto.getId()).setDateOfBirth(dto.getDateOfBirth())
                 .setPrimaryAddress(dto.getPrimaryAddress())
                 .setMailingAddress(dto.getMailingAddress());
     }
-    public static AccountHolder newAccountHolder(String name, String id){
-        var user= new AccountHolder();
+
+    public static AccountHolder newAccountHolder(String name, String id) {
+        var user = new AccountHolder();
         user.setId(id).setName(name);
         return user;
     }

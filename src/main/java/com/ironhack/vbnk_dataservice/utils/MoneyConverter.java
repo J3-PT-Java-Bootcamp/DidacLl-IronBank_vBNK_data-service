@@ -4,6 +4,8 @@ import com.ironhack.vbnk_dataservice.data.Money;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+import java.math.BigDecimal;
+import java.util.Currency;
 
 @Converter(autoApply = true)
 public class MoneyConverter implements AttributeConverter<Money, String> {
@@ -23,7 +25,7 @@ public class MoneyConverter implements AttributeConverter<Money, String> {
 //        } catch (Exception e) {
 //            throw new RuntimeException(e);
 //        }
-        return null;
+        return value.toParseableString();
     }
 
     @Override
@@ -38,6 +40,7 @@ public class MoneyConverter implements AttributeConverter<Money, String> {
 //        } catch (Exception e) {
 //            throw new RuntimeException(e);
 //        }
-        return null;
+        var val = dbData.split("//");
+        return new Money(new BigDecimal(val[0]), Currency.getInstance(val[1]));
     }
 }

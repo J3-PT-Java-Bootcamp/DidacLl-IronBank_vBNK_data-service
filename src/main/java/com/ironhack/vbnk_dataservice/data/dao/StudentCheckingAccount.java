@@ -8,7 +8,8 @@ import javax.persistence.Entity;
 
 @Entity
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class StudentCheckingAccount extends VBAccount {
 
 }

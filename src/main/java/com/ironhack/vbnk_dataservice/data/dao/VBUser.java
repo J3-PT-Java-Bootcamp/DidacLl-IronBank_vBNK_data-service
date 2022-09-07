@@ -21,8 +21,8 @@ public abstract class VBUser {
     String id;
     @NotNull
     String name;
-
     @CreationTimestamp
+    @Column(updatable = false)
     Instant creationDate;
     @UpdateTimestamp
     Instant updateDate;

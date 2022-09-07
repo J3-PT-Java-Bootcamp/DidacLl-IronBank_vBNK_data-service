@@ -2,10 +2,9 @@ package com.ironhack.vbnk_dataservice.utils;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class CryptoConverterTest {
-    CryptoConverter conv= new CryptoConverter();
+    CryptoConverter conv = new CryptoConverter();
+
     @Test
     void convertToDatabaseColumn_test() {
         System.out.println(conv.convertToDatabaseColumn("dlb12345"));
