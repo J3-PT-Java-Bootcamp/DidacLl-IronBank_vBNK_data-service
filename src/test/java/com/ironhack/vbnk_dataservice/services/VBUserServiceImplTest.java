@@ -2,9 +2,9 @@ package com.ironhack.vbnk_dataservice.services;
 
 import com.ironhack.vbnk_dataservice.data.Address;
 import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
-import com.ironhack.vbnk_dataservice.repositories.AccountHolderRepository;
-import com.ironhack.vbnk_dataservice.repositories.AdminRepository;
-import com.ironhack.vbnk_dataservice.repositories.ThirdPartyRepository;
+import com.ironhack.vbnk_dataservice.repositories.users.AccountHolderRepository;
+import com.ironhack.vbnk_dataservice.repositories.users.AdminRepository;
+import com.ironhack.vbnk_dataservice.repositories.users.ThirdPartyRepository;
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpResponseException;
 import org.junit.jupiter.api.AfterEach;

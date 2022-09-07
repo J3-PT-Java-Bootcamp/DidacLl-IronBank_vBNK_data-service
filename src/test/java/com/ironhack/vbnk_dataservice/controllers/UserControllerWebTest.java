@@ -2,9 +2,9 @@ package com.ironhack.vbnk_dataservice.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ironhack.vbnk_dataservice.data.Address;
-import com.ironhack.vbnk_dataservice.repositories.AccountHolderRepository;
-import com.ironhack.vbnk_dataservice.repositories.AdminRepository;
-import com.ironhack.vbnk_dataservice.repositories.ThirdPartyRepository;
+import com.ironhack.vbnk_dataservice.repositories.users.AccountHolderRepository;
+import com.ironhack.vbnk_dataservice.repositories.users.AdminRepository;
+import com.ironhack.vbnk_dataservice.repositories.users.ThirdPartyRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

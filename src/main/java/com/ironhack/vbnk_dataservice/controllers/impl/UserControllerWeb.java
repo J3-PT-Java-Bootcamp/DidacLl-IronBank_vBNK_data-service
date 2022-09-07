@@ -5,7 +5,7 @@ import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
-import com.ironhack.vbnk_dataservice.repositories.AccountHolderRepository;
+import com.ironhack.vbnk_dataservice.repositories.users.AccountHolderRepository;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.beans.factory.annotation.Autowired;

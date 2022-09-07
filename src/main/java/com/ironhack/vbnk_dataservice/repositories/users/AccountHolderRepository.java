@@ -1,4 +1,4 @@
-package com.ironhack.vbnk_dataservice.repositories;
+package com.ironhack.vbnk_dataservice.repositories.users;
 
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import org.springframework.data.jpa.repository.JpaRepository;
