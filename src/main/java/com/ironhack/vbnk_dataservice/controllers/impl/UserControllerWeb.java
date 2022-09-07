@@ -1,10 +1,10 @@
 package com.ironhack.vbnk_dataservice.controllers.impl;
 
 import com.ironhack.vbnk_dataservice.data.Address;
-import com.ironhack.vbnk_dataservice.data.dto.AccountHolderDTO;
-import com.ironhack.vbnk_dataservice.data.dto.AdminDTO;
-import com.ironhack.vbnk_dataservice.data.dto.ThirdPartyDTO;
-import com.ironhack.vbnk_dataservice.data.dto.VBUserDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
 import com.ironhack.vbnk_dataservice.repositories.AccountHolderRepository;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import org.apache.http.client.HttpResponseException;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.ironhack.vbnk_dataservice.data.dao.AccountHolder.newAccountHolder;
+import static com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder.newAccountHolder;
 
 @RestController
 @RequestMapping(path = "v1/users")

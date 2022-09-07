@@ -1,7 +1,7 @@
-package com.ironhack.vbnk_dataservice.data.dto;
+package com.ironhack.vbnk_dataservice.data.dto.users;
 
 import com.ironhack.vbnk_dataservice.data.Address;
-import com.ironhack.vbnk_dataservice.data.dao.AccountHolder;
+import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

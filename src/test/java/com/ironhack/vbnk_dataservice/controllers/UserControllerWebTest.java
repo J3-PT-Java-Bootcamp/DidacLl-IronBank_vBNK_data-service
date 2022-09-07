@@ -17,9 +17,9 @@ import org.springframework.web.context.WebApplicationContext;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.ironhack.vbnk_dataservice.data.dao.AccountHolder.newAccountHolder;
-import static com.ironhack.vbnk_dataservice.data.dao.ThirdParty.newThirdParty;
-import static com.ironhack.vbnk_dataservice.data.dao.VBAdmin.newVBAdmin;
+import static com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder.newAccountHolder;
+import static com.ironhack.vbnk_dataservice.data.dao.users.ThirdParty.newThirdParty;
+import static com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin.newVBAdmin;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

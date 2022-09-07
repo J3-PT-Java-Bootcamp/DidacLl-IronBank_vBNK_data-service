@@ -1,13 +1,13 @@
 package com.ironhack.vbnk_dataservice.services.impl;
 
-import com.ironhack.vbnk_dataservice.data.dao.AccountHolder;
-import com.ironhack.vbnk_dataservice.data.dao.ThirdParty;
-import com.ironhack.vbnk_dataservice.data.dao.VBAdmin;
-import com.ironhack.vbnk_dataservice.data.dao.VBUser;
-import com.ironhack.vbnk_dataservice.data.dto.AccountHolderDTO;
-import com.ironhack.vbnk_dataservice.data.dto.AdminDTO;
-import com.ironhack.vbnk_dataservice.data.dto.ThirdPartyDTO;
-import com.ironhack.vbnk_dataservice.data.dto.VBUserDTO;
+import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
+import com.ironhack.vbnk_dataservice.data.dao.users.ThirdParty;
+import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
+import com.ironhack.vbnk_dataservice.data.dao.users.VBUser;
+import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
 import com.ironhack.vbnk_dataservice.repositories.AccountHolderRepository;
 import com.ironhack.vbnk_dataservice.repositories.AdminRepository;
 import com.ironhack.vbnk_dataservice.repositories.ThirdPartyRepository;

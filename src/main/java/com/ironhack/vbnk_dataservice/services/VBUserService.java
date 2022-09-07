@@ -1,9 +1,9 @@
 package com.ironhack.vbnk_dataservice.services;
 
-import com.ironhack.vbnk_dataservice.data.dto.AccountHolderDTO;
-import com.ironhack.vbnk_dataservice.data.dto.AdminDTO;
-import com.ironhack.vbnk_dataservice.data.dto.ThirdPartyDTO;
-import com.ironhack.vbnk_dataservice.data.dto.VBUserDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
 import org.apache.http.client.HttpResponseException;
 
 import java.util.List;

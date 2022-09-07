@@ -1,6 +1,6 @@
-package com.ironhack.vbnk_dataservice.data.dto;
+package com.ironhack.vbnk_dataservice.data.dto.users;
 
-import com.ironhack.vbnk_dataservice.data.dao.VBAdmin;
+import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 
 public class AdminDTO extends VBUserDTO {
 

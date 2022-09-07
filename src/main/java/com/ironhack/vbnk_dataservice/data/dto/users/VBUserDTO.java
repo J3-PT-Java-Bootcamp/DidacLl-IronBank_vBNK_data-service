@@ -1,4 +1,4 @@
-package com.ironhack.vbnk_dataservice.data.dto;
+package com.ironhack.vbnk_dataservice.data.dto.users;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

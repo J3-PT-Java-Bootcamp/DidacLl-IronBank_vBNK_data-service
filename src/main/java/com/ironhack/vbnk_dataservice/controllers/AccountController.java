@@ -1,9 +1,9 @@
 package com.ironhack.vbnk_dataservice.controllers;
 
+import com.ironhack.vbnk_dataservice.data.dto.accounts.AccountDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
-import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-public interface UserController {
+public interface AccountController {
 
     //------------------------------------------------------------------------------GET END POINTS
-    ResponseEntity<VBUserDTO> get(String id) throws HttpException;
+    ResponseEntity<AccountDTO> getUnknownAccount(String id) throws HttpException;
 
     ResponseEntity<AdminDTO> getAdmin(String id);
 

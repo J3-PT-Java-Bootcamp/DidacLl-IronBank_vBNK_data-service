@@ -2,6 +2,7 @@ package com.ironhack.vbnk_dataservice.data.dao;
 
 import com.ironhack.vbnk_dataservice.data.NotificationState;
 import com.ironhack.vbnk_dataservice.data.NotificationType;
+import com.ironhack.vbnk_dataservice.data.dao.users.VBUser;
 import com.ironhack.vbnk_dataservice.data.dto.NotificationDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

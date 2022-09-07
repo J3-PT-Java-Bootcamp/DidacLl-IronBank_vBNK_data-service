@@ -1,8 +1,9 @@
-package com.ironhack.vbnk_dataservice.data.dao;
+package com.ironhack.vbnk_dataservice.data.dao.users;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ironhack.vbnk_dataservice.data.Address;
-import com.ironhack.vbnk_dataservice.data.dto.AccountHolderDTO;
+import com.ironhack.vbnk_dataservice.data.dao.Notification;
+import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -3,11 +3,10 @@ package com.ironhack.vbnk_dataservice.data.dto;
 import com.ironhack.vbnk_dataservice.data.NotificationState;
 import com.ironhack.vbnk_dataservice.data.NotificationType;
 import com.ironhack.vbnk_dataservice.data.dao.Notification;
-import com.ironhack.vbnk_dataservice.data.dao.VBUser;
+import com.ironhack.vbnk_dataservice.data.dao.users.VBUser;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 @Getter @Setter
 public class NotificationDTO {
     Long id;
@@ -18,7 +17,7 @@ public class NotificationDTO {
     VBUser owner;
 
 
-    public static final NotificationDTO fromEntity(Notification entity){
+    public static NotificationDTO fromEntity(Notification entity){
         return new NotificationDTO().setId(entity.getId())
                 .setType(entity.getType())
                 .setOwner(entity.getOwner())
