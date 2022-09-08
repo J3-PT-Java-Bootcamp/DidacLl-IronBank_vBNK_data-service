@@ -13,7 +13,6 @@ import com.ironhack.vbnk_dataservice.data.dto.accounts.*;
 import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.repositories.accounts.*;
-import com.ironhack.vbnk_dataservice.repositories.users.AccountHolderRepository;
 import org.apache.http.client.HttpResponseException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +22,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -82,11 +80,13 @@ class VBAccountServiceImplTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws HttpResponseException {
         checkingRepository.deleteAll();
         savingsRepository.deleteAll();
         studentRepository.deleteAll();
         creditRepository.deleteAll();
+        userService.delete("bbb");
+        userService.delete("aaa");
     }
 
     @Test
@@ -96,17 +96,27 @@ class VBAccountServiceImplTest {
 
     @Test
     void getAllUserAccounts_test() {
+        assertEquals(4,accountService.getAllUserAccounts("aaa").size());
     }
 
     @Test
-    void create_test() {
+    void create_test() throws HttpResponseException {
+        accountService.create(CheckingDTO.fromEntity(checking),"aaa");
+        assertEquals(5,accountService.getAllUserAccounts("aaa").size());
     }
 
     @Test
-    void update_test() {
+    void update_test() throws HttpResponseException {
+        var dto= new StudentCheckingDTO();
+        dto.setBalance(new Money(new BigDecimal(10000)));
+        accountService.update(dto, student.getId());
+        assertEquals(new Money(new BigDecimal(10000)).getAmount(),accountService.getAccount(student.getId()).getBalance().getAmount());
     }
 
     @Test
     void delete_test() {
+        accountService.delete(student.getId());
+        assertEquals(3,accountService.getAllUserAccounts("aaa").size());
+
     }
 }

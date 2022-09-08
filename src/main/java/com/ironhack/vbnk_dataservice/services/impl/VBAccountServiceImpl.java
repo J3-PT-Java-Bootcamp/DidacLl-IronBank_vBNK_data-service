@@ -40,23 +40,35 @@ public class VBAccountServiceImpl implements VBAccountService {
     @Override
     public AccountDTO getAccount(String id) throws HttpResponseException {
 //        return AccountDTO.fromAnyAccountEntity(repository.findById(id).orElseThrow());
-        if(checkingRepository.existsById(id))return CheckingDTO.fromEntity(checkingRepository.findById(id).get());
-        if(savingsAccountRepository.existsById(id))return SavingsDTO.fromEntity(savingsAccountRepository.findById(id).get());
-        if(creditRepository.existsById(id))return CreditDTO.fromEntity(creditRepository.findById(id).get());
-        if(studentRepository.existsById(id))return StudentCheckingDTO.fromEntity(studentRepository.findById(id).get());
+        if(checkingRepository.existsById(id))return CheckingDTO.fromEntity(checkingRepository.findById(id)
+                .orElseThrow(()->new HttpResponseException(404,"FATAL ERR")));
+        if(savingsAccountRepository.existsById(id))return SavingsDTO.fromEntity(savingsAccountRepository.findById(id)
+                .orElseThrow(()->new HttpResponseException(404,"FATAL ERR")));
+        if(creditRepository.existsById(id))return CreditDTO.fromEntity(creditRepository.findById(id)
+                .orElseThrow(()->new HttpResponseException(404,"FATAL ERR")));
+        if(studentRepository.existsById(id))return StudentCheckingDTO.fromEntity(studentRepository.findById(id)
+                .orElseThrow(()->new HttpResponseException(404,"FATAL ERR")));
         else throw new HttpResponseException(404,"ID NOK");
     }
     @Override
     public List<AccountDTO> getAllUserAccounts(String userId) {
-        var primary=  checkingRepository.findAllByPrimaryOwnerId(userId);
-        primary.addAll(checkingRepository.findAllBySecondaryOwnerId(userId));
-        primary.addAll(savingsAccountRepository.findAllByPrimaryOwnerId(userId));
-        primary.addAll(savingsAccountRepository.findAllBySecondaryOwnerId(userId));
-        primary.addAll(creditRepository.findAllByPrimaryOwnerId(userId));
-        primary.addAll(creditRepository.findAllBySecondaryOwnerId(userId));
-        primary.addAll(studentRepository.findAllByPrimaryOwnerId(userId));
-        primary.addAll(studentRepository.findAllBySecondaryOwnerId(userId));
-        return primary.stream().map(AccountDTO::fromAnyAccountEntity).collect(Collectors.toCollection(ArrayList::new));
+        List<AccountDTO> primary=  checkingRepository.findAllByPrimaryOwnerId(userId)
+                .stream().map(AccountDTO::fromAnyAccountEntity).collect(Collectors.toCollection(ArrayList::new));
+        primary.addAll(checkingRepository.findAllBySecondaryOwnerId(userId)
+                .stream().map(AccountDTO::fromAnyAccountEntity).collect(Collectors.toCollection(ArrayList::new)));
+        primary.addAll(savingsAccountRepository.findAllByPrimaryOwnerId(userId)
+                .stream().map(AccountDTO::fromAnyAccountEntity).collect(Collectors.toCollection(ArrayList::new)));
+        primary.addAll(savingsAccountRepository.findAllBySecondaryOwnerId(userId)
+                .stream().map(AccountDTO::fromAnyAccountEntity).collect(Collectors.toCollection(ArrayList::new)));
+        primary.addAll(creditRepository.findAllByPrimaryOwnerId(userId)
+                .stream().map(AccountDTO::fromAnyAccountEntity).collect(Collectors.toCollection(ArrayList::new)));
+        primary.addAll(creditRepository.findAllBySecondaryOwnerId(userId)
+                .stream().map(AccountDTO::fromAnyAccountEntity).collect(Collectors.toCollection(ArrayList::new)));
+        primary.addAll(studentRepository.findAllByPrimaryOwnerId(userId)
+                .stream().map(AccountDTO::fromAnyAccountEntity).collect(Collectors.toCollection(ArrayList::new)));
+        primary.addAll(studentRepository.findAllBySecondaryOwnerId(userId)
+                .stream().map(AccountDTO::fromAnyAccountEntity).collect(Collectors.toCollection(ArrayList::new)));
+        return primary;//.stream().map(AccountDTO::fromAnyAccountEntity).collect(Collectors.toCollection(ArrayList::new));
 
     }
 
@@ -64,6 +76,7 @@ public class VBAccountServiceImpl implements VBAccountService {
     public AccountDTO create(AccountDTO dto, String userId) throws HttpResponseException {
         var owner = userService.getAccountHolder(userId);
         var admin= userService.getRandomAdmin();
+        dto.setId(null);
         dto.setPrimaryOwner(AccountHolder.fromDTO(owner)).setAdministratedBy(VBAdmin.fromDTO(admin));
         if(dto instanceof CheckingDTO &&
                 dto.getPrimaryOwner().getDateOfBirth().plusYears(18).isEqual(LocalDate.now())){
@@ -83,9 +96,7 @@ public class VBAccountServiceImpl implements VBAccountService {
             case "StudentCheckingDTO"-> StudentCheckingDTO.fromEntity(studentRepository.save(StudentCheckingAccount.fromDTO((StudentCheckingDTO) dto)));
             case "SavingsDTO"-> SavingsDTO.fromEntity(savingsAccountRepository.save(SavingsAccount.fromDTO((SavingsDTO) dto)));
             case "CreditDTO"-> CreditDTO.fromEntity(creditRepository.save(CreditAccount.fromDTO((CreditDTO) dto)));
-            default -> {
-                throw new HttpResponseException(HttpStatus.I_AM_A_TEAPOT.value(), HttpStatus.I_AM_A_TEAPOT.getReasonPhrase());
-            }
+            default -> throw new HttpResponseException(HttpStatus.I_AM_A_TEAPOT.value(), HttpStatus.I_AM_A_TEAPOT.getReasonPhrase());
         };
 
 
@@ -100,31 +111,27 @@ public class VBAccountServiceImpl implements VBAccountService {
         if(dto.getAdministratedBy()!=null)original.setAdministratedBy(dto.getAdministratedBy());
         if(dto.getStatus()!=null)original.setStatus(dto.getStatus());
         if(dto.getSecretKey()!=null)original.setSecretKey(dto.getSecretKey());
-        if(dto instanceof CheckingDTO){
-            var espDto= (CheckingDTO)dto;
+        if(dto instanceof CheckingDTO espDto){
             var save=(CheckingDTO)original;
-            if(espDto.getMinimumBalance()!=null)((CheckingDTO) save).setMinimumBalance(espDto.getMinimumBalance());
-            if(espDto.getPenaltyFee()!=null)((CheckingDTO) save).setPenaltyFee(espDto.getPenaltyFee());
-            if(espDto.getMonthlyMaintenanceFee()!=null)((CheckingDTO) save).setMonthlyMaintenanceFee(espDto.getMonthlyMaintenanceFee());
+            if(espDto.getMinimumBalance()!=null)( save).setMinimumBalance(espDto.getMinimumBalance());
+            if(espDto.getPenaltyFee()!=null)( save).setPenaltyFee(espDto.getPenaltyFee());
+            if(espDto.getMonthlyMaintenanceFee()!=null)( save).setMonthlyMaintenanceFee(espDto.getMonthlyMaintenanceFee());
             checkingRepository.save(CheckingAccount.fromDTO(save));
         }
-        if(dto instanceof SavingsDTO){
-            var espDto= (SavingsDTO)dto;
+        if(dto instanceof SavingsDTO espDto){
             var save=(SavingsDTO)original;
-            if(espDto.getMinimumBalance()!=null)((SavingsDTO) save).setMinimumBalance(espDto.getMinimumBalance());
-            if(espDto.getPenaltyFee()!=null)((SavingsDTO) save).setPenaltyFee(espDto.getPenaltyFee());
-            if(espDto.getInterestRate()!=null)((SavingsDTO) save).setInterestRate(espDto.getInterestRate());
+            if(espDto.getMinimumBalance()!=null)( save).setMinimumBalance(espDto.getMinimumBalance());
+            if(espDto.getPenaltyFee()!=null)( save).setPenaltyFee(espDto.getPenaltyFee());
+            if(espDto.getInterestRate()!=null)( save).setInterestRate(espDto.getInterestRate());
             savingsAccountRepository.save(SavingsAccount.fromDTO(save));
         }
-        if(dto instanceof CreditDTO){
-            var espDto= (CreditDTO)dto;
+        if(dto instanceof CreditDTO espDto){
             var save=(CreditDTO)original;
-            if(espDto.getCreditLimit()!=null)((CreditDTO) save).setCreditLimit(espDto.getCreditLimit());
-            if(espDto.getInterestRate()!=null)((CreditDTO) save).setInterestRate(espDto.getInterestRate());
+            if(espDto.getCreditLimit()!=null)( save).setCreditLimit(espDto.getCreditLimit());
+            if(espDto.getInterestRate()!=null)( save).setInterestRate(espDto.getInterestRate());
             creditRepository.save(CreditAccount.fromDTO(save));
         }
         if(dto instanceof StudentCheckingDTO){
-//            var espDto= (CreditDTO)dto;
             var save=(StudentCheckingDTO) original;
             studentRepository.save(StudentCheckingAccount.fromDTO(save));
         }
