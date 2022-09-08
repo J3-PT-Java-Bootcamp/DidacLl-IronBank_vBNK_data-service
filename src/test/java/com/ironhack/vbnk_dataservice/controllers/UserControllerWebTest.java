@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 class UserControllerWebTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     AccountHolderRepository accountHolderRepository;
     @Autowired
@@ -36,6 +35,7 @@ class UserControllerWebTest {
     ThirdPartyRepository thirdPartyRepository;
     @Autowired
     WebApplicationContext webApplicationContext;
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private MockMvc mockMvc;
 
     @BeforeEach

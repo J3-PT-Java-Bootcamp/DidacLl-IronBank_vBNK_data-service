@@ -19,6 +19,7 @@ import java.util.List;
 @Entity
 public class AccountHolder extends VBUser {
     @NotNull
+    @Column(columnDefinition = "DATE")
     LocalDate dateOfBirth;
     @NotNull
     @Embedded

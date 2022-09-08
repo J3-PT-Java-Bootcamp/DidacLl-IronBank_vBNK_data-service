@@ -9,19 +9,21 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @NoArgsConstructor
-@Getter @Setter
-public class SavingsDTO extends AccountDTO{
+@Getter
+@Setter
+public class SavingsDTO extends AccountDTO {
 
-    Money minimumBalance;
+    BigDecimal minimumBalance;
     BigDecimal penaltyFee;
     BigDecimal interestRate;
 
-    public static SavingsDTO fromEntity(SavingsAccount entity){
-        var dto= new SavingsDTO().setMinimumBalance(entity.getMinimumBalance())
+    public static SavingsDTO fromEntity(SavingsAccount entity) {
+        var dto = new SavingsDTO().setMinimumBalance(entity.getMinimumBalance().getAmount())
                 .setPenaltyFee(entity.getPenaltyFee())
                 .setInterestRate(entity.getInterestRate());
         dto.setId(entity.getId())
-                .setBalance(entity.getBalance())
+                .setAmount(entity.getBalance().getAmount())
+                .setCurrency(entity.getBalance().getCurrency())
                 .setStatus(entity.getStatus())
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())

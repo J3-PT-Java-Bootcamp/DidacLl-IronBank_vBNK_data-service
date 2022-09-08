@@ -20,7 +20,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder.newAccountHolder;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @SpringBootTest
 class NotificationServiceImplTest {
     @Autowired
@@ -30,6 +32,7 @@ class NotificationServiceImplTest {
     @Autowired
     NotificationRepository repository;
     AccountHolder user;
+
     @BeforeEach
     void setUp() {
         user = userRepository.save(newAccountHolder("Antonio", "aaa")
@@ -37,7 +40,7 @@ class NotificationServiceImplTest {
                 setPrimaryAddress(new Address().setAdditionalInfo("KJSGD")
                         .setCity("Oklahoma").setCountry("India").setStreet("Main street")
                         .setStreetNumber(45).setZipCode(8080)));
-        var otherUser= userRepository.save(newAccountHolder("Antonia", "bbb")
+        var otherUser = userRepository.save(newAccountHolder("Antonia", "bbb")
                 .setDateOfBirth(LocalDate.now()).
                 setPrimaryAddress(new Address().setAdditionalInfo("KJSGD")
                         .setCity("Oklahoma").setCountry("India").setStreet("Main street")
@@ -65,44 +68,45 @@ class NotificationServiceImplTest {
     @Test
     @DisplayName("Get All User Pending Notifications")
     void getAllPending_test() {
-        assertEquals(6,service.getAllPending("aaa").size());
+        assertEquals(6, service.getAllPending("aaa").size());
     }
 
     @Test
     @DisplayName("Get Incoming Pending Notifications")
     void getIncomingNotifications_test() {
-        assertEquals(2,service.getIncomingNotifications("aaa").size());
+        assertEquals(2, service.getIncomingNotifications("aaa").size());
     }
 
     @Test
     @DisplayName("Get Fraud Pending Notifications")
     void getFraudNotifications_test() {
-        assertEquals(3,service.getFraudNotifications("aaa").size());
+        assertEquals(3, service.getFraudNotifications("aaa").size());
     }
 
     @Test
     @DisplayName("Get Payment Pending Notifications")
     void getPaymentNotifications_test() {
-        assertEquals(1,service.getPaymentNotifications("aaa").size());
+        assertEquals(1, service.getPaymentNotifications("aaa").size());
     }
 
     @Test
     @DisplayName("Create new (OK)")
     void create_test() throws HttpResponseException {
-        service.create(new CreateNotificationDTO("CHECK ME!","TEST",NotificationType.INCOMING,"bbb"));
-        assertEquals("CHECK ME!",service.getIncomingNotifications("bbb").get(0).getTitle());
+        service.create(new CreateNotificationDTO("CHECK ME!", "TEST", NotificationType.INCOMING, "bbb"));
+        assertEquals("CHECK ME!", service.getIncomingNotifications("bbb").get(0).getTitle());
     }
+
     @Test
     @DisplayName("Create new NOK wrong user")
     void create_test_NOK() {
-        assertThrows(HttpResponseException.class,()->service.create(new CreateNotificationDTO("CHECK ME!","TEST",NotificationType.INCOMING,"")));
+        assertThrows(HttpResponseException.class, () -> service.create(new CreateNotificationDTO("CHECK ME!", "TEST", NotificationType.INCOMING, "")));
     }
 
     @Test
     void delete_test() throws HttpResponseException {
-        var note=service.create(new CreateNotificationDTO("CHECK ME!","TEST",NotificationType.INCOMING,"bbb"));
+        var note = service.create(new CreateNotificationDTO("CHECK ME!", "TEST", NotificationType.INCOMING, "bbb"));
         service.delete(note.getId());
-        assertEquals(0,service.getIncomingNotifications("bbb").size());
+        assertEquals(0, service.getIncomingNotifications("bbb").size());
 
     }
 }

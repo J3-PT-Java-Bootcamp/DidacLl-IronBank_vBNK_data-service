@@ -4,7 +4,6 @@ import com.ironhack.vbnk_dataservice.data.Money;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CheckingDTO;
 import com.ironhack.vbnk_dataservice.utils.MoneyConverter;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Convert;
@@ -20,13 +19,13 @@ public class CheckingAccount extends VBAccount {
     BigDecimal penaltyFee;
     BigDecimal monthlyMaintenanceFee;
 
-    public static CheckingAccount fromDTO(CheckingDTO dto){
-        var entity= new CheckingAccount().setMinimumBalance(dto.getMinimumBalance())
+    public static CheckingAccount fromDTO(CheckingDTO dto) {
+        var entity = new CheckingAccount().setMinimumBalance(new Money(dto.getMinimumBalance(),dto.getCurrency()))
                 .setMonthlyMaintenanceFee(dto.getMonthlyMaintenanceFee())
                 .setPenaltyFee(dto.getPenaltyFee());
         entity.setId(dto.getId())
-                .setBalance(dto.getBalance())
-                .setStatus(dto.getStatus())
+
+                .setBalance(new Money(dto.getAmount(),dto.getCurrency()))                .setStatus(dto.getStatus())
                 .setSecretKey(dto.getSecretKey())
                 .setPrimaryOwner(dto.getPrimaryOwner())
                 .setSecondaryOwner(dto.getSecondaryOwner())

@@ -6,14 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@Getter @Setter
-public class StudentCheckingDTO extends AccountDTO{
+@Getter
+@Setter
+public class StudentCheckingDTO extends AccountDTO {
 
 
-    public static StudentCheckingDTO fromEntity(StudentCheckingAccount entity){
-        var dto= new StudentCheckingDTO();
+    public static StudentCheckingDTO fromEntity(StudentCheckingAccount entity) {
+        var dto = new StudentCheckingDTO();
         dto.setId(entity.getId())
-                .setBalance(entity.getBalance())
+                .setAmount(entity.getBalance().getAmount())
+                .setCurrency(entity.getBalance().getCurrency())
                 .setStatus(entity.getStatus())
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())

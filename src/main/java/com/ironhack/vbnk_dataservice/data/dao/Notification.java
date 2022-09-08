@@ -27,7 +27,7 @@ public class Notification {
     @ManyToOne(fetch = FetchType.EAGER)
     VBUser owner;
 
-    public final Notification fromDTO(NotificationDTO entity){
+    public final Notification fromDTO(NotificationDTO entity) {
         return new Notification().setId(entity.getId())
                 .setType(entity.getType())
                 .setOwner(entity.getOwner())

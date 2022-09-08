@@ -20,6 +20,7 @@ public class VBAdmin extends VBUser {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @JsonIgnore
     List<Notification> pendingNotifications;
+
     public static VBAdmin fromDTO(AdminDTO dto) {
         return newVBAdmin(dto.getName(), dto.getId());
     }

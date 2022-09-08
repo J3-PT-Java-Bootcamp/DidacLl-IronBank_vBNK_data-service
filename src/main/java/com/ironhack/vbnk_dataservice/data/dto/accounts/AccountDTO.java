@@ -8,21 +8,27 @@ import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.UUID;
+
+import java.math.BigDecimal;
+import java.util.Currency;
+
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public class AccountDTO {
     String id;
-    Money balance;
+    BigDecimal amount;
+    Currency currency;
     String secretKey;
     AccountHolder primaryOwner;
     AccountHolder secondaryOwner;
     AccountStatus status;
     VBAdmin administratedBy;
 
-    public static AccountDTO fromAnyAccountEntity(VBAccount entity){
+    public static AccountDTO fromAnyAccountEntity(VBAccount entity) {
         return new AccountDTO().setId(entity.getId())
-                .setBalance(entity.getBalance())
+                .setAmount(entity.getBalance().getAmount())
+                .setCurrency(entity.getBalance().getCurrency())
                 .setStatus(entity.getStatus())
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())
@@ -30,21 +36,24 @@ public class AccountDTO {
                 .setAdministratedBy(entity.getAdministratedBy());
     }
 
-    public static CreditDTO convertToCreditDTO(AccountDTO accDTO){
+    public static CreditDTO convertToCreditDTO(AccountDTO accDTO) {
         return (CreditDTO) copyBaseValues(accDTO, new CreditDTO());
     }
-    public static CheckingDTO convertToCheckingDTO(AccountDTO accDTO){
+
+    public static CheckingDTO convertToCheckingDTO(AccountDTO accDTO) {
         return (CheckingDTO) copyBaseValues(accDTO, new CheckingDTO());
     }
-    public static SavingsDTO convertToSavingsDTO(AccountDTO accDTO){
+
+    public static SavingsDTO convertToSavingsDTO(AccountDTO accDTO) {
         return (SavingsDTO) copyBaseValues(accDTO, new SavingsDTO());
     }
-    public static StudentCheckingDTO convertToStudentDTO(AccountDTO accDTO){
+
+    public static StudentCheckingDTO convertToStudentDTO(AccountDTO accDTO) {
         return (StudentCheckingDTO) copyBaseValues(accDTO, new StudentCheckingDTO());
     }
 
     private static AccountDTO copyBaseValues(AccountDTO src, AccountDTO dest) {
-        return dest.setBalance(src.getBalance()).setAdministratedBy(src.administratedBy)
+        return dest.setAmount(src.getAmount()).setCurrency(src.getCurrency()).setAdministratedBy(src.administratedBy)
                 .setStatus(src.getStatus()).setPrimaryOwner(src.getPrimaryOwner())
                 .setSecondaryOwner(src.getSecondaryOwner()).setSecretKey(src.getSecretKey())
                 .setId(src.getId());

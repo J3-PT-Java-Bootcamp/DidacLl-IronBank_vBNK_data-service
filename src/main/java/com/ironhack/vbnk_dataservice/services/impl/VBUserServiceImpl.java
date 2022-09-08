@@ -114,8 +114,8 @@ public class VBUserServiceImpl implements VBUserService {
 
     @Override
     public AdminDTO getRandomAdmin() {
-        Random rand= new Random();
-        var list= adminRepository.findAll();
+        Random rand = new Random();
+        var list = adminRepository.findAll();
         return AdminDTO.fromEntity(list.get(rand.nextInt(0, list.size())));
     }
 
@@ -125,8 +125,10 @@ public class VBUserServiceImpl implements VBUserService {
         // TODO: 06/09/2022 Implement id from keycloak
         if (dto instanceof AccountHolderDTO)
             return AccountHolderDTO.fromEntity(accountHolderRepository.save(AccountHolder.fromDTO((AccountHolderDTO) dto)));
-        else if (dto instanceof AdminDTO) return AdminDTO.fromEntity(adminRepository.save(VBAdmin.fromDTO((AdminDTO) dto)));
-        else if (dto instanceof ThirdPartyDTO) return ThirdPartyDTO.fromEntity(thirdPartyRepository.save(ThirdParty.fromDTO((ThirdPartyDTO) dto)));
+        else if (dto instanceof AdminDTO)
+            return AdminDTO.fromEntity(adminRepository.save(VBAdmin.fromDTO((AdminDTO) dto)));
+        else if (dto instanceof ThirdPartyDTO)
+            return ThirdPartyDTO.fromEntity(thirdPartyRepository.save(ThirdParty.fromDTO((ThirdPartyDTO) dto)));
         else
             throw new HttpResponseException(HttpStatus.I_AM_A_TEAPOT.value(), HttpStatus.I_AM_A_TEAPOT.getReasonPhrase());
     }

@@ -17,6 +17,7 @@ import java.util.List;
 public class NotificationControllerWeb implements NotificationController {
     @Autowired
     NotificationService service;
+
     @Override
     @GetMapping("/all")
     public ResponseEntity<List<NotificationDTO>> getAll(@RequestParam String userId) throws HttpException {

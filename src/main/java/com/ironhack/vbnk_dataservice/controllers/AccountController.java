@@ -15,7 +15,7 @@ public interface AccountController {
 
     //------------------------------------------------------------------------------GET END POINTS
     ResponseEntity<AccountDTO> getAccount(String id) throws HttpException, HttpResponseException;
-    
+
     //------------------------------------------------------------------------------GET ALL END POINTS
 
     ResponseEntity<List<AccountDTO>> getAllUserAccounts(String userId);
@@ -26,6 +26,7 @@ public interface AccountController {
     void createChecking(@RequestBody CheckingDTO dto, String userId) throws HttpResponseException;
 
     void createCreditAccount(@RequestBody CreditDTO dto, String userId) throws HttpResponseException;
+
     //------------------------------------------------------------------------------UPDATE END POINTS
     void updateSavingsAccount(@RequestBody SavingsDTO dto, String id) throws HttpResponseException;
 

@@ -1,6 +1,7 @@
 package com.ironhack.vbnk_dataservice.controllers;
 
-import com.ironhack.vbnk_dataservice.data.dto.*;
+import com.ironhack.vbnk_dataservice.data.dto.CreateNotificationDTO;
+import com.ironhack.vbnk_dataservice.data.dto.NotificationDTO;
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.http.ResponseEntity;

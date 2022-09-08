@@ -34,11 +34,12 @@ public abstract class VBUser {
     Instant updateDate;
 
     public static VBUser fromUnknownDTO(VBUserDTO unknown) throws HttpResponseException {
-        return switch (unknown.getClass().getSimpleName()){
-            case "AccountHolderDTO"->AccountHolder.fromDTO((AccountHolderDTO) unknown);
-            case "AdminDTO"->VBAdmin.fromDTO((AdminDTO) unknown);
-            case "ThirdPartyDTO"->ThirdParty.fromDTO((ThirdPartyDTO) unknown);
-            default -> throw new HttpResponseException(HttpStatus.I_AM_A_TEAPOT.value(),HttpStatus.I_AM_A_TEAPOT.getReasonPhrase());
+        return switch (unknown.getClass().getSimpleName()) {
+            case "AccountHolderDTO" -> AccountHolder.fromDTO((AccountHolderDTO) unknown);
+            case "AdminDTO" -> VBAdmin.fromDTO((AdminDTO) unknown);
+            case "ThirdPartyDTO" -> ThirdParty.fromDTO((ThirdPartyDTO) unknown);
+            default ->
+                    throw new HttpResponseException(HttpStatus.I_AM_A_TEAPOT.value(), HttpStatus.I_AM_A_TEAPOT.getReasonPhrase());
         };
     }
 }

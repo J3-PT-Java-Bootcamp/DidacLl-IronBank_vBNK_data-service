@@ -4,7 +4,6 @@ import com.ironhack.vbnk_dataservice.data.Money;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CreditDTO;
 import com.ironhack.vbnk_dataservice.utils.MoneyConverter;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Convert;
@@ -20,11 +19,12 @@ public class CreditAccount extends VBAccount {
     Money creditLimit;
     BigDecimal interestRate;
 
-    public static CreditAccount fromDTO(CreditDTO dto){
-        var retEntity= new CreditAccount().setCreditLimit(dto.getCreditLimit())
+    public static CreditAccount fromDTO(CreditDTO dto) {
+        var retEntity = new CreditAccount().setCreditLimit(new Money(dto.getCreditLimit(),dto.getCurrency()))
                 .setInterestRate(dto.getInterestRate());
         retEntity.setId(dto.getId())
-                .setBalance(dto.getBalance())
+
+                .setBalance(new Money(dto.getAmount(),dto.getCurrency()))
                 .setStatus(dto.getStatus())
                 .setSecretKey(dto.getSecretKey())
                 .setPrimaryOwner(dto.getPrimaryOwner())

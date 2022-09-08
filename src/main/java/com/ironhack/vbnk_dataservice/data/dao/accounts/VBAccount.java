@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -20,19 +19,20 @@ import java.time.Instant;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 public abstract class VBAccount {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(name = "id", updatable = false, nullable = false,columnDefinition = "VARCHAR(36)")
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
 //    @Type(type = "uuid-char")
     String id;
 
     @Convert(converter = MoneyConverter.class)
     Money balance;
 
-//    @NotNull
+    //    @NotNull
     @Convert(converter = CryptoConverter.class)
     String secretKey;
 

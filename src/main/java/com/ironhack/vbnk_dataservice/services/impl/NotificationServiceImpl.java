@@ -16,12 +16,14 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 public class NotificationServiceImpl implements NotificationService {
     @Autowired
     NotificationRepository repository;
     @Autowired
     VBUserService userService;
+
     @Override
     public List<NotificationDTO> getAllPending(String userId) {
         return repository.findAllByOwnerIdAndState(userId, NotificationState.PENDING)
@@ -60,9 +62,9 @@ public class NotificationServiceImpl implements NotificationService {
     public NotificationDTO create(CreateNotificationDTO dto) throws HttpResponseException {
         return NotificationDTO.fromEntity(repository.save(
                 new Notification().setType(dto.getType())
-                .setMessage(dto.getMessage()).setTitle(dto.getTitle())
-                .setState(NotificationState.PENDING)
-                .setOwner(VBUser.fromUnknownDTO(userService.getUnknown(dto.getOwnerId())))));
+                        .setMessage(dto.getMessage()).setTitle(dto.getTitle())
+                        .setState(NotificationState.PENDING)
+                        .setOwner(VBUser.fromUnknownDTO(userService.getUnknown(dto.getOwnerId())))));
     }
 
     @Override

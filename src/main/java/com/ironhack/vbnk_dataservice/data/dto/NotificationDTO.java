@@ -7,7 +7,8 @@ import com.ironhack.vbnk_dataservice.data.dao.users.VBUser;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 public class NotificationDTO {
     Long id;
     String title;
@@ -17,7 +18,7 @@ public class NotificationDTO {
     VBUser owner;
 
 
-    public static NotificationDTO fromEntity(Notification entity){
+    public static NotificationDTO fromEntity(Notification entity) {
         return new NotificationDTO().setId(entity.getId())
                 .setType(entity.getType())
                 .setOwner(entity.getOwner())
