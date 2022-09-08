@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter @Setter
 public class AccountDTO {
-    UUID id;
+    String id;
     Money balance;
     String secretKey;
     AccountHolder primaryOwner;
@@ -28,5 +28,25 @@ public class AccountDTO {
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
                 .setAdministratedBy(entity.getAdministratedBy());
+    }
+
+    public static CreditDTO convertToCreditDTO(AccountDTO accDTO){
+        return (CreditDTO) copyBaseValues(accDTO, new CreditDTO());
+    }
+    public static CheckingDTO convertToCheckingDTO(AccountDTO accDTO){
+        return (CheckingDTO) copyBaseValues(accDTO, new CheckingDTO());
+    }
+    public static SavingsDTO convertToSavingsDTO(AccountDTO accDTO){
+        return (SavingsDTO) copyBaseValues(accDTO, new SavingsDTO());
+    }
+    public static StudentCheckingDTO convertToStudentDTO(AccountDTO accDTO){
+        return (StudentCheckingDTO) copyBaseValues(accDTO, new StudentCheckingDTO());
+    }
+
+    private static AccountDTO copyBaseValues(AccountDTO src, AccountDTO dest) {
+        return dest.setBalance(src.getBalance()).setAdministratedBy(src.administratedBy)
+                .setStatus(src.getStatus()).setPrimaryOwner(src.getPrimaryOwner())
+                .setSecondaryOwner(src.getSecondaryOwner()).setSecretKey(src.getSecretKey())
+                .setId(src.getId());
     }
 }

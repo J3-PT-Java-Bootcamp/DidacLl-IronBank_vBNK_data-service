@@ -24,7 +24,7 @@ public interface NotificationController {
 
     //------------------------------------------------------------------------------DELETE END POINTS
 
-    void delete(String id) throws HttpResponseException;
+    void delete(Long id) throws HttpResponseException;
 
 
 }

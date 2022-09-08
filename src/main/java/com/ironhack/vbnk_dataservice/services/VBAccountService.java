@@ -1,20 +1,18 @@
 package com.ironhack.vbnk_dataservice.services;
 
 import com.ironhack.vbnk_dataservice.data.dto.accounts.AccountDTO;
-import com.ironhack.vbnk_dataservice.data.dto.accounts.SavingsDTO;
-import org.springframework.stereotype.Service;
+import org.apache.http.client.HttpResponseException;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface VBAccountService {
-    AccountDTO getAccount(UUID id);
+    AccountDTO getAccount(String id) throws HttpResponseException;
 
     List<AccountDTO> getAllUserAccounts(String userId);
 
-    void create(AccountDTO dto, String userId);
+    AccountDTO create(AccountDTO dto, String userId) throws HttpResponseException;
 
-    void update(AccountDTO dto, UUID id);
+    void update(AccountDTO dto, String id) throws HttpResponseException;
 
-    void delete(UUID id);
+    void delete(String id);
 }

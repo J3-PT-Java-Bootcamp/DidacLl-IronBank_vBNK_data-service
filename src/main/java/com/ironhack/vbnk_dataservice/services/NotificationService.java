@@ -19,7 +19,7 @@ public interface NotificationService {
 
     List<NotificationDTO> getPaymentNotifications(String userId);
 
-    void create(CreateNotificationDTO dto) throws HttpResponseException;
+    NotificationDTO create(CreateNotificationDTO dto) throws HttpResponseException;
 
-    void delete(String id);
+    void delete(Long id);
 }

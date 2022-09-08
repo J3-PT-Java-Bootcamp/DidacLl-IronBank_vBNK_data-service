@@ -12,7 +12,7 @@ public interface VBUserService {
 
     VBUserDTO getUnknown(String id) throws HttpResponseException;
 
-    void create(VBUserDTO dto) throws HttpResponseException;
+    VBUserDTO create(VBUserDTO dto) throws HttpResponseException;
 
     ThirdPartyDTO getThirdParty(String id);
 

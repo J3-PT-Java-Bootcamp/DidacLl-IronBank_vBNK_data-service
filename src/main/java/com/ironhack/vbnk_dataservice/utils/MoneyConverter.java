@@ -16,30 +16,12 @@ public class MoneyConverter implements AttributeConverter<Money, String> {
     @Override
     public String convertToDatabaseColumn(Money value) {
         // TODO: 06/09/2022 Convert Money into parseable string
-        // do some encryption
-//        Key key = new SecretKeySpec(KEY, "AES");
-//        try {
-//            Cipher c = Cipher.getInstance(ALGORITHM);
-//            c.init(Cipher.ENCRYPT_MODE, key);
-//            return Base64.toBase64String(c.doFinal(value.getBytes()));
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
         return value.toParseableString();
     }
 
     @Override
     public Money convertToEntityAttribute(String dbData) {
         // TODO: 06/09/2022 Parse string into Money
-//        // do some decryption
-//        Key key = new SecretKeySpec(KEY, "AES");
-//        try {
-//            Cipher c = Cipher.getInstance(ALGORITHM);
-//            c.init(Cipher.DECRYPT_MODE, key);
-//            return new String(c.doFinal(Base64.decode(dbData)));
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
         var val = dbData.split("//");
         return new Money(new BigDecimal(val[0]), Currency.getInstance(val[1]));
     }

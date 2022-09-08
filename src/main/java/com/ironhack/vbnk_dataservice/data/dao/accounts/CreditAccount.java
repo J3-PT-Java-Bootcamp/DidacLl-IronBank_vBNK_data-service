@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 import java.math.BigDecimal;
 
 @Entity
-@NoArgsConstructor
+//@NoArgsConstructor
 @Getter
 @Setter
 public class CreditAccount extends VBAccount {

@@ -49,7 +49,7 @@ public class NotificationControllerWeb implements NotificationController {
 
     @Override
     @DeleteMapping
-    public void delete(@RequestParam String id) throws HttpResponseException {
+    public void delete(@RequestParam Long id) throws HttpResponseException {
         service.delete(id);
     }
 }

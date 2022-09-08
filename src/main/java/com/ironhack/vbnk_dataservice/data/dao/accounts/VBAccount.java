@@ -6,42 +6,44 @@ import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.utils.CryptoConverter;
 import com.ironhack.vbnk_dataservice.utils.MoneyConverter;
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.UUID;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
 @Getter @Setter
 public abstract class VBAccount {
     @Id
-    @GeneratedValue
-    UUID id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @Column(name = "id", updatable = false, nullable = false,columnDefinition = "VARCHAR(36)")
+//    @Type(type = "uuid-char")
+    String id;
 
     @Convert(converter = MoneyConverter.class)
     Money balance;
 
-    @NotNull
+//    @NotNull
     @Convert(converter = CryptoConverter.class)
     String secretKey;
 
     @ManyToOne
     @JoinColumn(name = "primary_owner_id")
-    @NotNull
+//    @NotNull
     AccountHolder primaryOwner;
 
     @ManyToOne
     @JoinColumn(name = "secondary_owner_id")
-    @Nullable
+//    @Nullable
     AccountHolder secondaryOwner;
 
     @CreationTimestamp

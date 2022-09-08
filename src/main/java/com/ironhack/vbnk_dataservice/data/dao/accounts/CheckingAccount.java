@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import java.math.BigDecimal;
 
 @Entity
-@NoArgsConstructor
 @Getter
 @Setter
 public class CheckingAccount extends VBAccount {
@@ -34,4 +33,5 @@ public class CheckingAccount extends VBAccount {
                 .setAdministratedBy(dto.getAdministratedBy());
         return entity;
     }
+
 }

@@ -40,10 +40,10 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<NotificationDTO> getFraudNotifications(String userId) {
-        return repository.findAllByOwnerIdAndTypeAndState(userId,
-                        NotificationType.FRAUD,
-                        NotificationState.PENDING)
-                .stream().map(NotificationDTO::fromEntity)
+        List<Notification> all = repository.findAllByOwnerIdAndTypeAndState(userId,
+                NotificationType.FRAUD,
+                NotificationState.PENDING);
+        return all.stream().map(NotificationDTO::fromEntity)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -57,15 +57,16 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void create(CreateNotificationDTO dto) throws HttpResponseException {
-        repository.save(new Notification().setType(dto.getType())
-                .setMessage(dto.getMessage()).setTitle(dto.getTitle()))
+    public NotificationDTO create(CreateNotificationDTO dto) throws HttpResponseException {
+        return NotificationDTO.fromEntity(repository.save(
+                new Notification().setType(dto.getType())
+                .setMessage(dto.getMessage()).setTitle(dto.getTitle())
                 .setState(NotificationState.PENDING)
-                .setOwner(VBUser.fromUnknownDTO(userService.getUnknown(dto.getOwnerId())));
+                .setOwner(VBUser.fromUnknownDTO(userService.getUnknown(dto.getOwnerId())))));
     }
 
     @Override
-    public void delete(String id) {
-
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 }

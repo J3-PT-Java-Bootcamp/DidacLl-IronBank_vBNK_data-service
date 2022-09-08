@@ -16,10 +16,7 @@ import org.apache.http.client.HttpResponseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -117,18 +114,19 @@ public class VBUserServiceImpl implements VBUserService {
 
     @Override
     public AdminDTO getRandomAdmin() {
-        // TODO: 07/09/2022  
-        return null;
+        Random rand= new Random();
+        var list= adminRepository.findAll();
+        return AdminDTO.fromEntity(list.get(rand.nextInt(0, list.size())));
     }
 
     //-------------------------------------------------------------------------------------------------CREATE METHODS
     @Override
-    public void create(VBUserDTO dto) throws HttpResponseException {
+    public VBUserDTO create(VBUserDTO dto) throws HttpResponseException {
         // TODO: 06/09/2022 Implement id from keycloak
         if (dto instanceof AccountHolderDTO)
-            accountHolderRepository.save(AccountHolder.fromDTO((AccountHolderDTO) dto));
-        else if (dto instanceof AdminDTO) adminRepository.save(VBAdmin.fromDTO((AdminDTO) dto));
-        else if (dto instanceof ThirdPartyDTO) thirdPartyRepository.save(ThirdParty.fromDTO((ThirdPartyDTO) dto));
+            return AccountHolderDTO.fromEntity(accountHolderRepository.save(AccountHolder.fromDTO((AccountHolderDTO) dto)));
+        else if (dto instanceof AdminDTO) return AdminDTO.fromEntity(adminRepository.save(VBAdmin.fromDTO((AdminDTO) dto)));
+        else if (dto instanceof ThirdPartyDTO) return ThirdPartyDTO.fromEntity(thirdPartyRepository.save(ThirdParty.fromDTO((ThirdPartyDTO) dto)));
         else
             throw new HttpResponseException(HttpStatus.I_AM_A_TEAPOT.value(), HttpStatus.I_AM_A_TEAPOT.getReasonPhrase());
     }

@@ -1,0 +1,112 @@
+package com.ironhack.vbnk_dataservice.services;
+
+import com.ironhack.vbnk_dataservice.data.AccountStatus;
+import com.ironhack.vbnk_dataservice.data.Address;
+import com.ironhack.vbnk_dataservice.data.Money;
+import com.ironhack.vbnk_dataservice.data.dao.accounts.CheckingAccount;
+import com.ironhack.vbnk_dataservice.data.dao.accounts.CreditAccount;
+import com.ironhack.vbnk_dataservice.data.dao.accounts.SavingsAccount;
+import com.ironhack.vbnk_dataservice.data.dao.accounts.StudentCheckingAccount;
+import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
+import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
+import com.ironhack.vbnk_dataservice.data.dto.accounts.*;
+import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
+import com.ironhack.vbnk_dataservice.repositories.accounts.*;
+import com.ironhack.vbnk_dataservice.repositories.users.AccountHolderRepository;
+import org.apache.http.client.HttpResponseException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+@SpringBootTest
+class VBAccountServiceImplTest {
+    @Autowired
+    VBAccountService accountService;
+    @Autowired
+    VBUserService userService;
+    @Autowired
+    CheckingAccountRepository checkingRepository;
+    @Autowired
+    StudentCheckingAccountRepository studentRepository;
+    @Autowired
+    SavingsAccountRepository savingsRepository;
+    @Autowired
+    CreditAccountRepository creditRepository;
+
+    CreditAccount credit;
+    CheckingAccount checking;
+    SavingsAccount savings;
+    StudentCheckingAccount student;
+
+    VBAdmin admin;
+    AccountHolder user;
+
+    @BeforeEach
+    void setUp() throws HttpResponseException {
+        admin= VBAdmin.fromDTO((AdminDTO) userService.create(new AdminDTO().setName("Super Admin").setId("bbb")));
+        user= AccountHolder.fromDTO((AccountHolderDTO) userService.create(
+                AccountHolderDTO.newAccountHolderDTO("Antonio","aaa")
+                        .setDateOfBirth(LocalDate.of(1990,5,3))
+                        .setPrimaryAddress( new Address().setAdditionalInfo("KJSGD").setCity("Oklahoma").setCountry("India")
+                                .setStreet("Main street").setStreetNumber(45).setZipCode(8080)))
+        );
+        Money money = new Money(BigDecimal.valueOf(10));
+
+        credit= new CreditAccount().setCreditLimit(money).setInterestRate(BigDecimal.TEN);
+        credit.setBalance(money).setStatus(AccountStatus.ACTIVE)
+                .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
+        savings= new SavingsAccount().setInterestRate(BigDecimal.TEN)
+                .setMinimumBalance(money).setPenaltyFee(BigDecimal.TEN);
+        savings.setBalance(money).setStatus(AccountStatus.ACTIVE)
+                        .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
+        checking= new CheckingAccount().setPenaltyFee(BigDecimal.TEN)
+                .setMinimumBalance(money).setMonthlyMaintenanceFee(BigDecimal.TEN);
+                checking.setBalance(money).setStatus(AccountStatus.ACTIVE)
+                        .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
+        student= new StudentCheckingAccount();
+        student.setBalance(money).setStatus(AccountStatus.ACTIVE)
+                        .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
+//        repository.save(checking);
+        credit= CreditAccount.fromDTO((CreditDTO) accountService.create(CreditDTO.fromEntity(credit),"aaa"));
+        checking= CheckingAccount.fromDTO((CheckingDTO) accountService.create(CheckingDTO.fromEntity(checking),"aaa"));
+        savings= SavingsAccount.fromDTO((SavingsDTO) accountService.create(SavingsDTO.fromEntity(savings),"aaa"));
+        student= StudentCheckingAccount.fromDTO((StudentCheckingDTO) accountService.create(StudentCheckingDTO.fromEntity(student),"aaa"));
+    }
+
+    @AfterEach
+    void tearDown() {
+        checkingRepository.deleteAll();
+        savingsRepository.deleteAll();
+        studentRepository.deleteAll();
+        creditRepository.deleteAll();
+    }
+
+    @Test
+    void getAccount_test() throws HttpResponseException {
+        assertEquals("Antonio",accountService.getAccount(student.getId()).getPrimaryOwner().getName());
+    }
+
+    @Test
+    void getAllUserAccounts_test() {
+    }
+
+    @Test
+    void create_test() {
+    }
+
+    @Test
+    void update_test() {
+    }
+
+    @Test
+    void delete_test() {
+    }
+}
