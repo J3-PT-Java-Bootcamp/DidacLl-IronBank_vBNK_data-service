@@ -117,7 +117,7 @@ class VBAccountServiceImplTest {
         var dto = new StudentCheckingDTO();
         dto.setAmount(new BigDecimal(10000));
         accountService.update(dto, student.getId());
-        assertEquals(new BigDecimal(10000), accountService.getAccount(student.getId()).getAmount());
+        assertEquals(new Money(new BigDecimal(10000)).getAmount(), accountService.getAccount(student.getId()).getAmount());
     }
 
     @Test

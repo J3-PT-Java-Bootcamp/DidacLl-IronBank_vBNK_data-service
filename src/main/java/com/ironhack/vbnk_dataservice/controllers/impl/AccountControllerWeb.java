@@ -25,7 +25,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/accounts")
+@RequestMapping("v1/dev/accounts")
 public class AccountControllerWeb implements AccountController {
 
     @Autowired
@@ -68,49 +68,41 @@ public class AccountControllerWeb implements AccountController {
     public ResponseEntity<AccountDTO> getAccount(@RequestParam String id) throws HttpResponseException {
         return ResponseEntity.ok(service.getAccount(id));
     }
-
     @Override
     @GetMapping("/all")
     public ResponseEntity<List<AccountDTO>> getAllUserAccounts(@RequestParam String userId) {
         return ResponseEntity.ok(service.getAllUserAccounts(userId));
     }
-
     @Override
     @PostMapping("/savings")
     public void createSavingsAccount(@RequestBody SavingsDTO dto,@RequestParam String userId) throws HttpResponseException {
         service.create(dto, userId);
     }
-
     @Override
     @PostMapping("/checking")
     public void createChecking(@RequestBody CheckingDTO dto,@RequestParam String userId) throws HttpResponseException {
         service.create(dto, userId);
     }
-
     @Override
     @PostMapping("/credit")
     public void createCreditAccount(@RequestBody CreditDTO dto,@RequestParam String userId) throws HttpResponseException {
         service.create(dto, userId);
     }
-
     @Override
     @PatchMapping("/savings")
     public void updateSavingsAccount(@RequestBody SavingsDTO dto,@RequestParam  String id) throws HttpResponseException {
         service.update(dto, id);
     }
-
     @Override
     @PatchMapping("/checking")
     public void updateChecking(@RequestBody CheckingDTO dto,@RequestParam  String id) throws HttpResponseException {
         service.update(dto, id);
     }
-
     @Override
     @PatchMapping("/credit")
     public void updateCreditAccount(@RequestBody CreditDTO dto,@RequestParam  String id) throws HttpResponseException {
         service.update(dto, id);
     }
-
     @Override
     @DeleteMapping
     public void delete(@RequestParam String id) throws HttpResponseException {

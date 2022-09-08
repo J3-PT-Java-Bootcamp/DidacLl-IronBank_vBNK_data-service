@@ -19,7 +19,7 @@ import java.util.List;
 import static com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder.newAccountHolder;
 
 @RestController
-@RequestMapping(path = "v1/users")
+@RequestMapping(path = "v1/dev/users")
 public class UserControllerWeb {
     @Autowired
     VBUserService service;
