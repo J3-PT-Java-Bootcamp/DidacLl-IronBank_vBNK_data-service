@@ -76,7 +76,7 @@ class UserControllerWebTest {
     @Test
     void get_test() throws Exception {
         var result = mockMvc
-                .perform(get("/v1/users?id=aaa"))
+                .perform(get("/v1/data/auth/users?id=aaa"))
                 .andExpect(status().isFound()) // check status code 200
                 .andReturn();
 

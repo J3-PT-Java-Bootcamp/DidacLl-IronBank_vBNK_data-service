@@ -13,43 +13,43 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "v1/dev/notifications")
+@RequestMapping(path = "v1/data")
 public class NotificationControllerWeb implements NotificationController {
     @Autowired
     NotificationService service;
 
     @Override
-    @GetMapping("/all")
+    @GetMapping("dev/notifications/all")
     public ResponseEntity<List<NotificationDTO>> getAll(@RequestParam String userId) throws HttpException {
         return ResponseEntity.ok(service.getAllPending(userId));
     }
 
     @Override
-    @GetMapping("/incoming")
+    @GetMapping("dev/notifications/incoming")
     public ResponseEntity<List<NotificationDTO>> getIncoming(@RequestParam String userId) {
         return ResponseEntity.ok(service.getIncomingNotifications(userId));
     }
 
     @Override
-    @GetMapping("/fraud")
+    @GetMapping("dev/notifications/fraud")
     public ResponseEntity<List<NotificationDTO>> getFraud(@RequestParam String userId) {
         return ResponseEntity.ok(service.getFraudNotifications(userId));
     }
 
     @Override
-    @GetMapping("/payment")
+    @GetMapping("dev/notifications/payment")
     public ResponseEntity<List<NotificationDTO>> getPaymentConfirm(@RequestParam String userId) {
         return ResponseEntity.ok(service.getPaymentNotifications(userId));
     }
 
     @Override
-    @PostMapping
+    @PostMapping("dev/notifications")
     public void createNotification(@RequestBody CreateNotificationDTO dto) throws HttpResponseException {
         service.create(dto);
     }
 
     @Override
-    @DeleteMapping
+    @DeleteMapping("dev/notifications")
     public void delete(@RequestParam Long id) throws HttpResponseException {
         service.delete(id);
     }

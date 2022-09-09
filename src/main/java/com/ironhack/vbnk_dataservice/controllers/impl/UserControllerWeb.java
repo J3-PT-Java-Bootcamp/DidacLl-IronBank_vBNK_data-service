@@ -19,14 +19,14 @@ import java.util.List;
 import static com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder.newAccountHolder;
 
 @RestController
-@RequestMapping(path = "v1/dev/users")
+@RequestMapping(path = "v1/data")
 public class UserControllerWeb {
     @Autowired
     VBUserService service;
     @Autowired
     AccountHolderRepository repo;
 
-    @GetMapping("/populate")
+    @GetMapping("/dev/users/populate")
     void populate() {
         var address = new Address().setAdditionalInfo("KJSGD").setCity("Oklahoma").setCountry("India")
                 .setStreet("Main street").setStreetNumber(45).setZipCode(8080);
@@ -40,65 +40,65 @@ public class UserControllerWeb {
     }
 
     //------------------------------------------------------------------------------GET END POINTS
-    @GetMapping()
+    @GetMapping("/auth/users")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<VBUserDTO> get(@RequestParam String id) throws HttpResponseException {
         return new ResponseEntity<>(service.getUnknown(id), HttpStatus.FOUND);
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/dev/users/admin")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<AdminDTO> getAdmin(@RequestParam String id) {
         return new ResponseEntity<>(service.getAdmin(id), HttpStatus.FOUND);
     }
 
-    @GetMapping("/user")
+    @GetMapping("/auth/users/account-holder")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<AccountHolderDTO> getAccountHolder(@RequestParam String id) {
         return new ResponseEntity<>(service.getAccountHolder(id), HttpStatus.FOUND);
     }
 
-    @GetMapping("/third-party")
+    @GetMapping("/auth/users/third-party")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<ThirdPartyDTO> getThirdParty(@RequestParam String id) {
         return new ResponseEntity<>(service.getThirdParty(id), HttpStatus.FOUND);
     }
     //------------------------------------------------------------------------------GET ALL END POINTS
 
-    @GetMapping("/admin/all")
+    @GetMapping("/dev/users/admin/all")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<List<AdminDTO>> getAllAdmin() {
         return new ResponseEntity<>(service.getAllAdmin(), HttpStatus.FOUND);
     }
 
-    @GetMapping("/user/all")
+    @GetMapping("/dev/users/account-holder/all")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<List<AccountHolderDTO>> getAllAccountHolder() {
         return new ResponseEntity<>(service.getAllAccountHolder(), HttpStatus.FOUND);
     }
 
-    @GetMapping("/third-party/all")
+    @GetMapping("/dev/users/third-party/all")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<List<ThirdPartyDTO>> getThirdParty() {
         return new ResponseEntity<>(service.getAllThirdParty(), HttpStatus.FOUND);
     }
 
     //------------------------------------------------------------------------------CREATE END POINTS
-    @PostMapping("/new/user") // TODO: 06/09/2022 change String id for keycloak id passed on create
+    @PostMapping("/auth/users/new/account-holder") // TODO: 06/09/2022 change String id for keycloak id passed on create
     @ResponseStatus(HttpStatus.CREATED)
     void createAccountHolder(@RequestBody AccountHolderDTO dto, @RequestParam String id) throws HttpResponseException {
         dto.setId(id);
         service.create(dto);
     }
 
-    @PostMapping("/new/admin") // TODO: 06/09/2022 change String id for keycloak id passed on create
+    @PostMapping("/dev/users/new/admin") // TODO: 06/09/2022 change String id for keycloak id passed on create
     @ResponseStatus(HttpStatus.CREATED)
     void createAdmin(@RequestBody AdminDTO dto, @RequestParam String id) throws HttpResponseException {
         dto.setId(id);
         service.create(dto);
     }
 
-    @PostMapping("/new/third-party") // TODO: 06/09/2022 change String id for keycloak id passed on create
+    @PostMapping("/auth/users/new/third-party") // TODO: 06/09/2022 change String id for keycloak id passed on create
     @ResponseStatus(HttpStatus.CREATED)
     void createThirdParty(@RequestBody ThirdPartyDTO dto, @RequestParam String id) throws HttpResponseException {
         dto.setId(id);
@@ -107,19 +107,19 @@ public class UserControllerWeb {
 
     //------------------------------------------------------------------------------UPDATE END POINTS
 
-    @PatchMapping("/update/admin")
+    @PatchMapping("/dev/users/update/admin")
     @ResponseStatus(HttpStatus.OK)
     void updateAdmin(@RequestParam String id, @RequestBody AdminDTO dto) throws HttpResponseException {
         service.update(id, dto);
     }
 
-    @PatchMapping("/update/user")
+    @PatchMapping("/auth/users/update/account-holder")
     @ResponseStatus(HttpStatus.CREATED)
     void updateAccountHolder(@RequestParam String id, @RequestBody AccountHolderDTO dto) throws HttpResponseException {
         service.update(id, dto);
     }
 
-    @PatchMapping("/update/third-party")
+    @PatchMapping("/auth/users/update/third-party")
     @ResponseStatus(HttpStatus.CREATED)
     void updateThirdParty(@RequestParam String id, @RequestBody ThirdPartyDTO dto) throws HttpResponseException {
         service.update(id, dto);
@@ -127,7 +127,7 @@ public class UserControllerWeb {
 
     //------------------------------------------------------------------------------DELETE END POINTS
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/dev/users/delete")
     @ResponseStatus(HttpStatus.OK)
     void delete(@RequestParam String id) throws HttpResponseException {
         service.delete(id);

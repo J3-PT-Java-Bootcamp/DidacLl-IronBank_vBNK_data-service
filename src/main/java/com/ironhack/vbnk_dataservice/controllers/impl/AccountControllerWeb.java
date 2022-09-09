@@ -25,14 +25,14 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/dev/accounts")
+@RequestMapping("v1/data")
 public class AccountControllerWeb implements AccountController {
 
     @Autowired
     VBAccountService service;
     @Autowired
     VBUserService userService;
-    @GetMapping("/populate")
+    @GetMapping("/dev/accounts/populate")
     void populate() throws HttpResponseException {
         var admin = VBAdmin.fromDTO((AdminDTO) userService.create(new AdminDTO().setName("Super Admin").setId("bbb")));
         var user = AccountHolder.fromDTO((AccountHolderDTO) userService.create(
@@ -64,47 +64,47 @@ public class AccountControllerWeb implements AccountController {
 
     }
     @Override
-    @GetMapping
+    @GetMapping("/auth/accounts")
     public ResponseEntity<AccountDTO> getAccount(@RequestParam String id) throws HttpResponseException {
         return ResponseEntity.ok(service.getAccount(id));
     }
     @Override
-    @GetMapping("/all")
+    @GetMapping("/auth/accounts/all")
     public ResponseEntity<List<AccountDTO>> getAllUserAccounts(@RequestParam String userId) {
         return ResponseEntity.ok(service.getAllUserAccounts(userId));
     }
     @Override
-    @PostMapping("/savings")
+    @PostMapping("/auth/accounts/savings")
     public void createSavingsAccount(@RequestBody SavingsDTO dto,@RequestParam String userId) throws HttpResponseException {
         service.create(dto, userId);
     }
     @Override
-    @PostMapping("/checking")
+    @PostMapping("/auth/accounts/checking")
     public void createChecking(@RequestBody CheckingDTO dto,@RequestParam String userId) throws HttpResponseException {
         service.create(dto, userId);
     }
     @Override
-    @PostMapping("/credit")
+    @PostMapping("/auth/accounts/credit")
     public void createCreditAccount(@RequestBody CreditDTO dto,@RequestParam String userId) throws HttpResponseException {
         service.create(dto, userId);
     }
     @Override
-    @PatchMapping("/savings")
+    @PatchMapping("/auth/accounts/savings")
     public void updateSavingsAccount(@RequestBody SavingsDTO dto,@RequestParam  String id) throws HttpResponseException {
         service.update(dto, id);
     }
     @Override
-    @PatchMapping("/checking")
+    @PatchMapping("/auth/accounts/checking")
     public void updateChecking(@RequestBody CheckingDTO dto,@RequestParam  String id) throws HttpResponseException {
         service.update(dto, id);
     }
     @Override
-    @PatchMapping("/credit")
+    @PatchMapping("/auth/accounts/credit")
     public void updateCreditAccount(@RequestBody CreditDTO dto,@RequestParam  String id) throws HttpResponseException {
         service.update(dto, id);
     }
     @Override
-    @DeleteMapping
+    @DeleteMapping("/auth/accounts")
     public void delete(@RequestParam String id) throws HttpResponseException {
         service.delete(id);
     }

@@ -1,6 +1,5 @@
 package com.ironhack.vbnk_dataservice.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -27,7 +26,6 @@ import com.ironhack.vbnk_dataservice.repositories.accounts.StudentCheckingAccoun
 import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import com.ironhack.vbnk_dataservice.utils.MoneyDeserializer;
-import com.netflix.discovery.converters.wrappers.CodecWrappers;
 import org.apache.http.client.HttpResponseException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +38,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -127,7 +124,7 @@ class AccountControllerWebTest {
     @Test
     void getAccount_test() throws Exception {
         var result = mockMvc
-                .perform(get("/v1/accounts?id="+credit.getId()))
+                .perform(get("/v1/data/auth/accounts?id="+credit.getId()))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("superSecretKey"));
@@ -136,7 +133,7 @@ class AccountControllerWebTest {
     @Test
     void getAllUserAccounts_test() throws Exception {
         var result = mockMvc
-                .perform(get("/v1/accounts/all?userId=aaa"))
+                .perform(get("/v1/data/auth/accounts/all?userId=aaa"))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("superSecretKey"));
@@ -147,7 +144,7 @@ class AccountControllerWebTest {
         int count = accountService.getAllUserAccounts("aaa").size();
 
         var result = mockMvc
-                .perform(post("/v1/accounts/savings?userId=aaa").contentType(MediaType.APPLICATION_JSON)
+                .perform(post("/v1/data/auth/accounts/savings?userId=aaa").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(SavingsDTO.fromEntity(savings))))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
@@ -158,7 +155,7 @@ class AccountControllerWebTest {
     void createChecking_test() throws Exception {
         int count = accountService.getAllUserAccounts("aaa").size();
         var result = mockMvc
-                .perform(post("/v1/accounts/checking?userId=aaa").contentType(MediaType.APPLICATION_JSON)
+                .perform(post("/v1/data/auth/accounts/checking?userId=aaa").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CheckingDTO.fromEntity(checking))))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
@@ -169,7 +166,7 @@ class AccountControllerWebTest {
     void createCreditAccount_test() throws Exception {
         int count = accountService.getAllUserAccounts("aaa").size();
         var result = mockMvc
-                .perform(post("/v1/accounts/credit?userId=aaa").contentType(MediaType.APPLICATION_JSON)
+                .perform(post("/v1/data/auth/accounts/credit?userId=aaa").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(CreditDTO.fromEntity(credit))))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
@@ -180,7 +177,7 @@ class AccountControllerWebTest {
     @Test
     void updateSavingsAccount_test() throws Exception {
         var result = mockMvc
-                .perform(patch("/v1/accounts/savings?id="+savings.getId()).contentType(MediaType.APPLICATION_JSON)
+                .perform(patch("/v1/data/auth/accounts/savings?id="+savings.getId()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new SavingsDTO().setStatus(AccountStatus.FROZEN))))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
@@ -190,7 +187,7 @@ class AccountControllerWebTest {
     @Test
     void updateChecking_test() throws Exception {
         var result = mockMvc
-            .perform(patch("/v1/accounts/checking?id="+checking.getId()).contentType(MediaType.APPLICATION_JSON)
+            .perform(patch("/v1/data/auth/accounts/checking?id="+checking.getId()).contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(new CheckingDTO().setStatus(AccountStatus.FROZEN))))
             .andExpect(status().isOk()) // check status code 200
             .andReturn();
@@ -200,7 +197,7 @@ class AccountControllerWebTest {
     @Test
     void updateCreditAccount_test() throws Exception {
         var result = mockMvc
-                .perform(patch("/v1/accounts/credit?id="+credit.getId()).contentType(MediaType.APPLICATION_JSON)
+                .perform(patch("/v1/data/auth/accounts/credit?id="+credit.getId()).contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CreditDTO().setStatus(AccountStatus.FROZEN))))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
@@ -212,7 +209,7 @@ class AccountControllerWebTest {
         int count = accountService.getAllUserAccounts("aaa").size();
 
         var result = mockMvc
-                .perform(delete("/v1/accounts?id="+credit.getId()))
+                .perform(delete("/v1/data/auth/accounts?id="+credit.getId()))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
         assertTrue(count>accountService.getAllUserAccounts("aaa").size());

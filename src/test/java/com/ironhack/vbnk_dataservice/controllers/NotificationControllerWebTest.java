@@ -81,7 +81,7 @@ class NotificationControllerWebTest {
     @Test
     void getAll_test() throws Exception {
         var result = mockMvc
-                .perform(get("/v1/users/notifications/all?userId=aaa"))
+                .perform(get("/v1/data/dev/notifications/all?userId=aaa"))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("test1"));
@@ -90,7 +90,7 @@ class NotificationControllerWebTest {
     @Test
     void getIncoming_test() throws Exception {
         var result = mockMvc
-                .perform(get("/v1/users/notifications/incoming?userId=aaa"))
+                .perform(get("/v1/data/dev/notifications/incoming?userId=aaa"))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("test1"));
@@ -100,7 +100,7 @@ class NotificationControllerWebTest {
     @Test
     void getFraud_test() throws Exception {
         var result = mockMvc
-                .perform(get("/v1/users/notifications/fraud?userId=aaa"))
+                .perform(get("/v1/data/dev/notifications/fraud?userId=aaa"))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("test3"));
@@ -109,7 +109,7 @@ class NotificationControllerWebTest {
     @Test
     void getPaymentConfirm_test() throws Exception {
         var result = mockMvc
-                .perform(get("/v1/users/notifications/payment?userId=aaa"))
+                .perform(get("/v1/data/dev/notifications/payment?userId=aaa"))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
         assertTrue(result.getResponse().getContentAsString().contains("test2"));
@@ -120,7 +120,7 @@ class NotificationControllerWebTest {
         var objString = objectMapper.writeValueAsString(new CreateNotificationDTO("Testing","This is a test",NotificationType.INCOMING,"aaa")); // transform the object to string
         int count= service.getAllPending("aaa").size();
         mockMvc
-                .perform(post("/v1/users/notifications").content(objString).contentType(MediaType.APPLICATION_JSON))
+                .perform(post("/v1/data/dev/notifications").content(objString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
         assertTrue(service.getAllPending("aaa").size()>count);
@@ -131,7 +131,7 @@ class NotificationControllerWebTest {
         int count= service.getAllPending("aaa").size();
         Long id= service.getIncomingNotifications("aaa").get(0).getId();
         var result = mockMvc
-                .perform(delete("/v1/users/notifications?id="+id))
+                .perform(delete("/v1/data/dev/notifications?id="+id))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
         assertTrue(service.getAllPending("aaa").size()<count);
