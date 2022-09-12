@@ -19,12 +19,13 @@ import java.util.List;
 import static com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder.newAccountHolder;
 
 @RestController
-@RequestMapping(path = "v1/data")
+@RequestMapping(path = "/v1/data")
 public class UserControllerWeb {
     @Autowired
     VBUserService service;
     @Autowired
     AccountHolderRepository repo;
+
 
     @GetMapping("/dev/users/populate")
     void populate() {
@@ -40,6 +41,12 @@ public class UserControllerWeb {
     }
 
     //------------------------------------------------------------------------------GET END POINTS
+    @GetMapping("/client/{ping}")
+    @ResponseStatus(HttpStatus.OK)
+    String ping(@PathVariable("ping") String ping) {
+        return ping.replace('i', 'o');
+    }
+
     @GetMapping("/auth/users")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<VBUserDTO> get(@RequestParam String id) throws HttpResponseException {
