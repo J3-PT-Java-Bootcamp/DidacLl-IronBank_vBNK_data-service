@@ -24,7 +24,7 @@ public class CheckingAccount extends VBAccount {
                 .setMonthlyMaintenanceFee(dto.getMonthlyMaintenanceFee())
                 .setPenaltyFee(dto.getPenaltyFee());
         entity.setId(dto.getId())
-
+                .setAccountNumber(dto.getAccountNumber())
                 .setBalance(new Money(dto.getAmount(),dto.getCurrency()))                .setStatus(dto.getStatus())
                 .setSecretKey(dto.getSecretKey())
                 .setPrimaryOwner(dto.getPrimaryOwner())

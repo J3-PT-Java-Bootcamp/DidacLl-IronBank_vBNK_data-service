@@ -155,4 +155,13 @@ public class VBAccountServiceImpl implements VBAccountService {
         else if (creditRepository.existsById(id)) creditRepository.deleteById(id);
         else if (studentRepository.existsById(id)) studentRepository.deleteById(id);
     }
+
+    @Override
+    public boolean exist(String destinationAccountRef) {
+        return checkingRepository.existsById(destinationAccountRef) || checkingRepository.existsByAccountNumber(destinationAccountRef) ||
+                savingsAccountRepository.existsById(destinationAccountRef) || savingsAccountRepository.existsByAccountNumber(destinationAccountRef) ||
+                creditRepository.existsById(destinationAccountRef) || creditRepository.existsByAccountNumber(destinationAccountRef) ||
+                studentRepository.existsById(destinationAccountRef) || studentRepository.existsByAccountNumber(destinationAccountRef);
+
+    }
 }

@@ -1,6 +1,5 @@
 package com.ironhack.vbnk_dataservice.data.dto.accounts;
 
-import com.ironhack.vbnk_dataservice.data.Money;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.CreditAccount;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +25,7 @@ public class CreditDTO extends AccountDTO {
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
+                .setAccountNumber(entity.getAccountNumber())
                 .setAdministratedBy(entity.getAdministratedBy());
         return dto;
     }

@@ -4,8 +4,8 @@ import com.ironhack.vbnk_dataservice.data.NotificationState;
 import com.ironhack.vbnk_dataservice.data.NotificationType;
 import com.ironhack.vbnk_dataservice.data.dao.Notification;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBUser;
-import com.ironhack.vbnk_dataservice.data.dto.CreateNotificationDTO;
 import com.ironhack.vbnk_dataservice.data.dto.NotificationDTO;
+import com.ironhack.vbnk_dataservice.data.http.request.NotificationRequest;
 import com.ironhack.vbnk_dataservice.repositories.NotificationRepository;
 import com.ironhack.vbnk_dataservice.services.NotificationService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
@@ -59,7 +59,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public NotificationDTO create(CreateNotificationDTO dto) throws HttpResponseException {
+    public NotificationDTO create(NotificationRequest dto) throws HttpResponseException {
         return NotificationDTO.fromEntity(repository.save(
                 new Notification().setType(dto.getType())
                         .setMessage(dto.getMessage()).setTitle(dto.getTitle())

@@ -12,4 +12,6 @@ public interface StudentCheckingAccountRepository extends JpaRepository<StudentC
     List<StudentCheckingAccount> findAllByPrimaryOwnerId(String userId);
 
     List<StudentCheckingAccount> findAllBySecondaryOwnerId(String userId);
+
+    boolean existsByAccountNumber(String destinationAccountRef);
 }

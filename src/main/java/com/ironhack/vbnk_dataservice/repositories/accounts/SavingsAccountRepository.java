@@ -12,4 +12,6 @@ public interface SavingsAccountRepository extends JpaRepository<SavingsAccount, 
     List<SavingsAccount> findAllByPrimaryOwnerId(String userId);
 
     List<SavingsAccount> findAllBySecondaryOwnerId(String userId);
+
+    boolean existsByAccountNumber(String destinationAccountRef);
 }

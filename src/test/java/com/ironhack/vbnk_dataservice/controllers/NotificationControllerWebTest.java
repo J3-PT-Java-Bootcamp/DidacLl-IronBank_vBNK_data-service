@@ -6,7 +6,7 @@ import com.ironhack.vbnk_dataservice.data.NotificationState;
 import com.ironhack.vbnk_dataservice.data.NotificationType;
 import com.ironhack.vbnk_dataservice.data.dao.Notification;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
-import com.ironhack.vbnk_dataservice.data.dto.CreateNotificationDTO;
+import com.ironhack.vbnk_dataservice.data.http.request.NotificationRequest;
 import com.ironhack.vbnk_dataservice.repositories.NotificationRepository;
 import com.ironhack.vbnk_dataservice.repositories.users.AccountHolderRepository;
 import com.ironhack.vbnk_dataservice.services.NotificationService;
@@ -117,8 +117,8 @@ class NotificationControllerWebTest {
 
     @Test
     void createNotification_test() throws Exception {
-        var objString = objectMapper.writeValueAsString(new CreateNotificationDTO("Testing","This is a test",NotificationType.INCOMING,"aaa")); // transform the object to string
-        int count= service.getAllPending("aaa").size();
+        var objString = objectMapper.writeValueAsString(new NotificationRequest("Testing", "This is a test", NotificationType.INCOMING, "aaa")); // transform the object to string
+        int count = service.getAllPending("aaa").size();
         mockMvc
                 .perform(post("/v1/data/dev/notifications").content(objString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()) // check status code 200

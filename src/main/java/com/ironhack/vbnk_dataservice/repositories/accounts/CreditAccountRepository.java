@@ -12,4 +12,6 @@ public interface CreditAccountRepository extends JpaRepository<CreditAccount, St
     List<CreditAccount> findAllByPrimaryOwnerId(String userId);
 
     List<CreditAccount> findAllBySecondaryOwnerId(String userId);
+
+    boolean existsByAccountNumber(String destinationAccountRef);
 }

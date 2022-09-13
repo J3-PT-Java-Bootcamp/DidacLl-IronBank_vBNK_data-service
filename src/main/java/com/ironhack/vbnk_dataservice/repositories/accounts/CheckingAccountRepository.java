@@ -12,4 +12,6 @@ public interface CheckingAccountRepository extends JpaRepository<CheckingAccount
     List<CheckingAccount> findAllByPrimaryOwnerId(String userId);
 
     List<CheckingAccount> findAllBySecondaryOwnerId(String userId);
+
+    boolean existsByAccountNumber(String accountNumber);
 }

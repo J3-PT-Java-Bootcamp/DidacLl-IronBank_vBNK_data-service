@@ -1,6 +1,5 @@
 package com.ironhack.vbnk_dataservice.data.dto.accounts;
 
-import com.ironhack.vbnk_dataservice.data.Money;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.SavingsAccount;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +27,8 @@ public class SavingsDTO extends AccountDTO {
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
-                .setAdministratedBy(entity.getAdministratedBy());
+                .setAdministratedBy(entity.getAdministratedBy())
+                .setAccountNumber(entity.getAccountNumber());
         return dto;
     }
 }

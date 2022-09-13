@@ -5,7 +5,7 @@ import com.ironhack.vbnk_dataservice.data.NotificationState;
 import com.ironhack.vbnk_dataservice.data.NotificationType;
 import com.ironhack.vbnk_dataservice.data.dao.Notification;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
-import com.ironhack.vbnk_dataservice.data.dto.CreateNotificationDTO;
+import com.ironhack.vbnk_dataservice.data.http.request.NotificationRequest;
 import com.ironhack.vbnk_dataservice.repositories.NotificationRepository;
 import com.ironhack.vbnk_dataservice.repositories.users.AccountHolderRepository;
 import org.apache.http.client.HttpResponseException;
@@ -92,19 +92,19 @@ class NotificationServiceImplTest {
     @Test
     @DisplayName("Create new (OK)")
     void create_test() throws HttpResponseException {
-        service.create(new CreateNotificationDTO("CHECK ME!", "TEST", NotificationType.INCOMING, "bbb"));
+        service.create(new NotificationRequest("CHECK ME!", "TEST", NotificationType.INCOMING, "bbb"));
         assertEquals("CHECK ME!", service.getIncomingNotifications("bbb").get(0).getTitle());
     }
 
     @Test
     @DisplayName("Create new NOK wrong user")
     void create_test_NOK() {
-        assertThrows(HttpResponseException.class, () -> service.create(new CreateNotificationDTO("CHECK ME!", "TEST", NotificationType.INCOMING, "")));
+        assertThrows(HttpResponseException.class, () -> service.create(new NotificationRequest("CHECK ME!", "TEST", NotificationType.INCOMING, "")));
     }
 
     @Test
     void delete_test() throws HttpResponseException {
-        var note = service.create(new CreateNotificationDTO("CHECK ME!", "TEST", NotificationType.INCOMING, "bbb"));
+        var note = service.create(new NotificationRequest("CHECK ME!", "TEST", NotificationType.INCOMING, "bbb"));
         service.delete(note.getId());
         assertEquals(0, service.getIncomingNotifications("bbb").size());
 

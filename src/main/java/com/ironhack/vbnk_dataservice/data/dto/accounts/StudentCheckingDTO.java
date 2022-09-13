@@ -20,7 +20,8 @@ public class StudentCheckingDTO extends AccountDTO {
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
-                .setAdministratedBy(entity.getAdministratedBy());
+                .setAdministratedBy(entity.getAdministratedBy())
+                .setAccountNumber(entity.getAccountNumber());
         return dto;
     }
 }

@@ -1,7 +1,6 @@
 package com.ironhack.vbnk_dataservice.data.dto.accounts;
 
 import com.ironhack.vbnk_dataservice.data.AccountStatus;
-import com.ironhack.vbnk_dataservice.data.Money;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.VBAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
@@ -17,6 +16,7 @@ import java.util.Currency;
 @Setter
 public class AccountDTO {
     String id;
+    String accountNumber;
     BigDecimal amount;
     Currency currency;
     String secretKey;
@@ -27,6 +27,7 @@ public class AccountDTO {
 
     public static AccountDTO fromAnyAccountEntity(VBAccount entity) {
         return new AccountDTO().setId(entity.getId())
+                .setAccountNumber(entity.getAccountNumber())
                 .setAmount(entity.getBalance().getAmount())
                 .setCurrency(entity.getBalance().getCurrency())
                 .setStatus(entity.getStatus())
@@ -53,9 +54,13 @@ public class AccountDTO {
     }
 
     private static AccountDTO copyBaseValues(AccountDTO src, AccountDTO dest) {
-        return dest.setAmount(src.getAmount()).setCurrency(src.getCurrency()).setAdministratedBy(src.administratedBy)
-                .setStatus(src.getStatus()).setPrimaryOwner(src.getPrimaryOwner())
-                .setSecondaryOwner(src.getSecondaryOwner()).setSecretKey(src.getSecretKey())
+        return dest.setAccountNumber(src.getAccountNumber())
+                .setAmount(src.getAmount()).setCurrency(src.getCurrency())
+                .setAdministratedBy(src.administratedBy)
+                .setStatus(src.getStatus())
+                .setPrimaryOwner(src.getPrimaryOwner())
+                .setSecondaryOwner(src.getSecondaryOwner())
+                .setSecretKey(src.getSecretKey())
                 .setId(src.getId());
     }
 }

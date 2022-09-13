@@ -1,4 +1,4 @@
-package com.ironhack.vbnk_dataservice.data.dto;
+package com.ironhack.vbnk_dataservice.data.http.request;
 
 import com.ironhack.vbnk_dataservice.data.NotificationType;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CreateNotificationDTO {
+public class NotificationRequest {
     String title;
     String message;
     NotificationType type;

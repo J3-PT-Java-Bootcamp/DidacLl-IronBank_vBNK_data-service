@@ -1,6 +1,5 @@
 package com.ironhack.vbnk_dataservice.data.dto.accounts;
 
-import com.ironhack.vbnk_dataservice.data.Money;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.CheckingAccount;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +21,7 @@ public class CheckingDTO extends AccountDTO {
                 .setMonthlyMaintenanceFee(entity.getMonthlyMaintenanceFee())
                 .setPenaltyFee(entity.getPenaltyFee());
         dto.setId(entity.getId())
+                .setAccountNumber(entity.getAccountNumber())
                 .setAmount(entity.getBalance().getAmount())
                 .setCurrency(entity.getBalance().getCurrency())
                 .setStatus(entity.getStatus())

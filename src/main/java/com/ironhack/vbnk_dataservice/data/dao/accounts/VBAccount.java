@@ -28,7 +28,7 @@ public abstract class VBAccount {
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
 //    @Type(type = "uuid-char")
     String id;
-
+    String accountNumber;
     @Convert(converter = MoneyConverter.class)
     Money balance;
 

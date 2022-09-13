@@ -15,4 +15,6 @@ public interface VBAccountService {
     void update(AccountDTO dto, String id) throws HttpResponseException;
 
     void delete(String id);
+
+    boolean exist(String destinationAccountRef);
 }

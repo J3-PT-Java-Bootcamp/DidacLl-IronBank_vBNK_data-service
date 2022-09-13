@@ -1,8 +1,8 @@
 package com.ironhack.vbnk_dataservice.controllers.impl;
 
 import com.ironhack.vbnk_dataservice.controllers.NotificationController;
-import com.ironhack.vbnk_dataservice.data.dto.CreateNotificationDTO;
 import com.ironhack.vbnk_dataservice.data.dto.NotificationDTO;
+import com.ironhack.vbnk_dataservice.data.http.request.NotificationRequest;
 import com.ironhack.vbnk_dataservice.services.NotificationService;
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpResponseException;
@@ -44,7 +44,7 @@ public class NotificationControllerWeb implements NotificationController {
 
     @Override
     @PostMapping("dev/notifications")
-    public void createNotification(@RequestBody CreateNotificationDTO dto) throws HttpResponseException {
+    public void createNotification(@RequestBody NotificationRequest dto) throws HttpResponseException {
         service.create(dto);
     }
 
