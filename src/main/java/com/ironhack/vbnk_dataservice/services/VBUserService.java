@@ -31,4 +31,6 @@ public interface VBUserService {
     List<AdminDTO> getAllAdmin();
 
     AdminDTO getRandomAdmin();
+
+    boolean existsById(String id);
 }

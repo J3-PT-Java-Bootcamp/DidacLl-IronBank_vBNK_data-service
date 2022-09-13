@@ -1,6 +1,7 @@
 package com.ironhack.vbnk_dataservice.services;
 
 import com.ironhack.vbnk_dataservice.data.dto.accounts.AccountDTO;
+import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
 import org.apache.http.client.HttpResponseException;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public interface VBAccountService {
 
     List<AccountDTO> getAllUserAccounts(String userId);
 
-    AccountDTO create(AccountDTO dto, String userId) throws HttpResponseException;
+    AccountDTO create(NewAccountRequest dto, String userId) throws HttpResponseException;
 
     void update(AccountDTO dto, String id) throws HttpResponseException;
 

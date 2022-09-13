@@ -4,6 +4,7 @@ import com.ironhack.vbnk_dataservice.data.dto.accounts.AccountDTO;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CheckingDTO;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CreditDTO;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.SavingsDTO;
+import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,11 @@ public interface AccountController {
     ResponseEntity<List<AccountDTO>> getAllUserAccounts(String userId);
 
     //------------------------------------------------------------------------------CREATE END POINTS
-    void createSavingsAccount(@RequestBody SavingsDTO dto, String userId) throws HttpResponseException;
+    void createSavingsAccount(@RequestBody NewAccountRequest dto, String userId) throws HttpResponseException;
 
-    void createChecking(@RequestBody CheckingDTO dto, String userId) throws HttpResponseException;
+    void createChecking(@RequestBody NewAccountRequest dto, String userId) throws HttpResponseException;
 
-    void createCreditAccount(@RequestBody CreditDTO dto, String userId) throws HttpResponseException;
+    void createCreditAccount(@RequestBody NewAccountRequest dto, String userId) throws HttpResponseException;
 
     //------------------------------------------------------------------------------UPDATE END POINTS
     void updateSavingsAccount(@RequestBody SavingsDTO dto, String id) throws HttpResponseException;

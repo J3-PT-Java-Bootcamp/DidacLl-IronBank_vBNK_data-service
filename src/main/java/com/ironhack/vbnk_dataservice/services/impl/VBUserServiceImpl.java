@@ -119,6 +119,11 @@ public class VBUserServiceImpl implements VBUserService {
         return AdminDTO.fromEntity(list.get(rand.nextInt(0, list.size())));
     }
 
+    @Override
+    public boolean existsById(String id) {
+        return accountHolderRepository.existsById(id) || adminRepository.existsById(id) || thirdPartyRepository.existsById(id);
+    }
+
     //-------------------------------------------------------------------------------------------------CREATE METHODS
     @Override
     public VBUserDTO create(VBUserDTO dto) throws HttpResponseException {
