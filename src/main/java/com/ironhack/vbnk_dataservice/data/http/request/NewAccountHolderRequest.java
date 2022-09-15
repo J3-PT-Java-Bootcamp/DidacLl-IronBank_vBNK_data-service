@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class NewAccountHolderRequest {
+    String id;
     String name;
     LocalDate dateOfBirth;
     String mainStreet, mainCity, mainCountry, mainAdditionalInfo;

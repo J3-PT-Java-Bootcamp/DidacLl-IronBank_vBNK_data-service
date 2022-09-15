@@ -25,7 +25,7 @@ public abstract class VBUser {
 
     @Id
     String id;
-    @NotNull
+//    @NotNull
     String name;
     @CreationTimestamp
     @Column(updatable = false)

@@ -2,6 +2,7 @@ package com.ironhack.vbnk_dataservice.data.dto.users;
 
 import com.ironhack.vbnk_dataservice.data.Address;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
+import com.ironhack.vbnk_dataservice.data.http.request.NewAccountHolderRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,5 +38,21 @@ public class AccountHolderDTO extends VBUserDTO {
     public AccountHolderDTO setName(String name) {
         super.setName(name);
         return this;
+    }
+
+    public static AccountHolderDTO fromRequest(NewAccountHolderRequest request){
+        return newAccountHolderDTO(request.getName(), request.getId()).setDateOfBirth(request.getDateOfBirth())
+                .setMailingAddress(new Address(request.getMailStreet(),
+                        request.getMailCity(),
+                        request.getMailCountry(),
+                        request.getMailAdditionalInfo(),
+                        request.getMailStreetNumber(),
+                        request.getMailZipCode()))
+                .setPrimaryAddress(new Address(request.getMainStreet(),
+                        request.getMainCity(),
+                        request.getMainCountry(),
+                        request.getMainAdditionalInfo(),
+                        request.getMainStreetNumber(),
+                        request.getMainZipCode()));
     }
 }

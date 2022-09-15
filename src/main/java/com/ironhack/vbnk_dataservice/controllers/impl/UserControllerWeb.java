@@ -5,6 +5,7 @@ import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
+import com.ironhack.vbnk_dataservice.data.http.request.NewAccountHolderRequest;
 import com.ironhack.vbnk_dataservice.repositories.users.AccountHolderRepository;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import org.apache.http.client.HttpResponseException;
@@ -41,7 +42,7 @@ public class UserControllerWeb {
     }
 
     //------------------------------------------------------------------------------GET END POINTS
-    @GetMapping("/client/{ping}")
+    @GetMapping("/client/test/{ping}")
     @ResponseStatus(HttpStatus.OK)
     String ping(@PathVariable("ping") String ping) {
         return ping.replace('i', 'o');
@@ -91,11 +92,10 @@ public class UserControllerWeb {
     }
 
     //------------------------------------------------------------------------------CREATE END POINTS
-    @PostMapping("/auth/users/new/account-holder") // TODO: 06/09/2022 change String id for keycloak id passed on create
+    @PostMapping("/client/users/new/account-holder") // TODO: 06/09/2022 change String id for keycloak id passed on create
     @ResponseStatus(HttpStatus.CREATED)
-    void createAccountHolder(@RequestBody AccountHolderDTO dto, @RequestParam String id) throws HttpResponseException {
-        dto.setId(id);
-        service.create(dto);
+    void createAccountHolder(@RequestBody NewAccountHolderRequest request) throws HttpResponseException {
+        service.create(AccountHolderDTO.fromRequest(request));
     }
 
     @PostMapping("/dev/users/new/admin") // TODO: 06/09/2022 change String id for keycloak id passed on create
