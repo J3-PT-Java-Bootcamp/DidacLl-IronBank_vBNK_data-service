@@ -9,11 +9,8 @@ import org.apache.http.HttpException;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.security.Principal;
 import java.util.List;
 
 public interface AccountController {
@@ -26,11 +23,11 @@ public interface AccountController {
     ResponseEntity<List<AccountDTO>> getAllUserAccounts(String userId);
 
     //------------------------------------------------------------------------------CREATE END POINTS
-    void createSavingsAccount( Authentication auth, @RequestBody NewAccountRequest dto, String userId) throws HttpResponseException;
+    String createSavingsAccount(Authentication auth, @RequestBody NewAccountRequest dto) throws HttpResponseException;
 
-    void createChecking(Authentication auth,@RequestBody NewAccountRequest dto, String userId) throws HttpResponseException;
+    String createChecking(Authentication auth, @RequestBody NewAccountRequest dto) throws HttpResponseException;
 
-    void createCreditAccount(Authentication auth,@RequestBody NewAccountRequest dto, String userId) throws HttpResponseException;
+    String createCreditAccount(Authentication auth, @RequestBody NewAccountRequest dto) throws HttpResponseException;
 
     //------------------------------------------------------------------------------UPDATE END POINTS
     void updateSavingsAccount(@RequestBody SavingsDTO dto, String id) throws HttpResponseException;

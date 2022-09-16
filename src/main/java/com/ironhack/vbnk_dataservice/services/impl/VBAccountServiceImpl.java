@@ -86,15 +86,16 @@ public class VBAccountServiceImpl implements VBAccountService {
     }
 
     @Override
-    public AccountDTO create(NewAccountRequest request, String userId,String adminId) throws HttpResponseException {
-        var owner = userService.getAccountHolder(userId);
+    public AccountDTO create(NewAccountRequest request) throws HttpResponseException {
+        var owner = userService.getAccountHolder(request.getPrimaryOwner());
         if (owner == null) throw new HttpResponseException(404, "Wrong User Id");
-        var admin = (adminId==null||adminId==""||adminId==" ")?
-                userService.getRandomAdmin():userService.getAdmin(adminId);
+        var admin = (request.getAdministratedBy()==null||request.getAdministratedBy()==""||request.getAdministratedBy()==" ")?
+                userService.getRandomAdmin():userService.getAdmin(request.getAdministratedBy());
+        if( admin==null) throw new HttpResponseException(404, "Wrong Admin Id");
         var sOwner = userService.getAccountHolder(request.getSecondaryOwner());
         request
                 .setId(null)
-                .setPrimaryOwner(userId)
+                .setPrimaryOwner(owner.getId())
                 .setAdministratedBy(admin.getId())
                 .setAccountNumber(createAccountNumber(owner,admin));
         if (request instanceof NewCreditAccountRequest &&
@@ -199,8 +200,7 @@ public class VBAccountServiceImpl implements VBAccountService {
         StringBuilder userNumbers= new StringBuilder();
         userNumbers.append(Arrays.toString(getNumbersFromId(pOwner.getId()).toArray(new Character[0])));
         var accountNumber=userNumbers.toString().substring(0,6);
-        accountNumber += Arrays.toString(getNumbersFromId(admin.getId()).toArray(new Character[0]));
-
+        accountNumber += Arrays.toString(getNumbersFromId(admin.getId()).toArray(new Character[0])).substring(0,4);
         String securityCode = ((pOwner.getDateOfBirth().getDayOfYear() + 10) + " ").substring(0, 2);
         String IBANNumber= VBNK_INT_ENTITY_CODE+ VBNK_ENTITY_CODE+ securityCode +accountNumber;
         if (exist(IBANNumber))return createAccountNumber(pOwner,admin);

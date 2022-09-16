@@ -9,13 +9,9 @@ import com.ironhack.vbnk_dataservice.data.dao.accounts.SavingsAccount;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.StudentCheckingAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
-import com.ironhack.vbnk_dataservice.data.dto.accounts.CheckingDTO;
-import com.ironhack.vbnk_dataservice.data.dto.accounts.CreditDTO;
-import com.ironhack.vbnk_dataservice.data.dto.accounts.SavingsDTO;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.StudentCheckingDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
-import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
 import com.ironhack.vbnk_dataservice.repositories.accounts.CheckingAccountRepository;
 import com.ironhack.vbnk_dataservice.repositories.accounts.CreditAccountRepository;
 import com.ironhack.vbnk_dataservice.repositories.accounts.SavingsAccountRepository;
@@ -70,11 +66,10 @@ class VBAccountServiceImplTest {
         credit.setBalance(money).setStatus(AccountStatus.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
         savings = new SavingsAccount().setInterestRate(BigDecimal.TEN)
-                .setMinimumBalance(money).setPenaltyFee(BigDecimal.TEN);
+                .setMinimumBalance(money);
         savings.setBalance(money).setStatus(AccountStatus.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
-        checking = new CheckingAccount().setPenaltyFee(BigDecimal.TEN)
-                .setMinimumBalance(money).setMonthlyMaintenanceFee(BigDecimal.TEN);
+        checking = new CheckingAccount();
         checking.setBalance(money).setStatus(AccountStatus.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
         student = new StudentCheckingAccount();

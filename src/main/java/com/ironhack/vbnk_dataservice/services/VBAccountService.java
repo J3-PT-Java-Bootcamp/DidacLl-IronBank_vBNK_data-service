@@ -11,7 +11,7 @@ public interface VBAccountService {
 
     List<AccountDTO> getAllUserAccounts(String userId);
 
-    AccountDTO create(NewAccountRequest dto, String userId,String adminId) throws HttpResponseException;
+    AccountDTO create(NewAccountRequest dto) throws HttpResponseException;
 
     void update(AccountDTO dto, String id) throws HttpResponseException;
 

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -26,8 +27,9 @@ public abstract class VBAccount {
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
-//    @Type(type = "uuid-char")
+    @Type(type = "uuid-char")
     private  String id;
+    @Column(updatable = false,unique = true,nullable = false)
     private  String accountNumber;
     @Convert(converter = MoneyConverter.class)
     private  Money balance;
@@ -38,15 +40,14 @@ public abstract class VBAccount {
 
     @ManyToOne
     @JoinColumn(name = "primary_owner_id")
-//    @NotNull
     private  AccountHolder primaryOwner;
 
     @ManyToOne
     @JoinColumn(name = "secondary_owner_id")
-//    @Nullable
     AccountHolder secondaryOwner;
 
     @CreationTimestamp
+    @Column(updatable = false)
     Instant creationDate;
 
     @UpdateTimestamp
@@ -55,6 +56,6 @@ public abstract class VBAccount {
     @Enumerated(EnumType.STRING)
     AccountStatus status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,optional = false)
     VBAdmin administratedBy;
 }

@@ -8,17 +8,15 @@ import com.ironhack.vbnk_dataservice.data.dto.accounts.SavingsDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
 import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
-import org.apache.http.auth.Credentials;
 import org.apache.http.client.HttpResponseException;
-import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -30,37 +28,7 @@ public class AccountControllerWeb implements AccountController {
     @Autowired
     VBUserService userService;
 
-    //    @GetMapping("/dev/accounts/populate")
-//    void populate() throws HttpResponseException {
-//        var admin = VBAdmin.fromDTO((AdminDTO) userService.create(new AdminDTO().setName("Super Admin").setId("bbb")));
-//        var user = AccountHolder.fromDTO((AccountHolderDTO) userService.create(
-//                AccountHolderDTO.newAccountHolderDTO("Antonio", "aaa")
-//                        .setDateOfBirth(LocalDate.of(1990, 5, 3))
-//                        .setPrimaryAddress(new Address().setAdditionalInfo("KJSGD").setCity("Oklahoma").setCountry("India")
-//                                .setStreet("Main street").setStreetNumber(45).setZipCode(8080)))
-//        );
-//        Money money = new Money(BigDecimal.valueOf(10));
-//
-//        var credit = new CreditAccount().setCreditLimit(money).setInterestRate(BigDecimal.TEN);
-//        credit.setBalance(money).setStatus(AccountStatus.ACTIVE)
-//                .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
-//        var savings = new SavingsAccount().setInterestRate(BigDecimal.TEN)
-//                .setMinimumBalance(money).setPenaltyFee(BigDecimal.TEN);
-//        savings.setBalance(money).setStatus(AccountStatus.ACTIVE)
-//                .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
-//        var checking = new CheckingAccount().setPenaltyFee(BigDecimal.TEN)
-//                .setMinimumBalance(money).setMonthlyMaintenanceFee(BigDecimal.TEN);
-//         checking.setBalance(money).setStatus(AccountStatus.ACTIVE)
-//                .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
-//        var student = new StudentCheckingAccount();
-//        student.setBalance(money).setStatus(AccountStatus.ACTIVE)
-//                .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
-////        repository.save(checking);
-//        credit = CreditAccount.fromDTO((CreditDTO) service.create(CreditDTO.fromEntity(credit), "aaa"));
-//        checking = CheckingAccount.fromDTO((CheckingDTO) service.create(SavingsDTO.fromEntity(savings), "aaa"));
-//        student = StudentCheckingAccount.fromDTO((StudentCheckingDTO) service.create(StudentCheckingDTO.fromEntity(student), "aaa"));
-//
-//    }
+
     @Override
     @GetMapping("/auth/accounts")
     public ResponseEntity<AccountDTO> getAccount(@RequestParam String id) throws HttpResponseException {
@@ -75,23 +43,25 @@ public class AccountControllerWeb implements AccountController {
 
     @Override
     @PostMapping("/auth/accounts/savings")
-    public void createSavingsAccount(Authentication auth,@RequestBody NewAccountRequest request, @RequestParam String userId) throws HttpResponseException {
-        var admin= userService.getAdmin(((UserDetails)(auth.getDetails())).getUsername());
-        service.create(request, userId,admin.getId());
+    public String createSavingsAccount(Authentication auth, @RequestBody NewAccountRequest request) throws HttpResponseException {
+        request.setAdministratedBy( userService.getAdmin(((UserDetails)(auth.getDetails())).getUsername()).getId());
+        if(!(userService.existsById(request.getPrimaryOwner())&& userService.existsById(request.getAdministratedBy())))throw new HttpResponseException(404,"USERS NOT FOUND");
+        return service.create(request).getAccountNumber();
     }
 
     @Override
     @PostMapping("/auth/accounts/checking")
-    public void createChecking(Authentication auth,@RequestBody NewAccountRequest request, @RequestParam String userId) throws HttpResponseException {
+    public String createChecking(Authentication auth, @RequestBody NewAccountRequest request) throws HttpResponseException {
         var admin= userService.getAdmin(((UserDetails)(auth.getDetails())).getUsername());
-        service.create(request, userId,admin.getId());
-    }
+        if(!(userService.existsById(request.getPrimaryOwner())&& userService.existsById(request.getAdministratedBy())))throw new HttpResponseException(404,"USERS NOT FOUND");
+        return service.create(request).getAccountNumber();    }
 
     @Override
     @PostMapping("/auth/accounts/credit")
-    public void createCreditAccount(Authentication auth,@RequestBody NewAccountRequest request, @RequestParam String userId) throws HttpResponseException {
-        var admin= userService.getAdmin(((UserDetails)(auth.getDetails())).getUsername());
-        service.create(request, userId,admin.getId());
+    public String createCreditAccount(Authentication auth, @RequestBody NewAccountRequest request) throws HttpResponseException {
+      request.setAdministratedBy(userService.getAdmin(((UserDetails)(auth.getDetails())).getUsername()).getId());
+        if(!(userService.existsById(request.getPrimaryOwner())&& userService.existsById(request.getAdministratedBy())))throw new HttpResponseException(404,"USERS NOT FOUND");
+        return service.create(request).getAccountNumber();
     }
 
     @Override
@@ -112,6 +82,7 @@ public class AccountControllerWeb implements AccountController {
     @Override
     @DeleteMapping("/auth/accounts")
     public void delete(@RequestParam String id) throws HttpResponseException {
+        if(service.getAccount(id).getAmount().compareTo(BigDecimal.ZERO)!=0)throw new HttpResponseException(HttpStatus.CONFLICT.value(), "Account must be at 0 to delete it");
         service.delete(id);
     }
 }

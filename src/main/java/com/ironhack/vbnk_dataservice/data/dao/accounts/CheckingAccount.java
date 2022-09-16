@@ -10,19 +10,22 @@ import javax.persistence.Convert;
 import javax.persistence.Entity;
 import java.math.BigDecimal;
 
+import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
+
 @Entity
 @Getter
 @Setter
 public class CheckingAccount extends VBAccount {
+
     @Convert(converter = MoneyConverter.class)
-    private Money minimumBalance;
-    private BigDecimal penaltyFee;
-    private BigDecimal monthlyMaintenanceFee;
+    private final Money minimumBalance= VBNK_CHECKING_MIN_BALANCE;
+    private final BigDecimal penaltyFee= VBNK_PENALTY_FEE;
+    private final BigDecimal monthlyMaintenanceFee= VBNK_MONTH_MAINTENANCE_FEE;
 
     public static CheckingAccount fromDTO(CheckingDTO dto) {
-        var entity = new CheckingAccount().setMinimumBalance(new Money(dto.getMinimumBalance(),dto.getCurrency()))
-                .setMonthlyMaintenanceFee(dto.getMonthlyMaintenanceFee())
-                .setPenaltyFee(dto.getPenaltyFee());
+        var entity = new CheckingAccount();//.setMinimumBalance(new Money(dto.getMinimumBalance(),dto.getCurrency()))
+//                .setMonthlyMaintenanceFee(dto.getMonthlyMaintenanceFee())
+//                .setPenaltyFee(dto.getPenaltyFee());
         entity.setId(dto.getId())
                 .setAccountNumber(dto.getAccountNumber())
                 .setBalance(new Money(dto.getAmount(),dto.getCurrency()))                .setStatus(dto.getStatus())

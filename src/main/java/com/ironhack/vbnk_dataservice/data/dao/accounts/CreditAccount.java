@@ -5,10 +5,15 @@ import com.ironhack.vbnk_dataservice.data.dto.accounts.CreditDTO;
 import com.ironhack.vbnk_dataservice.utils.MoneyConverter;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
+
+import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 
 @Entity
 //@NoArgsConstructor
@@ -16,7 +21,11 @@ import java.math.BigDecimal;
 @Setter
 public class CreditAccount extends VBAccount {
     @Convert(converter = MoneyConverter.class)
+    @ColumnDefault(VBNK_MAX_CREDIT_DEF + "//" + VBNK_CURRENCY_DEF)
     private Money creditLimit;
+
+    @ColumnDefault(VBNK_MAX_INTEREST_RATE)
+    @DecimalMax(VBNK_MAX_INTEREST_RATE) @DecimalMin(VBNK_MIN_INTEREST_RATE)
     private BigDecimal interestRate;
 
     public static CreditAccount fromDTO(CreditDTO dto) {
