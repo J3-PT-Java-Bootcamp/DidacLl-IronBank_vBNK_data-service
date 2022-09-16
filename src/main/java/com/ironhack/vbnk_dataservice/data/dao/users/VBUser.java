@@ -4,11 +4,13 @@ import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
+import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.http.client.HttpResponseException;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.http.HttpStatus;
 
@@ -25,8 +27,9 @@ public abstract class VBUser {
     @Id
     private String id;
 
-//    @NotNull
-    private String username,firstName,lastName;
+    @Column(updatable = false,unique = true,nullable = false)
+    private String username;
+    private String firstName,lastName;
     @CreationTimestamp
     @Column(updatable = false)
     private Instant creationDate;

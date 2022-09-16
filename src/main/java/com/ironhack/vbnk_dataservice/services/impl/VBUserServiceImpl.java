@@ -54,12 +54,16 @@ public class VBUserServiceImpl implements VBUserService {
 
     @Override
     public AccountHolderDTO getAccountHolder(String id) {
-        return AccountHolderDTO.fromEntity(accountHolderRepository.findById(id).orElseThrow());
+        return AccountHolderDTO.fromEntity(accountHolderRepository.findById(id).orElse(
+                accountHolderRepository.findByUsername(id).orElseThrow()
+        ));
     }
 
     @Override
     public AdminDTO getAdmin(String id) {
-        return AdminDTO.fromEntity(adminRepository.findById(id).orElseThrow());
+            return AdminDTO.fromEntity(adminRepository.findById(id).orElse(
+                    adminRepository.findByUsername(id).orElseThrow()
+            ));
     }
     //-------------------------------------------------------------------------------------------------Update METHODS
 
@@ -122,6 +126,11 @@ public class VBUserServiceImpl implements VBUserService {
     @Override
     public boolean existsById(String id) {
         return accountHolderRepository.existsById(id) || adminRepository.existsById(id) || thirdPartyRepository.existsById(id);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return accountHolderRepository.existsByUsername(username) || adminRepository.existsByUsername(username) || thirdPartyRepository.existsByUsername(username);
     }
 
     //-------------------------------------------------------------------------------------------------CREATE METHODS

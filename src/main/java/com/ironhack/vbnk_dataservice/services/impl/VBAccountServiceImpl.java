@@ -7,6 +7,8 @@ import com.ironhack.vbnk_dataservice.data.dao.accounts.StudentCheckingAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.*;
+import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.*;
 import com.ironhack.vbnk_dataservice.repositories.accounts.CheckingAccountRepository;
 import com.ironhack.vbnk_dataservice.repositories.accounts.CreditAccountRepository;
@@ -20,8 +22,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 
 @Service
 public class VBAccountServiceImpl implements VBAccountService {
@@ -81,17 +86,22 @@ public class VBAccountServiceImpl implements VBAccountService {
     }
 
     @Override
-    public AccountDTO create(NewAccountRequest request, String userId) throws HttpResponseException {
+    public AccountDTO create(NewAccountRequest request, String userId,String adminId) throws HttpResponseException {
         var owner = userService.getAccountHolder(userId);
         if (owner == null) throw new HttpResponseException(404, "Wrong User Id");
-        var admin = userService.getRandomAdmin();
+        var admin = (adminId==null||adminId==""||adminId==" ")?
+                userService.getRandomAdmin():userService.getAdmin(adminId);
         var sOwner = userService.getAccountHolder(request.getSecondaryOwner());
-        request.setId(null);
-        request.setPrimaryOwner(userId).setAdministratedBy(admin.getId());
+        request
+                .setId(null)
+                .setPrimaryOwner(userId)
+                .setAdministratedBy(admin.getId())
+                .setAccountNumber(createAccountNumber(owner,admin));
         if (request instanceof NewCreditAccountRequest &&
-                owner.getDateOfBirth().plusYears(18).isEqual(LocalDate.now())) {
+                owner.getDateOfBirth().plusYears(24).isAfter(LocalDate.now())) {
             NewStudentCheckingAccountRequest dto2 = new NewStudentCheckingAccountRequest();
             dto2.setId(request.getId())
+                    .setAccountNumber(request.getAccountNumber())
                     .setInitialAmount(request.getInitialAmount())
                     .setCurrency(request.getCurrency())
                     .setStatus(request.getStatus())
@@ -181,4 +191,22 @@ public class VBAccountServiceImpl implements VBAccountService {
                 studentRepository.existsById(destinationAccountRef) || studentRepository.existsByAccountNumber(destinationAccountRef);
 
     }
+
+
+
+
+    public String createAccountNumber(AccountHolderDTO pOwner, AdminDTO admin){
+        StringBuilder userNumbers= new StringBuilder();
+        userNumbers.append(Arrays.toString(getNumbersFromId(pOwner.getId()).toArray(new Character[0])));
+        var accountNumber=userNumbers.toString().substring(0,6);
+        accountNumber += Arrays.toString(getNumbersFromId(admin.getId()).toArray(new Character[0]));
+
+        String securityCode = ((pOwner.getDateOfBirth().getDayOfYear() + 10) + " ").substring(0, 2);
+        String IBANNumber= VBNK_INT_ENTITY_CODE+ VBNK_ENTITY_CODE+ securityCode +accountNumber;
+        if (exist(IBANNumber))return createAccountNumber(pOwner,admin);
+        return IBANNumber;
+    }
+
+
+
 }

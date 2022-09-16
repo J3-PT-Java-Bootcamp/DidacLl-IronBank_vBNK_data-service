@@ -33,4 +33,6 @@ public interface VBUserService {
     AdminDTO getRandomAdmin();
 
     boolean existsById(String id);
+
+    boolean existsByUsername(String username);
 }

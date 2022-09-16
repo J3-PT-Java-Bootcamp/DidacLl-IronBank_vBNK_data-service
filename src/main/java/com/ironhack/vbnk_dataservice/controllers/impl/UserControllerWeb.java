@@ -93,18 +93,19 @@ public class UserControllerWeb {
     }
 
     //------------------------------------------------------------------------------CREATE END POINTS
-    @PostMapping("/client/users/new/account-holder") // TODO: 06/09/2022 change String id for keycloak id passed on create
+    @PostMapping("/client/users/new/account-holder")
     @ResponseStatus(HttpStatus.CREATED)
-    void createAccountHolder(@RequestBody NewAccountHolderRequest request) throws HttpResponseException {
-        service.create(AccountHolderDTO.fromRequest(request));
+    String createAccountHolder(@RequestBody NewAccountHolderRequest request) throws HttpResponseException {
+        if(service.existsById(request.getId())||service.existsByUsername(request.getUsername()))throw new HttpResponseException(409,"User already exists" );
+        return service.create(AccountHolderDTO.fromRequest(request)).getId();
     }
 
     @PostMapping("/client/users/new/admin")
     @ResponseStatus(HttpStatus.CREATED)
-    void createAdmin(@RequestBody NewAdminRequest request) throws HttpResponseException {
-        if(service.existsById(request.getId()))throw new HttpResponseException(409,"User already exists" );
+    String createAdmin(@RequestBody NewAdminRequest request) throws HttpResponseException {
+        if(service.existsById(request.getId())||service.existsByUsername(request.getUserName()))throw new HttpResponseException(409,"User already exists" );
         AdminDTO dto = AdminDTO.fromRequest(request);
-        service.create(dto);
+        return service.create(dto).getId();
     }
 
     @PostMapping("/auth/users/new/third-party")

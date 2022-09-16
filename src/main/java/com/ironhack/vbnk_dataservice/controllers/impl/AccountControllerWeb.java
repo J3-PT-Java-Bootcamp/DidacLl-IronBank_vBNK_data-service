@@ -8,11 +8,17 @@ import com.ironhack.vbnk_dataservice.data.dto.accounts.SavingsDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
 import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
+import org.apache.http.auth.Credentials;
 import org.apache.http.client.HttpResponseException;
+import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -69,20 +75,23 @@ public class AccountControllerWeb implements AccountController {
 
     @Override
     @PostMapping("/auth/accounts/savings")
-    public void createSavingsAccount(@RequestBody NewAccountRequest dto, @RequestParam String userId) throws HttpResponseException {
-        service.create(dto, userId);
+    public void createSavingsAccount(Authentication auth,@RequestBody NewAccountRequest request, @RequestParam String userId) throws HttpResponseException {
+        var admin= userService.getAdmin(((UserDetails)(auth.getDetails())).getUsername());
+        service.create(request, userId,admin.getId());
     }
 
     @Override
     @PostMapping("/auth/accounts/checking")
-    public void createChecking(@RequestBody NewAccountRequest dto, @RequestParam String userId) throws HttpResponseException {
-        service.create(dto, userId);
+    public void createChecking(Authentication auth,@RequestBody NewAccountRequest request, @RequestParam String userId) throws HttpResponseException {
+        var admin= userService.getAdmin(((UserDetails)(auth.getDetails())).getUsername());
+        service.create(request, userId,admin.getId());
     }
 
     @Override
     @PostMapping("/auth/accounts/credit")
-    public void createCreditAccount(@RequestBody NewAccountRequest dto, @RequestParam String userId) throws HttpResponseException {
-        service.create(dto, userId);
+    public void createCreditAccount(Authentication auth,@RequestBody NewAccountRequest request, @RequestParam String userId) throws HttpResponseException {
+        var admin= userService.getAdmin(((UserDetails)(auth.getDetails())).getUsername());
+        service.create(request, userId,admin.getId());
     }
 
     @Override

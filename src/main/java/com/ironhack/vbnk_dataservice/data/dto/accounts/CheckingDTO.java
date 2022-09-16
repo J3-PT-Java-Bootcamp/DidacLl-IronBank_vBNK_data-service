@@ -5,12 +5,16 @@ import com.ironhack.vbnk_dataservice.data.dao.accounts.CheckingAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.http.request.NewCheckingAccountRequest;
+import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Currency;
+
+import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 
 @NoArgsConstructor
 @Getter
@@ -38,6 +42,7 @@ public class CheckingDTO extends AccountDTO {
     }
 
     public static CheckingDTO fromRequest(NewCheckingAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin) {
+
         CheckingDTO dto = new CheckingDTO().setMinimumBalance(request.getMinimumBalance())
                 .setMonthlyMaintenanceFee(request.getMonthlyMaintenanceFee())
                 .setPenaltyFee(request.getPenaltyFee());
