@@ -21,11 +21,13 @@ import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 @Setter
 public class SavingsAccount extends VBAccount {
 
-    @ColumnDefault(VBNK_MAX_INTEREST_RATE)
-    @DecimalMax(VBNK_MAX_INTEREST_RATE) @DecimalMin(VBNK_MIN_INTEREST_RATE)
+    @ColumnDefault(VBNK_MIN_SAVINGS_INTEREST_RATE)
+    @DecimalMax(VBNK_MAX_SAVINGS_INTEREST_RATE) @DecimalMin(VBNK_MIN_SAVINGS_INTEREST_RATE)
     private BigDecimal interestRate;
     private final BigDecimal penaltyFee=VBNK_PENALTY_FEE;
     @Convert(converter = MoneyConverter.class)
+    @ColumnDefault(VBNK_MAX_SAVINGS_MINIMUM_BALANCE)
+    @DecimalMin(VBNK_MIN_SAVINGS_MINIMUM_BALANCE) @DecimalMax(VBNK_MAX_SAVINGS_MINIMUM_BALANCE)
     private Money minimumBalance;
 
     public static SavingsAccount fromDTO(SavingsDTO dto) {

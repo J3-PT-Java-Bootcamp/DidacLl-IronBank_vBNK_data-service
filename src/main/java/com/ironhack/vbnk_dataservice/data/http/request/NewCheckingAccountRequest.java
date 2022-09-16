@@ -12,14 +12,8 @@ import java.math.BigDecimal;
 @Setter
 public class NewCheckingAccountRequest extends NewAccountRequest {
 
-    BigDecimal minimumBalance;
-    BigDecimal penaltyFee;
-    BigDecimal monthlyMaintenanceFee;
-
     public static NewCheckingAccountRequest fromEntity(CheckingAccount entity) {
-        var dto = new NewCheckingAccountRequest().setMinimumBalance(entity.getMinimumBalance().getAmount())
-                .setMonthlyMaintenanceFee(entity.getMonthlyMaintenanceFee())
-                .setPenaltyFee(entity.getPenaltyFee());
+        var dto = new NewCheckingAccountRequest();
         dto.setId(entity.getId())
                 .setAccountNumber(entity.getAccountNumber())
                 .setInitialAmount(entity.getBalance().getAmount())

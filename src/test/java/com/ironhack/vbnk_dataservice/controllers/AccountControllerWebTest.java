@@ -95,11 +95,10 @@ class AccountControllerWebTest {
         credit.setBalance(money).setStatus(AccountStatus.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("superSecretKey");
         savings = new SavingsAccount().setInterestRate(BigDecimal.TEN)
-                .setMinimumBalance(money).setPenaltyFee(BigDecimal.TEN);
+                .setMinimumBalance(money);
         savings.setBalance(money).setStatus(AccountStatus.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
-        checking = new CheckingAccount().setPenaltyFee(BigDecimal.TEN)
-                .setMinimumBalance(money).setMonthlyMaintenanceFee(BigDecimal.TEN);
+        checking = new CheckingAccount();
         checking.setBalance(money).setStatus(AccountStatus.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
         student = new StudentCheckingAccount();
