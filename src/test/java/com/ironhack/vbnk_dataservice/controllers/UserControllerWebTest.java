@@ -47,22 +47,22 @@ class UserControllerWebTest {
                 .setStreet("Main street").setStreetNumber(45).setZipCode(8080);
 
         accountHolderRepository.saveAll(List.of(
-                newAccountHolder("Antonio", "aaa").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
-                newAccountHolder("Antonia", "aab").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
-                newAccountHolder("Antonino", "aac").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
-                newAccountHolder("Antoine", "aad").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address)
+                newAccountHolder("Antonio", "aaa","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antonia", "aab","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antonino", "aac","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antoine", "aad","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address)
         ));
         adminRepository.saveAll(List.of(
-                newVBAdmin("Antonio", "bbb"),
-                newVBAdmin("Antonia", "bba"),
-                newVBAdmin("Antonino", "bbc"),
-                newVBAdmin("Antoine", "bbd")
+                newVBAdmin("Antonio", "bbb","Antonio","Antoniez"),
+                newVBAdmin("Antonia", "bba","Antonio","Antoniez"),
+                newVBAdmin("Antonino", "bbc","Antonio","Antoniez"),
+                newVBAdmin("Antoine", "bbd","Antonio","Antoniez")
         ));
         thirdPartyRepository.saveAll(List.of(
-                newThirdParty("Antonio", "abb"),
-                newThirdParty("Antonia", "aba"),
-                newThirdParty("Antonino", "abc"),
-                newThirdParty("Antoine", "abd")
+                newThirdParty("Antonio", "abb","Antonio","Antoniez"),
+                newThirdParty("Antonia", "aba","Antonio","Antoniez"),
+                newThirdParty("Antonino", "abc","Antonio","Antoniez"),
+                newThirdParty("Antoine", "abd","Antonio","Antoniez")
         ));
     }
 

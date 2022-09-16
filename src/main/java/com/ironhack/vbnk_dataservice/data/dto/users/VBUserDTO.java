@@ -9,6 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public abstract class VBUserDTO {
     String id;
-    String name;
 
+    private String username,firstName,lastName;
 }

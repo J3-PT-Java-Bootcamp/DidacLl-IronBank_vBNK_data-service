@@ -12,17 +12,17 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Entity
 public class ThirdParty extends VBUser {
-    String hashKey;
-    boolean trusted;
+    private String hashKey;
+    private boolean trusted;
 
 
     public static ThirdParty fromDTO(ThirdPartyDTO dto) {
-        return newThirdParty(dto.getName(), dto.getId()).setHashKey(dto.getHashKey()).setTrusted(dto.isTrusted());
+        return newThirdParty(dto.getUsername(), dto.getId(), dto.getFirstName(), dto.getLastName()).setTrusted(dto.isTrusted());
     }
 
-    public static ThirdParty newThirdParty(String name, String id) {
+    public static ThirdParty newThirdParty(String name, String id,String firstname,String lastname) {
         var user = new ThirdParty();
-        user.setId(id).setName(name);
+        user.setId(id).setUsername(name).setFirstName(firstname).setLastName(lastname);
         return user;
     }
 }

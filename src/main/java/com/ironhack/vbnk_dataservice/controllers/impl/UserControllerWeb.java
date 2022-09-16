@@ -6,6 +6,7 @@ import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.NewAccountHolderRequest;
+import com.ironhack.vbnk_dataservice.data.http.request.NewAdminRequest;
 import com.ironhack.vbnk_dataservice.repositories.users.AccountHolderRepository;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import org.apache.http.client.HttpResponseException;
@@ -34,10 +35,10 @@ public class UserControllerWeb {
                 .setStreet("Main street").setStreetNumber(45).setZipCode(8080);
 
         repo.saveAll(List.of(
-                newAccountHolder("Antonio", "aaa").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
-                newAccountHolder("Antonia", "aab").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
-                newAccountHolder("Antonino", "aac").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
-                newAccountHolder("Antoine", "aad").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address)
+                newAccountHolder("Antonio", "aaa","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antonia", "aab","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antonino", "aac","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antoine", "aad","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address)
         ));
     }
 
@@ -98,14 +99,15 @@ public class UserControllerWeb {
         service.create(AccountHolderDTO.fromRequest(request));
     }
 
-    @PostMapping("/dev/users/new/admin") // TODO: 06/09/2022 change String id for keycloak id passed on create
+    @PostMapping("/client/users/new/admin")
     @ResponseStatus(HttpStatus.CREATED)
-    void createAdmin(@RequestBody AdminDTO dto, @RequestParam String id) throws HttpResponseException {
-        dto.setId(id);
+    void createAdmin(@RequestBody NewAdminRequest request) throws HttpResponseException {
+        if(service.existsById(request.getId()))throw new HttpResponseException(409,"User already exists" );
+        AdminDTO dto = AdminDTO.fromRequest(request);
         service.create(dto);
     }
 
-    @PostMapping("/auth/users/new/third-party") // TODO: 06/09/2022 change String id for keycloak id passed on create
+    @PostMapping("/auth/users/new/third-party")
     @ResponseStatus(HttpStatus.CREATED)
     void createThirdParty(@RequestBody ThirdPartyDTO dto, @RequestParam String id) throws HttpResponseException {
         dto.setId(id);

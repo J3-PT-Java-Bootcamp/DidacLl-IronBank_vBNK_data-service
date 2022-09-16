@@ -35,12 +35,12 @@ class NotificationServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        user = userRepository.save(newAccountHolder("Antonio", "aaa")
+        user = userRepository.save(newAccountHolder("Antonio", "aaa","Antonio","Antoniez")
                 .setDateOfBirth(LocalDate.now()).
                 setPrimaryAddress(new Address().setAdditionalInfo("KJSGD")
                         .setCity("Oklahoma").setCountry("India").setStreet("Main street")
                         .setStreetNumber(45).setZipCode(8080)));
-        var otherUser = userRepository.save(newAccountHolder("Antonia", "bbb")
+        var otherUser = userRepository.save(newAccountHolder("Antonia", "bbb","Antonio","Antoniez")
                 .setDateOfBirth(LocalDate.now()).
                 setPrimaryAddress(new Address().setAdditionalInfo("KJSGD")
                         .setCity("Oklahoma").setCountry("India").setStreet("Main street")

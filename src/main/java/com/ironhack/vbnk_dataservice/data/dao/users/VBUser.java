@@ -4,7 +4,6 @@ import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
-import com.sun.istack.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,14 +23,15 @@ import java.time.Instant;
 public abstract class VBUser {
 
     @Id
-    String id;
+    private String id;
+
 //    @NotNull
-    String name;
+    private String username,firstName,lastName;
     @CreationTimestamp
     @Column(updatable = false)
-    Instant creationDate;
+    private Instant creationDate;
     @UpdateTimestamp
-    Instant updateDate;
+    private Instant updateDate;
 
     public static VBUser fromUnknownDTO(VBUserDTO unknown) throws HttpResponseException {
         return switch (unknown.getClass().getSimpleName()) {

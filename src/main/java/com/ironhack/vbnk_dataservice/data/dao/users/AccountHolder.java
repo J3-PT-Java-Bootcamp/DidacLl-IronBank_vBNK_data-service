@@ -20,10 +20,10 @@ import java.util.List;
 public class AccountHolder extends VBUser {
     @NotNull
     @Column(columnDefinition = "DATE")
-    LocalDate dateOfBirth;
+    private LocalDate dateOfBirth;
     @NotNull
     @Embedded
-    Address primaryAddress;
+    private Address primaryAddress;
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "street", column = @Column(name = "mail_street")),
@@ -33,20 +33,20 @@ public class AccountHolder extends VBUser {
             @AttributeOverride(name = "streetNumber", column = @Column(name = "mail_street_number")),
             @AttributeOverride(name = "zipCode", column = @Column(name = "mail_zip_code")),
     })
-    Address mailingAddress;
+    private Address mailingAddress;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @JsonIgnore
-    List<Notification> pendingNotifications;
+    private List<Notification> pendingNotifications;
 
     public static AccountHolder fromDTO(AccountHolderDTO dto) {
-        return newAccountHolder(dto.getName(), dto.getId()).setDateOfBirth(dto.getDateOfBirth())
+        return newAccountHolder(dto.getUsername(), dto.getId(), dto.getFirstName(), dto.getLastName()).setDateOfBirth(dto.getDateOfBirth())
                 .setPrimaryAddress(dto.getPrimaryAddress())
                 .setMailingAddress(dto.getMailingAddress());
     }
 
-    public static AccountHolder newAccountHolder(String name, String id) {
+    public static AccountHolder newAccountHolder(String username, String id,String firstname, String lastname) {
         var user = new AccountHolder();
-        user.setId(id).setName(name);
+        user.setId(id).setUsername(username).setLastName(lastname).setFirstName(firstname);;
         return user;
     }
 }

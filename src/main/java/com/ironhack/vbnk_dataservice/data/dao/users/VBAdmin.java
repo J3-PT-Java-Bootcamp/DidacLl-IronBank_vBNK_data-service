@@ -19,15 +19,15 @@ import java.util.List;
 public class VBAdmin extends VBUser {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @JsonIgnore
-    List<Notification> pendingNotifications;
+    private List<Notification> pendingNotifications;
 
     public static VBAdmin fromDTO(AdminDTO dto) {
-        return newVBAdmin(dto.getName(), dto.getId());
+        return newVBAdmin(dto.getUsername(), dto.getId(),dto.getFirstName(),dto.getLastName());
     }
 
-    public static VBAdmin newVBAdmin(String name, String id) {
+    public static VBAdmin newVBAdmin(String name, String id, String firstName, String lastName) {
         var user = new VBAdmin();
-        user.setId(id).setName(name);
+        user.setId(id).setUsername(name).setLastName(lastName).setFirstName(firstName);;
         return user;
     }
 }

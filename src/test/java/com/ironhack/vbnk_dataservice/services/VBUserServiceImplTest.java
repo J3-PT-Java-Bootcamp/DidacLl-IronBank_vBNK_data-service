@@ -43,22 +43,22 @@ class VBUserServiceImplTest {
                 .setStreet("Main street").setStreetNumber(45).setZipCode(8080);
 
         accountHolderRepository.saveAll(List.of(
-                newAccountHolder("Antonio", "aaa").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
-                newAccountHolder("Antonia", "aab").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
-                newAccountHolder("Antonino", "aac").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
-                newAccountHolder("Antoine", "aad").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address)
+                newAccountHolder("Antonio", "aaa","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antonia", "aab","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antonino", "aac","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address),
+                newAccountHolder("Antoine", "aad","Antonio","Antoniez").setDateOfBirth(LocalDate.now()).setPrimaryAddress(address)
         ));
         adminRepository.saveAll(List.of(
-                newVBAdmin("Antonio", "bbb"),
-                newVBAdmin("Antonia", "bba"),
-                newVBAdmin("Antonino", "bbc"),
-                newVBAdmin("Antoine", "bbd")
+                newVBAdmin("Antonio", "bbb","Antonio","Antoniez"),
+                newVBAdmin("Antonia", "bba","Antonio","Antoniez"),
+                newVBAdmin("Antonino", "bbc","Antonio","Antoniez"),
+                newVBAdmin("Antoine", "bbd","Antonio","Antoniez")
         ));
         thirdPartyRepository.saveAll(List.of(
-                newThirdParty("Antonio", "abb"),
-                newThirdParty("Antonia", "aba"),
-                newThirdParty("Antonino", "abc"),
-                newThirdParty("Antoine", "abd")
+                newThirdParty("Antonio", "abb","Antonio","Antoniez"),
+                newThirdParty("Antonia", "aba","Antonio","Antoniez"),
+                newThirdParty("Antonino", "abc","Antonio","Antoniez"),
+                newThirdParty("Antoine", "abd","Antonio","Antoniez")
         ));
 
     }
@@ -73,7 +73,7 @@ class VBUserServiceImplTest {
     @Test
     @DisplayName("Get unknown user by id (OK)")
     void getUnknown_test_ok() throws HttpResponseException, HttpException {
-        assertEquals("Antonino", service.getUnknown("abc").getName());
+        assertEquals("Antonino", service.getUnknown("abc").getUsername());
     }
 
     @Test
@@ -92,27 +92,27 @@ class VBUserServiceImplTest {
     @Test
     @DisplayName("Get thirdParty by id (OK)")
     void getThirdParty_test() {
-        assertEquals("Antonino", service.getThirdParty("abc").getName());
+        assertEquals("Antonino", service.getThirdParty("abc").getUsername());
     }
 
     @Test
     @DisplayName("Get AccHolder by id (OK)")
     void getAccountHolder_test() {
-        assertEquals("Antonio", service.getAccountHolder("aaa").getName());
+        assertEquals("Antonio", service.getAccountHolder("aaa").getUsername());
     }
 
     @Test
     @DisplayName("Get Admin by id (OK)")
     void getAdmin_test() {
-        assertEquals("Antonio", service.getAdmin("bbb").getName());
+        assertEquals("Antonio", service.getAdmin("bbb").getUsername());
     }
 
     @Test
     @DisplayName("Update Existing User")
     void update_test() throws HttpResponseException {
-        var dto = new AccountHolderDTO().setName("Patata");
+        var dto = new AccountHolderDTO().setUsername("Patata");
         service.update("aaa", dto);
-        assertEquals("Patata", service.getUnknown("aaa").getName());
+        assertEquals("Patata", service.getUnknown("aaa").getUsername());
     }
 
     @Test
@@ -144,7 +144,7 @@ class VBUserServiceImplTest {
     @DisplayName("Create new user")
     void create_test() throws HttpResponseException {
         service.create(new AccountHolderDTO("parapapa")
-                .setName("piii")
+                .setUsername("piii")
                 .setPrimaryAddress(address)
                 .setDateOfBirth(LocalDate.now()));
         assertEquals(5, service.getAllAccountHolder().size());

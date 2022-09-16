@@ -15,9 +15,9 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class SavingsAccount extends VBAccount {
-    BigDecimal interestRate, penaltyFee;
+    private BigDecimal interestRate, penaltyFee;
     @Convert(converter = MoneyConverter.class)
-    Money minimumBalance;
+    private Money minimumBalance;
 
     public static SavingsAccount fromDTO(SavingsDTO dto) {
         var retEntity = new SavingsAccount().setMinimumBalance(new Money(dto.getMinimumBalance(),dto.getCurrency()))

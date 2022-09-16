@@ -16,8 +16,8 @@ import java.math.BigDecimal;
 @Setter
 public class CreditAccount extends VBAccount {
     @Convert(converter = MoneyConverter.class)
-    Money creditLimit;
-    BigDecimal interestRate;
+    private Money creditLimit;
+    private BigDecimal interestRate;
 
     public static CreditAccount fromDTO(CreditDTO dto) {
         var retEntity = new CreditAccount().setCreditLimit(new Money(dto.getCreditLimit(),dto.getCurrency()))

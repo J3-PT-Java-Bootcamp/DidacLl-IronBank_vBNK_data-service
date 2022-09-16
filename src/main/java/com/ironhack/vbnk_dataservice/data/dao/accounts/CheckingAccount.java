@@ -15,9 +15,9 @@ import java.math.BigDecimal;
 @Setter
 public class CheckingAccount extends VBAccount {
     @Convert(converter = MoneyConverter.class)
-    Money minimumBalance;
-    BigDecimal penaltyFee;
-    BigDecimal monthlyMaintenanceFee;
+    private Money minimumBalance;
+    private BigDecimal penaltyFee;
+    private BigDecimal monthlyMaintenanceFee;
 
     public static CheckingAccount fromDTO(CheckingDTO dto) {
         var entity = new CheckingAccount().setMinimumBalance(new Money(dto.getMinimumBalance(),dto.getCurrency()))

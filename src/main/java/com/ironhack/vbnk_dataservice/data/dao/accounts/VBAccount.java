@@ -27,19 +27,19 @@ public abstract class VBAccount {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
 //    @Type(type = "uuid-char")
-    String id;
-    String accountNumber;
+    private  String id;
+    private  String accountNumber;
     @Convert(converter = MoneyConverter.class)
-    Money balance;
+    private  Money balance;
 
     //    @NotNull
     @Convert(converter = CryptoConverter.class)
-    String secretKey;
+    private  String secretKey;
 
     @ManyToOne
     @JoinColumn(name = "primary_owner_id")
 //    @NotNull
-    AccountHolder primaryOwner;
+    private  AccountHolder primaryOwner;
 
     @ManyToOne
     @JoinColumn(name = "secondary_owner_id")

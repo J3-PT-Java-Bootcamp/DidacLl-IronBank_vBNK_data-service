@@ -15,6 +15,7 @@ import com.ironhack.vbnk_dataservice.data.dto.accounts.SavingsDTO;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.StudentCheckingDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
+import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
 import com.ironhack.vbnk_dataservice.repositories.accounts.CheckingAccountRepository;
 import com.ironhack.vbnk_dataservice.repositories.accounts.CreditAccountRepository;
 import com.ironhack.vbnk_dataservice.repositories.accounts.SavingsAccountRepository;
@@ -56,9 +57,9 @@ class VBAccountServiceImplTest {
 
     @BeforeEach
     void setUp() throws HttpResponseException {
-        admin = VBAdmin.fromDTO((AdminDTO) userService.create(new AdminDTO().setName("Super Admin").setId("bbb")));
+        admin = VBAdmin.fromDTO((AdminDTO) userService.create(new AdminDTO().setUsername("Super Admin").setId("bbb")));
         user = AccountHolder.fromDTO((AccountHolderDTO) userService.create(
-                AccountHolderDTO.newAccountHolderDTO("Antonio", "aaa")
+                AccountHolderDTO.newAccountHolderDTO("Antonio", "aaa","antonio","antoniez")
                         .setDateOfBirth(LocalDate.of(1990, 5, 3))
                         .setPrimaryAddress(new Address().setAdditionalInfo("KJSGD").setCity("Oklahoma").setCountry("India")
                                 .setStreet("Main street").setStreetNumber(45).setZipCode(8080)))
@@ -79,11 +80,11 @@ class VBAccountServiceImplTest {
         student = new StudentCheckingAccount();
         student.setBalance(money).setStatus(AccountStatus.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
-//        repository.save(checking);
-        credit = CreditAccount.fromDTO((CreditDTO) accountService.create(CreditDTO.fromEntity(credit), "aaa"));
-        checking = CheckingAccount.fromDTO((CheckingDTO) accountService.create(CheckingDTO.fromEntity(checking), "aaa"));
-        savings = SavingsAccount.fromDTO((SavingsDTO) accountService.create(SavingsDTO.fromEntity(savings), "aaa"));
-        student = StudentCheckingAccount.fromDTO((StudentCheckingDTO) accountService.create(StudentCheckingDTO.fromEntity(student), "aaa"));
+////        repository.save(checking);
+//        credit = CreditAccount.fromDTO((CreditDTO) accountService.create(CreditDTO.fromEntity(credit), "aaa"));
+//        checking = CheckingAccount.fromDTO((CheckingDTO) accountService.create(CheckingDTO.fromEntity(checking), "aaa"));
+//        savings = SavingsAccount.fromDTO((SavingsDTO) accountService.create(SavingsDTO.fromEntity(savings), "aaa"));
+//        student = StudentCheckingAccount.fromDTO((StudentCheckingDTO) accountService.create(StudentCheckingDTO.fromEntity(student), "aaa"));
     }
 
     @AfterEach
@@ -98,7 +99,7 @@ class VBAccountServiceImplTest {
 
     @Test
     void getAccount_test() throws HttpResponseException {
-        assertEquals("Antonio", accountService.getAccount(student.getId()).getPrimaryOwner().getName());
+        assertEquals("Antonio", accountService.getAccount(student.getId()).getPrimaryOwner().getUsername());
     }
 
     @Test
@@ -108,7 +109,7 @@ class VBAccountServiceImplTest {
 
     @Test
     void create_test() throws HttpResponseException {
-        accountService.create(CheckingDTO.fromEntity(checking), "aaa");
+//        accountService.create(CheckingDTO.fromEntity(checking), "aaa");
         assertEquals(5, accountService.getAllUserAccounts("aaa").size());
     }
 

@@ -67,21 +67,21 @@ public class VBUserServiceImpl implements VBUserService {
     public void update(String id, VBUserDTO dto) throws HttpResponseException {
         if (dto instanceof AccountHolderDTO accDTO) {
             var originalDTO = AccountHolderDTO.fromEntity(accountHolderRepository.findById(id).orElseThrow());
-            if (accDTO.getName() != null && !accDTO.getName().equals("")) originalDTO.setName(accDTO.getName());
+            if (accDTO.getUsername() != null && !accDTO.getUsername().equals("")) originalDTO.setUsername(accDTO.getUsername());
             if (accDTO.getMailingAddress() != null) originalDTO.setMailingAddress(accDTO.getMailingAddress());
             if (accDTO.getPrimaryAddress() != null) originalDTO.setPrimaryAddress(accDTO.getPrimaryAddress());
             if (accDTO.getDateOfBirth() != null) originalDTO.setDateOfBirth(accDTO.getDateOfBirth());
             accountHolderRepository.save(AccountHolder.fromDTO(originalDTO));
         } else if (dto instanceof AdminDTO adminDTO) {
             var originalDTO = AdminDTO.fromEntity(adminRepository.findById(id).orElseThrow());
-            if (adminDTO.getName() != null && !adminDTO.getName().equals("")) originalDTO.setName(adminDTO.getName());
+            if (adminDTO.getUsername() != null && !adminDTO.getUsername().equals("")) originalDTO.setUsername(adminDTO.getUsername());
             adminRepository.save(VBAdmin.fromDTO(originalDTO));
         } else if (dto instanceof ThirdPartyDTO thirdPartyDTO) {
             var originalDTO = ThirdPartyDTO.fromEntity(thirdPartyRepository.findById(id).orElseThrow());
             if (thirdPartyDTO.getHashKey() != null && !thirdPartyDTO.getHashKey().equals(""))
                 originalDTO.setHashKey(thirdPartyDTO.getHashKey());
-            if (thirdPartyDTO.getName() != null && !thirdPartyDTO.getName().equals(""))
-                originalDTO.setName(thirdPartyDTO.getName());
+            if (thirdPartyDTO.getUsername() != null && !thirdPartyDTO.getUsername().equals(""))
+                originalDTO.setUsername(thirdPartyDTO.getUsername());
             thirdPartyRepository.save(ThirdParty.fromDTO(originalDTO));
         } else
             throw new HttpResponseException(HttpStatus.I_AM_A_TEAPOT.value(), HttpStatus.I_AM_A_TEAPOT.getReasonPhrase());

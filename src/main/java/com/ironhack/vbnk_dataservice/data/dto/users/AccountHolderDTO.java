@@ -13,9 +13,10 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class AccountHolderDTO extends VBUserDTO {
-    LocalDate dateOfBirth;
-    Address primaryAddress;
-    Address mailingAddress;
+    private String secretKey;
+    private LocalDate dateOfBirth;
+    private Address primaryAddress;
+    private Address mailingAddress;
 
     public AccountHolderDTO(String id) {
         super();
@@ -23,25 +24,27 @@ public class AccountHolderDTO extends VBUserDTO {
     }
 
     public static AccountHolderDTO fromEntity(AccountHolder entity) {
-        return newAccountHolderDTO(entity.getName(), entity.getId()).setDateOfBirth(entity.getDateOfBirth())
+        return newAccountHolderDTO(entity.getUsername(), entity.getId(), entity.getFirstName(), entity.getLastName())
+                .setDateOfBirth(entity.getDateOfBirth())
                 .setMailingAddress(entity.getMailingAddress())
                 .setPrimaryAddress(entity.getPrimaryAddress());
     }
 
-    public static AccountHolderDTO newAccountHolderDTO(String name, String id) {
+    public static AccountHolderDTO newAccountHolderDTO(String username, String id,String firstname,String lastname) {
         var user = new AccountHolderDTO();
-        user.setId(id).setName(name);
+        user.setId(id).setUsername(username).setFirstName(firstname).setLastName(lastname);
         return user;
     }
 
     @Override
-    public AccountHolderDTO setName(String name) {
-        super.setName(name);
+    public AccountHolderDTO setUsername(String userName) {
+        super.setUsername(userName);
         return this;
     }
 
     public static AccountHolderDTO fromRequest(NewAccountHolderRequest request){
-        return newAccountHolderDTO(request.getName(), request.getId()).setDateOfBirth(request.getDateOfBirth())
+        return newAccountHolderDTO(request.getUsername(), request.getId(), request.getFirstname(), request.getLastname())
+                .setDateOfBirth(request.getDateOfBirth())
                 .setMailingAddress(new Address(request.getMailStreet(),
                         request.getMailCity(),
                         request.getMailCountry(),

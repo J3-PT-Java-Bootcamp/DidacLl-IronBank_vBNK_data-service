@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="clean" type="DatabaseScript">
+    <data-source id="ae1c57cd-c60a-426b-bc22-bec6b949dd25" namespace="schema/&quot;vbnk_data&quot;" />
+    <script-text>DROP DATABASE IF EXISTS vbnk_data;
+CREATE DATABASE vbnk_data;</script-text>
+    <method v="2" />
+  </configuration>
+</component>

@@ -10,11 +10,11 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class NewAccountHolderRequest {
-    String id;
-    String name;
-    LocalDate dateOfBirth;
-    String mainStreet, mainCity, mainCountry, mainAdditionalInfo;
-    String mailStreet, mailCity, mailCountry, mailAdditionalInfo;
-    Integer mainStreetNumber, mainZipCode;
-    Integer mailStreetNumber, mailZipCode;
+    private String id;
+    private String username,email,firstname,lastname;
+    private LocalDate dateOfBirth;
+    private String mainStreet, mainCity, mainCountry, mainAdditionalInfo;
+    private String mailStreet, mailCity, mailCountry, mailAdditionalInfo;
+    private Integer mainStreetNumber, mainZipCode;
+    private Integer mailStreetNumber, mailZipCode;
 }
