@@ -54,16 +54,18 @@ public class VBUserServiceImpl implements VBUserService {
 
     @Override
     public AccountHolderDTO getAccountHolder(String id) {
-        return AccountHolderDTO.fromEntity(accountHolderRepository.findById(id).orElse(
-                accountHolderRepository.findByUsername(id).orElseThrow()
-        ));
+        Optional<AccountHolder> byId = accountHolderRepository.findById(id);
+        if(byId.isPresent()) return AccountHolderDTO.fromEntity(byId.get());
+        Optional<AccountHolder> byUsername = accountHolderRepository.findByUsername(id);
+        return AccountHolderDTO.fromEntity(byUsername.orElseThrow());
     }
 
     @Override
     public AdminDTO getAdmin(String id) {
-            return AdminDTO.fromEntity(adminRepository.findById(id).orElse(
-                    adminRepository.findByUsername(id).orElseThrow()
-            ));
+        Optional<VBAdmin> byId = adminRepository.findById(id);
+        if(byId.isPresent()) return AdminDTO.fromEntity(byId.get());
+        Optional<VBAdmin> byUsername = adminRepository.findByUsername(id);
+        return AdminDTO.fromEntity(byUsername.orElseThrow());
     }
     //-------------------------------------------------------------------------------------------------Update METHODS
 

@@ -20,21 +20,21 @@ import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 @Getter
 @Setter
 public class CreditAccount extends VBAccount {
-    @Convert(converter = MoneyConverter.class)
-    @ColumnDefault(VBNK_MAX_CREDIT_DEF + "//" + VBNK_CURRENCY_DEF)
-    private Money creditLimit;
+//    @Convert(converter = MoneyConverter.class)
+    @ColumnDefault(VBNK_MIN_CREDIT_LIMIT)
+    private BigDecimal creditLimit;
 
     @ColumnDefault(VBNK_MAX_INTEREST_RATE)
     @DecimalMax(VBNK_MAX_INTEREST_RATE) @DecimalMin(VBNK_MIN_INTEREST_RATE)
     private BigDecimal interestRate;
 
     public static CreditAccount fromDTO(CreditDTO dto) {
-        var retEntity = new CreditAccount().setCreditLimit(new Money(dto.getCreditLimit(),dto.getCurrency()))
+        var retEntity = new CreditAccount().setCreditLimit(dto.getCreditLimit())
                 .setInterestRate(dto.getInterestRate());
         retEntity.setId(dto.getId())
 
                 .setBalance(new Money(dto.getAmount(),dto.getCurrency()))
-                .setStatus(dto.getStatus())
+                .setState(dto.getState())
                 .setSecretKey(dto.getSecretKey())
                 .setPrimaryOwner(dto.getPrimaryOwner())
                 .setSecondaryOwner(dto.getSecondaryOwner())

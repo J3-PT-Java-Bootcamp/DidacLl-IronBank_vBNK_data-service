@@ -1,6 +1,6 @@
 package com.ironhack.vbnk_dataservice.services.impl;
 
-import com.ironhack.vbnk_dataservice.data.AccountStatus;
+import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.AccountDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.NotificationRequest;
 import com.ironhack.vbnk_dataservice.data.http.request.TransferRequest;
@@ -40,7 +40,7 @@ public class VBNKServiceWeb implements VBNKService {
             } catch (HttpResponseException e) {
                 errors.add(VBError.ACCOUNT_NOT_FOUND);
             }
-            if (sourceAccount != null && sourceAccount.getStatus().equals(AccountStatus.ACTIVE)) {
+            if (sourceAccount != null && sourceAccount.getState().equals(AccountState.ACTIVE)) {
                 BigDecimal prevSrcAmount = sourceAccount.getAmount();
                 if (prevSrcAmount.compareTo(request.getAmount()) >= 0) {
                     try {
@@ -69,7 +69,7 @@ public class VBNKServiceWeb implements VBNKService {
         if (accountService.exist(request.getDestinationAccountRef())) {
             AccountDTO destAccount = null;
             destAccount = accountService.getAccount(request.getDestinationAccountRef());
-            if (destAccount != null && destAccount.getStatus().equals(AccountStatus.ACTIVE)) {
+            if (destAccount != null && destAccount.getState().equals(AccountState.ACTIVE)) {
                 //--------SUCCESS! -------//
                 var prevDestAmount = destAccount.getAmount();
                 response.setDestPreviousBalance(prevDestAmount);

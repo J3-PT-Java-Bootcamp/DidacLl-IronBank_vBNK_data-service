@@ -1,6 +1,6 @@
 package com.ironhack.vbnk_dataservice.data.dao.accounts;
 
-import com.ironhack.vbnk_dataservice.data.AccountStatus;
+import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.Money;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
@@ -27,7 +27,7 @@ public abstract class VBAccount {
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "VARCHAR(36)")
-    @Type(type = "uuid-char")
+//    @Type(type = "uuid-char")
     private  String id;
     @Column(updatable = false,unique = true,nullable = false)
     private  String accountNumber;
@@ -54,7 +54,7 @@ public abstract class VBAccount {
     Instant updateDate;
 
     @Enumerated(EnumType.STRING)
-    AccountStatus status;
+    AccountState state;
 
     @ManyToOne(fetch = FetchType.EAGER,optional = false)
     VBAdmin administratedBy;

@@ -1,6 +1,6 @@
 package com.ironhack.vbnk_dataservice.data.dto.accounts;
 
-import com.ironhack.vbnk_dataservice.data.AccountStatus;
+import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.VBAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
@@ -22,7 +22,7 @@ public class AccountDTO {
     String secretKey;
     AccountHolder primaryOwner;
     AccountHolder secondaryOwner;
-    AccountStatus status;
+    AccountState state;
     VBAdmin administratedBy;
 
     public static AccountDTO fromAnyAccountEntity(VBAccount entity) {
@@ -30,7 +30,7 @@ public class AccountDTO {
                 .setAccountNumber(entity.getAccountNumber())
                 .setAmount(entity.getBalance().getAmount())
                 .setCurrency(entity.getBalance().getCurrency())
-                .setStatus(entity.getStatus())
+                .setState(entity.getState())
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
@@ -57,7 +57,7 @@ public class AccountDTO {
         return dest.setAccountNumber(src.getAccountNumber())
                 .setAmount(src.getAmount()).setCurrency(src.getCurrency())
                 .setAdministratedBy(src.administratedBy)
-                .setStatus(src.getStatus())
+                .setState(src.getState())
                 .setPrimaryOwner(src.getPrimaryOwner())
                 .setSecondaryOwner(src.getSecondaryOwner())
                 .setSecretKey(src.getSecretKey())

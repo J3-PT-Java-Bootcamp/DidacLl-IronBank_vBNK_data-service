@@ -18,7 +18,7 @@ public class StudentCheckingAccount extends VBAccount {
         var retVal = new StudentCheckingAccount();
         retVal.setId(dto.getId())
                 .setBalance(new Money(dto.getAmount(),dto.getCurrency()))
-                .setStatus(dto.getStatus())
+                .setState(dto.getState())
                 .setSecretKey(dto.getSecretKey())
                 .setPrimaryOwner(dto.getPrimaryOwner())
                 .setSecondaryOwner(dto.getSecondaryOwner())

@@ -15,17 +15,5 @@ public class NewCreditAccountRequest extends NewAccountRequest {
     BigDecimal creditLimit;
     BigDecimal interestRate;
 
-    public static NewCreditAccountRequest fromEntity(CreditAccount entity) {
-        var dto = new NewCreditAccountRequest().setCreditLimit(entity.getCreditLimit().getAmount())
-                .setInterestRate(entity.getInterestRate());
-        dto.setId(entity.getId())
-                .setInitialAmount(entity.getBalance().getAmount())
-                .setCurrency(entity.getBalance().getCurrency().getCurrencyCode())
-                .setStatus(entity.getStatus())
-                .setSecretKey(entity.getSecretKey())
-                .setPrimaryOwner(entity.getPrimaryOwner().getId())
-                .setSecondaryOwner(entity.getSecondaryOwner().getId())
-                .setAdministratedBy(entity.getAdministratedBy().getId());
-        return dto;
-    }
+
 }

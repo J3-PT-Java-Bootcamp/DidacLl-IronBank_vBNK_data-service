@@ -1,6 +1,6 @@
 package com.ironhack.vbnk_dataservice.services;
 
-import com.ironhack.vbnk_dataservice.data.AccountStatus;
+import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.Address;
 import com.ironhack.vbnk_dataservice.data.Money;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.CheckingAccount;
@@ -62,18 +62,18 @@ class VBAccountServiceImplTest {
         );
         Money money = new Money(BigDecimal.valueOf(10));
 
-        credit = new CreditAccount().setCreditLimit(money).setInterestRate(BigDecimal.TEN);
-        credit.setBalance(money).setStatus(AccountStatus.ACTIVE)
+        credit = new CreditAccount().setInterestRate(BigDecimal.TEN);
+        credit.setBalance(money).setState(AccountState.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
         savings = new SavingsAccount().setInterestRate(BigDecimal.TEN)
                 .setMinimumBalance(money);
-        savings.setBalance(money).setStatus(AccountStatus.ACTIVE)
+        savings.setBalance(money).setState(AccountState.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
         checking = new CheckingAccount();
-        checking.setBalance(money).setStatus(AccountStatus.ACTIVE)
+        checking.setBalance(money).setState(AccountState.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
         student = new StudentCheckingAccount();
-        student.setBalance(money).setStatus(AccountStatus.ACTIVE)
+        student.setBalance(money).setState(AccountState.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
 ////        repository.save(checking);
 //        credit = CreditAccount.fromDTO((CreditDTO) accountService.create(CreditDTO.fromEntity(credit), "aaa"));

@@ -1,5 +1,5 @@
 package com.ironhack.vbnk_dataservice.data;
 
-public enum AccountStatus {
+public enum AccountState {
     ACTIVE, FROZEN, CLOSED
 }

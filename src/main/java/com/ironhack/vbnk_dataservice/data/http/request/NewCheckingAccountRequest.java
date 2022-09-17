@@ -5,24 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @NoArgsConstructor
 @Getter
 @Setter
 public class NewCheckingAccountRequest extends NewAccountRequest {
 
-    public static NewCheckingAccountRequest fromEntity(CheckingAccount entity) {
-        var dto = new NewCheckingAccountRequest();
-        dto.setId(entity.getId())
-                .setAccountNumber(entity.getAccountNumber())
-                .setInitialAmount(entity.getBalance().getAmount())
-                .setCurrency(entity.getBalance().getCurrency().getCurrencyCode())
-                .setStatus(entity.getStatus())
-                .setSecretKey(entity.getSecretKey())
-                .setPrimaryOwner(entity.getPrimaryOwner().getId())
-                .setSecondaryOwner(entity.getSecondaryOwner().getId())
-                .setAdministratedBy(entity.getAdministratedBy().getId());
-        return dto;
-    }
 }

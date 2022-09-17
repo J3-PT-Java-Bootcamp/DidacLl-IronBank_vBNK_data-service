@@ -1,10 +1,10 @@
 package com.ironhack.vbnk_dataservice.data.dto.accounts;
 
-import com.ironhack.vbnk_dataservice.data.AccountStatus;
+import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.StudentCheckingAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
-import com.ironhack.vbnk_dataservice.data.http.request.NewStudentCheckingAccountRequest;
+import com.ironhack.vbnk_dataservice.data.http.request.NewCheckingAccountRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,7 +22,7 @@ public class StudentCheckingDTO extends AccountDTO {
         dto.setId(entity.getId())
                 .setAmount(entity.getBalance().getAmount())
                 .setCurrency(entity.getBalance().getCurrency())
-                .setStatus(entity.getStatus())
+                .setState(entity.getState())
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
@@ -31,17 +31,17 @@ public class StudentCheckingDTO extends AccountDTO {
         return dto;
     }
 
-    public static StudentCheckingDTO fromRequest(NewStudentCheckingAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin) {
+    public static StudentCheckingDTO fromRequest(NewCheckingAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin) {
         StudentCheckingDTO dto = new StudentCheckingDTO();
-        dto.setId(request.getId())
+        dto
                 .setAmount(request.getInitialAmount())
                 .setCurrency(Currency.getInstance(request.getCurrency()))
-                .setStatus(AccountStatus.ACTIVE)
+                .setState(AccountState.ACTIVE)
                 .setSecretKey(request.getSecretKey())
-                .setPrimaryOwner(pOwner)
-                .setSecondaryOwner(sOwner)
+                .setAccountNumber(request.getAccountNumber())
                 .setAdministratedBy(admin)
-                .setAccountNumber(request.getAccountNumber());
+                .setPrimaryOwner(pOwner);
+        if(sOwner!=null)dto.setSecondaryOwner(sOwner);
         return dto;
     }
 }

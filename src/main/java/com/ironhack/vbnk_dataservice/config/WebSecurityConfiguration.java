@@ -5,6 +5,7 @@ import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticatio
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,8 +36,8 @@ public class WebSecurityConfiguration extends KeycloakWebSecurityConfigurerAdapt
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/v1/data/client/**").permitAll()
-                .antMatchers("/v1/data/auth/**").hasAnyRole("admin", "client")
-                .antMatchers("/v1/data/main/**").hasAnyRole("admin", "customer")
+                .antMatchers("/v1/data/auth").hasRole("admin")
+                .antMatchers("/v1/data/main/**").hasRole("customer")
                 .antMatchers("/v1/data/public/**").permitAll()
                 .antMatchers("/v1/data/**").hasRole("developer")
                 .anyRequest()

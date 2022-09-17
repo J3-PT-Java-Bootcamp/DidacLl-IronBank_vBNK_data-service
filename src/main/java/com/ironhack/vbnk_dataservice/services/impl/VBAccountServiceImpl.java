@@ -9,7 +9,10 @@ import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.*;
 import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
-import com.ironhack.vbnk_dataservice.data.http.request.*;
+import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
+import com.ironhack.vbnk_dataservice.data.http.request.NewCheckingAccountRequest;
+import com.ironhack.vbnk_dataservice.data.http.request.NewCreditAccountRequest;
+import com.ironhack.vbnk_dataservice.data.http.request.NewSavingsAccountRequest;
 import com.ironhack.vbnk_dataservice.repositories.accounts.CheckingAccountRepository;
 import com.ironhack.vbnk_dataservice.repositories.accounts.CreditAccountRepository;
 import com.ironhack.vbnk_dataservice.repositories.accounts.SavingsAccountRepository;
@@ -24,6 +27,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
@@ -89,41 +93,31 @@ public class VBAccountServiceImpl implements VBAccountService {
     public AccountDTO create(NewAccountRequest request) throws HttpResponseException {
         var owner = userService.getAccountHolder(request.getPrimaryOwner());
         if (owner == null) throw new HttpResponseException(404, "Wrong User Id");
-        var admin = (request.getAdministratedBy()==null||request.getAdministratedBy()==""||request.getAdministratedBy()==" ")?
-                userService.getRandomAdmin():userService.getAdmin(request.getAdministratedBy());
-        if( admin==null) throw new HttpResponseException(404, "Wrong Admin Id");
+        var admin = (request.getAdministratedBy() == null || request.getAdministratedBy() == "" || request.getAdministratedBy() == " ") ?
+                userService.getRandomAdmin() : userService.getAdmin(request.getAdministratedBy());
+        if (admin == null) throw new HttpResponseException(404, "Wrong Admin Id");
         var sOwner = userService.getAccountHolder(request.getSecondaryOwner());
         request
-                .setId(null)
+//                .setId(null)
                 .setPrimaryOwner(owner.getId())
                 .setAdministratedBy(admin.getId())
-                .setAccountNumber(createAccountNumber(owner,admin));
-        if (request instanceof NewCreditAccountRequest &&
-                owner.getDateOfBirth().plusYears(24).isAfter(LocalDate.now())) {
-            NewStudentCheckingAccountRequest dto2 = new NewStudentCheckingAccountRequest();
-            dto2.setId(request.getId())
-                    .setAccountNumber(request.getAccountNumber())
-                    .setInitialAmount(request.getInitialAmount())
-                    .setCurrency(request.getCurrency())
-                    .setStatus(request.getStatus())
-                    .setSecretKey(request.getSecretKey())
-                    .setPrimaryOwner(request.getPrimaryOwner())
-                    .setSecondaryOwner(request.getSecondaryOwner())
-                    .setAdministratedBy(request.getAdministratedBy());
-            request = dto2;
-        }
+                .setAccountNumber(createAccountNumber(owner, admin));
+
         return switch (request.getClass().getSimpleName()) {
-            case "NewCheckingAccountRequest" -> CheckingDTO.fromEntity(checkingRepository.save(CheckingAccount.fromDTO(
-                    CheckingDTO.fromRequest((NewCheckingAccountRequest) request,
-                            AccountHolder.fromDTO(owner),
-                            AccountHolder.fromDTO(sOwner),
-                            VBAdmin.fromDTO(admin)))));
-            case "NewStudentCheckingAccountRequest" ->
-                    StudentCheckingDTO.fromEntity(studentRepository.save(StudentCheckingAccount.fromDTO(
-                            StudentCheckingDTO.fromRequest((NewStudentCheckingAccountRequest) request,
-                                    AccountHolder.fromDTO(owner),
-                                    AccountHolder.fromDTO(sOwner),
-                                    VBAdmin.fromDTO(admin)))));
+            case "NewCheckingAccountRequest" ->
+                    (owner.getDateOfBirth().plusYears(24).isAfter(LocalDate.now())) ?
+                            StudentCheckingDTO.fromEntity(studentRepository.save(StudentCheckingAccount.fromDTO(
+                                    StudentCheckingDTO.fromRequest((NewCheckingAccountRequest) request,
+                                            AccountHolder.fromDTO(owner),
+                                            AccountHolder.fromDTO(sOwner),
+                                            VBAdmin.fromDTO(admin)))))
+                            :
+                            CheckingDTO.fromEntity(checkingRepository.save(CheckingAccount.fromDTO(
+                                    CheckingDTO.fromRequest((NewCheckingAccountRequest) request,
+                                            AccountHolder.fromDTO(owner),
+                                            AccountHolder.fromDTO(sOwner),
+                                            VBAdmin.fromDTO(admin)))));
+
             case "NewSavingsAccountRequest" ->
                     SavingsDTO.fromEntity(savingsAccountRepository.save(SavingsAccount.fromDTO(
                             SavingsDTO.fromRequest((NewSavingsAccountRequest) request,
@@ -147,7 +141,7 @@ public class VBAccountServiceImpl implements VBAccountService {
         if (dto.getPrimaryOwner() != null) original.setPrimaryOwner(dto.getPrimaryOwner());
         if (dto.getSecondaryOwner() != null) original.setSecondaryOwner(dto.getSecondaryOwner());
         if (dto.getAdministratedBy() != null) original.setAdministratedBy(dto.getAdministratedBy());
-        if (dto.getStatus() != null) original.setStatus(dto.getStatus());
+        if (dto.getState() != null) original.setState(dto.getState());
         if (dto.getSecretKey() != null) original.setSecretKey(dto.getSecretKey());
         if (dto instanceof CheckingDTO espDto) {
             var save = (CheckingDTO) original;
@@ -194,19 +188,22 @@ public class VBAccountServiceImpl implements VBAccountService {
     }
 
 
-
-
-    public String createAccountNumber(AccountHolderDTO pOwner, AdminDTO admin){
-        StringBuilder userNumbers= new StringBuilder();
-        userNumbers.append(Arrays.toString(getNumbersFromId(pOwner.getId()).toArray(new Character[0])));
-        var accountNumber=userNumbers.toString().substring(0,6);
-        accountNumber += Arrays.toString(getNumbersFromId(admin.getId()).toArray(new Character[0])).substring(0,4);
+    public String createAccountNumber(AccountHolderDTO pOwner, AdminDTO admin) {
+        Random rand= new Random();
+        StringBuilder userNumbers = new StringBuilder();
+        for(Character num: getNumbersFromId(pOwner.getId()))userNumbers.append(num);
+        int val= rand.nextInt(6,userNumbers.toString().length());
+        var accountNumber = userNumbers.toString().substring(val-6, val);
+        userNumbers= new StringBuilder();
+       for(Character num:getNumbersFromId(admin.getId()))userNumbers.append(num);
+//       userNumbers.substring(0, 4);
+        val= rand.nextInt(4,userNumbers.toString().length());
+       accountNumber+= userNumbers.substring(val-4, val);
         String securityCode = ((pOwner.getDateOfBirth().getDayOfYear() + 10) + " ").substring(0, 2);
-        String IBANNumber= VBNK_INT_ENTITY_CODE+ VBNK_ENTITY_CODE+ securityCode +accountNumber;
-        if (exist(IBANNumber))return createAccountNumber(pOwner,admin);
+        String IBANNumber = VBNK_INT_ENTITY_CODE + VBNK_ENTITY_CODE + securityCode + accountNumber;
+        if (exist(IBANNumber)) return createAccountNumber(pOwner, admin);
         return IBANNumber;
     }
-
 
 
 }

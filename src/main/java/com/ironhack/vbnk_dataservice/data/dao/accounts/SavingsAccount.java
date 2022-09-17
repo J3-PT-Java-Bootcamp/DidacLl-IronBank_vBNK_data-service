@@ -34,7 +34,7 @@ public class SavingsAccount extends VBAccount {
         var retEntity = new SavingsAccount().setMinimumBalance(new Money(dto.getMinimumBalance(),dto.getCurrency()))
                 .setInterestRate(dto.getInterestRate());
         retEntity.setId(dto.getId())
-                .setBalance(new Money(dto.getAmount(),dto.getCurrency()))                .setStatus(dto.getStatus())
+                .setBalance(new Money(dto.getAmount(),dto.getCurrency()))                .setState(dto.getState())
                 .setSecretKey(dto.getSecretKey())
                 .setPrimaryOwner(dto.getPrimaryOwner())
                 .setSecondaryOwner(dto.getSecondaryOwner())

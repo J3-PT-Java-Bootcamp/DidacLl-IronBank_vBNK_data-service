@@ -1,16 +1,19 @@
 package com.ironhack.vbnk_dataservice.data.dto.accounts;
 
-import com.ironhack.vbnk_dataservice.data.AccountStatus;
+import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.CreditAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.http.request.NewCreditAccountRequest;
+import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+
+import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 
 @NoArgsConstructor
 @Getter
@@ -21,12 +24,12 @@ public class CreditDTO extends AccountDTO {
     BigDecimal interestRate;
 
     public static CreditDTO fromEntity(CreditAccount entity) {
-        CreditDTO dto = new CreditDTO().setCreditLimit(entity.getCreditLimit().getAmount())
+        CreditDTO dto = new CreditDTO().setCreditLimit(entity.getCreditLimit())
                 .setInterestRate(entity.getInterestRate());
         dto.setId(entity.getId())
                 .setAmount(entity.getBalance().getAmount())
                 .setCurrency(entity.getBalance().getCurrency())
-                .setStatus(entity.getStatus())
+                .setState(entity.getState())
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
@@ -36,12 +39,17 @@ public class CreditDTO extends AccountDTO {
     }
 
     public static CreditDTO fromRequest(NewCreditAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin) {
-        CreditDTO dto = new CreditDTO().setCreditLimit(request.getCreditLimit())
-                .setInterestRate(request.getInterestRate());
-        dto.setId(request.getId())
+        CreditDTO dto = new CreditDTO();
+        var cLimit= request.getCreditLimit();
+        var intRate= request.getInterestRate();
+        if(cLimit!=null&&cLimit.compareTo(new BigDecimal(VBNK_MIN_CREDIT_LIMIT))>=0&&
+                cLimit.compareTo(new BigDecimal(VBNK_MAX_CREDIT_LIMIT))<1)dto.setCreditLimit(request.getCreditLimit());
+        if(intRate!=null&&intRate.compareTo(new BigDecimal(VBNK_MIN_INTEREST_RATE))>=0&&
+        intRate.compareTo(new BigDecimal(VBNK_MAX_INTEREST_RATE))<=1)dto.setInterestRate(request.getInterestRate());
+        dto
                 .setAmount(request.getInitialAmount())
                 .setCurrency(Currency.getInstance(request.getCurrency()))
-                .setStatus(AccountStatus.ACTIVE)
+                .setState(AccountState.ACTIVE)
                 .setSecretKey(request.getSecretKey())
                 .setPrimaryOwner(pOwner)
                 .setSecondaryOwner(sOwner)

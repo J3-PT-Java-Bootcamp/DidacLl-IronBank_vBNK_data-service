@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.ironhack.vbnk_dataservice.data.AccountStatus;
+import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.Address;
 import com.ironhack.vbnk_dataservice.data.Money;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.CheckingAccount;
@@ -16,7 +16,6 @@ import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CheckingDTO;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CreditDTO;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.SavingsDTO;
-import com.ironhack.vbnk_dataservice.data.dto.accounts.StudentCheckingDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.repositories.accounts.CheckingAccountRepository;
@@ -91,18 +90,18 @@ class AccountControllerWebTest {
         );
         Money money = new Money(BigDecimal.valueOf(10));
 
-        credit = new CreditAccount().setCreditLimit(money).setInterestRate(BigDecimal.TEN);
-        credit.setBalance(money).setStatus(AccountStatus.ACTIVE)
+        credit = new CreditAccount().setInterestRate(BigDecimal.TEN);
+        credit.setBalance(money).setState(AccountState.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("superSecretKey");
         savings = new SavingsAccount().setInterestRate(BigDecimal.TEN)
                 .setMinimumBalance(money);
-        savings.setBalance(money).setStatus(AccountStatus.ACTIVE)
+        savings.setBalance(money).setState(AccountState.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
         checking = new CheckingAccount();
-        checking.setBalance(money).setStatus(AccountStatus.ACTIVE)
+        checking.setBalance(money).setState(AccountState.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
         student = new StudentCheckingAccount();
-        student.setBalance(money).setStatus(AccountStatus.ACTIVE)
+        student.setBalance(money).setState(AccountState.ACTIVE)
                 .setPrimaryOwner(user).setAdministratedBy(admin).setSecretKey("patatas");
 //        credit = CreditAccount.fromDTO((CreditDTO) accountService.create(CreditDTO.fromEntity(credit), "aaa"));
 //        checking = CheckingAccount.fromDTO((CheckingDTO) accountService.create(CheckingDTO.fromEntity(checking), "aaa"));
@@ -177,30 +176,30 @@ class AccountControllerWebTest {
     void updateSavingsAccount_test() throws Exception {
         var result = mockMvc
                 .perform(patch("/v1/data/auth/accounts/savings?id="+savings.getId()).contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new SavingsDTO().setStatus(AccountStatus.FROZEN))))
+                        .content(objectMapper.writeValueAsString(new SavingsDTO().setState(AccountState.FROZEN))))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
-        assertSame(accountService.getAccount(savings.getId()).getStatus(), AccountStatus.FROZEN);
+        assertSame(accountService.getAccount(savings.getId()).getState(), AccountState.FROZEN);
     }
 
     @Test
     void updateChecking_test() throws Exception {
         var result = mockMvc
             .perform(patch("/v1/data/auth/accounts/checking?id="+checking.getId()).contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(new CheckingDTO().setStatus(AccountStatus.FROZEN))))
+                    .content(objectMapper.writeValueAsString(new CheckingDTO().setState(AccountState.FROZEN))))
             .andExpect(status().isOk()) // check status code 200
             .andReturn();
-        assertSame(accountService.getAccount(checking.getId()).getStatus(), AccountStatus.FROZEN);
+        assertSame(accountService.getAccount(checking.getId()).getState(), AccountState.FROZEN);
     }
 
     @Test
     void updateCreditAccount_test() throws Exception {
         var result = mockMvc
                 .perform(patch("/v1/data/auth/accounts/credit?id="+credit.getId()).contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new CreditDTO().setStatus(AccountStatus.FROZEN))))
+                        .content(objectMapper.writeValueAsString(new CreditDTO().setState(AccountState.FROZEN))))
                 .andExpect(status().isOk()) // check status code 200
                 .andReturn();
-        assertSame(accountService.getAccount(credit.getId()).getStatus(), AccountStatus.FROZEN);
+        assertSame(accountService.getAccount(credit.getId()).getState(), AccountState.FROZEN);
     }
 
     @Test

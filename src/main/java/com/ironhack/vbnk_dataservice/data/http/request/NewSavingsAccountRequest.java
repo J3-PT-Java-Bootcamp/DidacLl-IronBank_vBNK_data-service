@@ -13,22 +13,6 @@ import java.math.BigDecimal;
 public class NewSavingsAccountRequest extends NewAccountRequest {
 
     BigDecimal minimumBalance;
-    BigDecimal penaltyFee;
     BigDecimal interestRate;
-
-    public static NewSavingsAccountRequest fromEntity(SavingsAccount entity) {
-        var dto = new NewSavingsAccountRequest().setMinimumBalance(entity.getMinimumBalance().getAmount())
-                .setPenaltyFee(entity.getPenaltyFee())
-                .setInterestRate(entity.getInterestRate());
-        dto.setId(entity.getId())
-                .setInitialAmount(entity.getBalance().getAmount())
-                .setCurrency(entity.getBalance().getCurrency().getCurrencyCode())
-                .setStatus(entity.getStatus())
-                .setSecretKey(entity.getSecretKey())
-                .setPrimaryOwner(entity.getPrimaryOwner().getId())
-                .setSecondaryOwner(entity.getSecondaryOwner().getId())
-                .setAdministratedBy(entity.getAdministratedBy().getId())
-                .setAccountNumber(entity.getAccountNumber());
-        return dto;
-    }
+    
 }
