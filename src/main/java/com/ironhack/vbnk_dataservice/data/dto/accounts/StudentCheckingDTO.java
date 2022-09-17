@@ -15,6 +15,7 @@ import java.util.Currency;
 @Getter
 @Setter
 public class StudentCheckingDTO extends AccountDTO {
+    private final String  display_name = "Student Checking Account";
 
 
     public static StudentCheckingDTO fromEntity(StudentCheckingAccount entity) {
@@ -31,14 +32,14 @@ public class StudentCheckingDTO extends AccountDTO {
         return dto;
     }
 
-    public static StudentCheckingDTO fromRequest(NewCheckingAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin) {
+    public static StudentCheckingDTO fromRequest(NewCheckingAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin, String accountNumber) {
         StudentCheckingDTO dto = new StudentCheckingDTO();
         dto
                 .setAmount(request.getInitialAmount())
                 .setCurrency(Currency.getInstance(request.getCurrency()))
                 .setState(AccountState.ACTIVE)
                 .setSecretKey(request.getSecretKey())
-                .setAccountNumber(request.getAccountNumber())
+                .setAccountNumber(accountNumber)
                 .setAdministratedBy(admin)
                 .setPrimaryOwner(pOwner);
         if(sOwner!=null)dto.setSecondaryOwner(sOwner);

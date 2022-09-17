@@ -13,6 +13,7 @@ import com.ironhack.vbnk_dataservice.repositories.users.AdminRepository;
 import com.ironhack.vbnk_dataservice.repositories.users.ThirdPartyRepository;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import org.apache.http.client.HttpResponseException;
+import org.keycloak.representations.AccessToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -127,12 +128,27 @@ public class VBUserServiceImpl implements VBUserService {
 
     @Override
     public boolean existsById(String id) {
-        return accountHolderRepository.existsById(id) || adminRepository.existsById(id) || thirdPartyRepository.existsById(id);
+        try {
+            return accountHolderRepository.existsById(id) || adminRepository.existsById(id) || thirdPartyRepository.existsById(id);
+        }catch (Throwable err){
+            return false;
+        }
     }
 
     @Override
     public boolean existsByUsername(String username) {
         return accountHolderRepository.existsByUsername(username) || adminRepository.existsByUsername(username) || thirdPartyRepository.existsByUsername(username);
+    }
+
+    @Override
+    public AdminDTO getAdminFromToken(AccessToken accessToken) {
+        var id= accessToken.getSubject();
+        var name= accessToken.getPreferredUsername();
+        Optional<VBAdmin> byId = adminRepository.findById(id);
+        if(byId.isPresent()) return AdminDTO.fromEntity(byId.get());
+        Optional<VBAdmin> byUsername = adminRepository.findByUsername(name);
+        return AdminDTO.fromEntity(byUsername.orElseThrow());
+
     }
 
     //-------------------------------------------------------------------------------------------------CREATE METHODS

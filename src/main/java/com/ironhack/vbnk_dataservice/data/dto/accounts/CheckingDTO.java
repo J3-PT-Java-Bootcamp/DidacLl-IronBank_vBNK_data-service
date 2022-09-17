@@ -16,10 +16,10 @@ import java.util.Currency;
 @Getter
 @Setter
 public class CheckingDTO extends AccountDTO {
-
-    BigDecimal minimumBalance;
-    BigDecimal penaltyFee;
-    BigDecimal monthlyMaintenanceFee;
+    private final String  display_name = "Checking Account";
+    private BigDecimal minimumBalance;
+    private BigDecimal penaltyFee;
+    private BigDecimal monthlyMaintenanceFee;
 
     public static CheckingDTO fromEntity(CheckingAccount entity) {
         CheckingDTO dto = new CheckingDTO().setMinimumBalance(entity.getMinimumBalance().getAmount())
@@ -37,11 +37,11 @@ public class CheckingDTO extends AccountDTO {
         return dto;
     }
 
-    public static CheckingDTO fromRequest(NewCheckingAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin) {
+    public static CheckingDTO fromRequest(NewCheckingAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin, String accountNumber) {
 
         CheckingDTO dto = new CheckingDTO();
         dto
-                .setAccountNumber(request.getAccountNumber())
+                .setAccountNumber(accountNumber)
                 .setAmount(request.getInitialAmount())
                 .setCurrency(Currency.getInstance(request.getCurrency()))
                 .setState(AccountState.ACTIVE)

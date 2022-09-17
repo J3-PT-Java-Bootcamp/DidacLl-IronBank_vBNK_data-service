@@ -5,7 +5,6 @@ import com.ironhack.vbnk_dataservice.data.dao.accounts.CreditAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.http.request.NewCreditAccountRequest;
-import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,9 +18,10 @@ import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 @Getter
 @Setter
 public class CreditDTO extends AccountDTO {
+    private final String  display_name = "Credit Account";
 
-    BigDecimal creditLimit;
-    BigDecimal interestRate;
+    private BigDecimal creditLimit;
+    private  BigDecimal interestRate;
 
     public static CreditDTO fromEntity(CreditAccount entity) {
         CreditDTO dto = new CreditDTO().setCreditLimit(entity.getCreditLimit())
@@ -38,7 +38,7 @@ public class CreditDTO extends AccountDTO {
         return dto;
     }
 
-    public static CreditDTO fromRequest(NewCreditAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin) {
+    public static CreditDTO fromRequest(NewCreditAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin, String accountNumber) {
         CreditDTO dto = new CreditDTO();
         var cLimit= request.getCreditLimit();
         var intRate= request.getInterestRate();
@@ -53,7 +53,7 @@ public class CreditDTO extends AccountDTO {
                 .setSecretKey(request.getSecretKey())
                 .setPrimaryOwner(pOwner)
                 .setSecondaryOwner(sOwner)
-                .setAccountNumber(request.getAccountNumber())
+                .setAccountNumber(accountNumber)
                 .setAdministratedBy(admin);
         return dto;
     }

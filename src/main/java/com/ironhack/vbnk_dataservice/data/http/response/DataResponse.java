@@ -13,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DataResponse {
-    boolean isOk;
-    List<VBError> error;
+    private  boolean isOk;
+    private List<VBError> error;
 }

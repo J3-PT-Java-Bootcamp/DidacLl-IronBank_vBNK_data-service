@@ -10,12 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NotificationDTO {
-    Long id;
-    String title;
-    String message;
-    NotificationType type;
-    NotificationState state;
-    VBUser owner;
+    private Long id;
+    private String title;
+    private  String message;
+    private NotificationType type;
+    private  NotificationState state;
+    private VBUser owner;
 
 
     public static NotificationDTO fromEntity(Notification entity) {

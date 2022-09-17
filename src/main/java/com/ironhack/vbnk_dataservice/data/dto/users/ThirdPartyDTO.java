@@ -10,8 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ThirdPartyDTO extends VBUserDTO {
 
-    String hashKey;
-    boolean trusted;
+    private String hashKey;
+    private boolean trusted;
 
     public static ThirdPartyDTO fromEntity(ThirdParty entity) {
         return newThirdPartyDTO(entity.getUsername(), entity.getId()).setHashKey(entity.getHashKey()).setTrusted(entity.isTrusted());

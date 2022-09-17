@@ -2,11 +2,9 @@ package com.ironhack.vbnk_dataservice.data.dto.accounts;
 
 import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.SavingsAccount;
-import com.ironhack.vbnk_dataservice.data.dao.accounts.VBAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.http.request.NewSavingsAccountRequest;
-import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,10 +18,11 @@ import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 @Getter
 @Setter
 public class SavingsDTO extends AccountDTO {
+    private final String  display_name = "Savings Account";
 
-    BigDecimal minimumBalance;
-    BigDecimal penaltyFee;
-    BigDecimal interestRate;
+    private BigDecimal minimumBalance;
+    private BigDecimal penaltyFee;
+    private BigDecimal interestRate;
 
     public static SavingsDTO fromEntity(SavingsAccount entity) {
         SavingsDTO dto = new SavingsDTO().setMinimumBalance(entity.getMinimumBalance().getAmount())
@@ -41,7 +40,7 @@ public class SavingsDTO extends AccountDTO {
         return dto;
     }
 
-    public static SavingsDTO fromRequest(NewSavingsAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin) {
+    public static SavingsDTO fromRequest(NewSavingsAccountRequest request, AccountHolder pOwner, AccountHolder sOwner, VBAdmin admin, String accountNumber) {
         BigDecimal minBal = request.getMinimumBalance();
         BigDecimal rate = request.getInterestRate();
         SavingsDTO dto = new SavingsDTO();
@@ -57,7 +56,7 @@ public class SavingsDTO extends AccountDTO {
                 .setPrimaryOwner(pOwner)
                 .setSecondaryOwner(sOwner)
                 .setAdministratedBy(admin)
-                .setAccountNumber(request.getAccountNumber());
+                .setAccountNumber(accountNumber);
         return dto;
     }
 }

@@ -23,11 +23,11 @@ import java.util.List;
 @Service
 public class VBNKServiceWeb implements VBNKService {
     @Autowired
-    VBUserService userService;
+    private VBUserService userService;
     @Autowired
-    VBAccountService accountService;
+    private VBAccountService accountService;
     @Autowired
-    NotificationService notificationService;
+    private NotificationService notificationService;
 
     @Override
     public ResponseEntity<TransferResponse> transferFunds(TransferRequest request) {

@@ -24,10 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
@@ -93,42 +90,45 @@ public class VBAccountServiceImpl implements VBAccountService {
     public AccountDTO create(NewAccountRequest request) throws HttpResponseException {
         var owner = userService.getAccountHolder(request.getPrimaryOwner());
         if (owner == null) throw new HttpResponseException(404, "Wrong User Id");
+        if(request.getCurrency()==null)request.setCurrency(VBNK_CURRENCY_DEF);
         var admin = (request.getAdministratedBy() == null || request.getAdministratedBy() == "" || request.getAdministratedBy() == " ") ?
                 userService.getRandomAdmin() : userService.getAdmin(request.getAdministratedBy());
         if (admin == null) throw new HttpResponseException(404, "Wrong Admin Id");
-        var sOwner = userService.getAccountHolder(request.getSecondaryOwner());
-        request
-//                .setId(null)
-                .setPrimaryOwner(owner.getId())
-                .setAdministratedBy(admin.getId())
-                .setAccountNumber(createAccountNumber(owner, admin));
-
+        AccountHolderDTO sOwner = null;
+        try {
+            sOwner = userService.getAccountHolder(request.getSecondaryOwner());
+        }catch (Throwable ignored){}
+        request.setPrimaryOwner(owner.getId()).setAdministratedBy(admin.getId());
         return switch (request.getClass().getSimpleName()) {
             case "NewCheckingAccountRequest" ->
                     (owner.getDateOfBirth().plusYears(24).isAfter(LocalDate.now())) ?
                             StudentCheckingDTO.fromEntity(studentRepository.save(StudentCheckingAccount.fromDTO(
                                     StudentCheckingDTO.fromRequest((NewCheckingAccountRequest) request,
                                             AccountHolder.fromDTO(owner),
-                                            AccountHolder.fromDTO(sOwner),
-                                            VBAdmin.fromDTO(admin)))))
+                                            sOwner==null?null:AccountHolder.fromDTO(sOwner),
+                                            VBAdmin.fromDTO(admin),
+                                            createAccountNumber(owner, admin)))))
                             :
                             CheckingDTO.fromEntity(checkingRepository.save(CheckingAccount.fromDTO(
                                     CheckingDTO.fromRequest((NewCheckingAccountRequest) request,
                                             AccountHolder.fromDTO(owner),
-                                            AccountHolder.fromDTO(sOwner),
-                                            VBAdmin.fromDTO(admin)))));
+                                            sOwner==null?null:AccountHolder.fromDTO(sOwner),
+                                            VBAdmin.fromDTO(admin),
+                                            createAccountNumber(owner, admin)))));
 
             case "NewSavingsAccountRequest" ->
                     SavingsDTO.fromEntity(savingsAccountRepository.save(SavingsAccount.fromDTO(
                             SavingsDTO.fromRequest((NewSavingsAccountRequest) request,
                                     AccountHolder.fromDTO(owner),
-                                    AccountHolder.fromDTO(sOwner),
-                                    VBAdmin.fromDTO(admin)))));
+                                    sOwner==null?null:AccountHolder.fromDTO(sOwner),
+                                    VBAdmin.fromDTO(admin),
+                                    createAccountNumber(owner, admin)))));
             case "NewCreditAccountRequest" -> CreditDTO.fromEntity(creditRepository.save(CreditAccount.fromDTO(
                     CreditDTO.fromRequest((NewCreditAccountRequest) request,
                             AccountHolder.fromDTO(owner),
-                            AccountHolder.fromDTO(sOwner),
-                            VBAdmin.fromDTO(admin)))));
+                            sOwner==null?null:AccountHolder.fromDTO(sOwner),
+                            VBAdmin.fromDTO(admin),
+                            createAccountNumber(owner, admin)))));
             default ->
                     throw new HttpResponseException(HttpStatus.I_AM_A_TEAPOT.value(), HttpStatus.I_AM_A_TEAPOT.getReasonPhrase());
         };

@@ -15,15 +15,16 @@ import java.util.Currency;
 @Getter
 @Setter
 public class AccountDTO {
-    String id;
-    String accountNumber;
-    BigDecimal amount;
-    Currency currency;
-    String secretKey;
-    AccountHolder primaryOwner;
-    AccountHolder secondaryOwner;
-    AccountState state;
-    VBAdmin administratedBy;
+    private String displayName;
+    private String id;
+    private String accountNumber;
+    private BigDecimal amount;
+    private Currency currency;
+    private String secretKey;
+    private AccountHolder primaryOwner;
+    private AccountHolder secondaryOwner;
+    private AccountState state;
+    private VBAdmin administratedBy;
 
     public static AccountDTO fromAnyAccountEntity(VBAccount entity) {
         return new AccountDTO().setId(entity.getId())
@@ -52,6 +53,7 @@ public class AccountDTO {
     public static StudentCheckingDTO convertToStudentDTO(AccountDTO accDTO) {
         return (StudentCheckingDTO) copyBaseValues(accDTO, new StudentCheckingDTO());
     }
+
 
     private static AccountDTO copyBaseValues(AccountDTO src, AccountDTO dest) {
         return dest.setAccountNumber(src.getAccountNumber())

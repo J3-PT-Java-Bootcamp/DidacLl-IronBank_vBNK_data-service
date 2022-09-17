@@ -13,8 +13,9 @@ import java.util.Currency;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransferRequest {
-    String sourceAccountRef, sourceOwnerId, destinationAccountRef;
-    BigDecimal amount;
-    Currency currency;
+    private  String sourceAccountRef, sourceOwnerId, destinationAccountRef;
+    private  BigDecimal amount;
+    private  Currency currency;
+    private  String senderId;
 
 }

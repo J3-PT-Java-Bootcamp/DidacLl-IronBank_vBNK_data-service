@@ -8,11 +8,14 @@ import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
 import com.ironhack.vbnk_dataservice.data.http.request.NewCheckingAccountRequest;
 import com.ironhack.vbnk_dataservice.data.http.request.NewCreditAccountRequest;
 import com.ironhack.vbnk_dataservice.data.http.request.NewSavingsAccountRequest;
+import com.ironhack.vbnk_dataservice.data.http.views.AccountView;
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -44,4 +47,6 @@ public interface AccountController {
     void delete(String id) throws HttpResponseException;
 
 
+    @GetMapping("main/accounts/view")
+    AccountView getAccountDetails(@RequestParam String accountRef) throws HttpResponseException;
 }
