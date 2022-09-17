@@ -92,6 +92,12 @@ public class VBNKServiceWeb implements VBNKService {
     }
 
     @Override
+    public ResponseEntity<TransferResponse> sendBlindTransfer(TransferRequest request) throws HttpResponseException {
+        // TODO: 17/09/2022
+        return null;
+    }
+
+    @Override
     public ResponseEntity<DataResponse> sendNotification(NotificationRequest request) {
         var response = new DataResponse();
         var errors = new ArrayList<VBError>();

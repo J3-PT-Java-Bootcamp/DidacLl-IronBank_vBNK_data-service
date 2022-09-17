@@ -1,4 +1,4 @@
-package com.ironhack.vbnk_dataservice.data;
+package com.ironhack.vbnk_dataservice.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

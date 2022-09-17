@@ -12,7 +12,9 @@ public interface VBNKService {
 
     ResponseEntity<TransferResponse> transferFunds(TransferRequest request);
 
-    public ResponseEntity<TransferResponse> receiveTransfer(TransferRequest request) throws HttpResponseException;
+    ResponseEntity<TransferResponse> receiveTransfer(TransferRequest request) throws HttpResponseException;
+    ResponseEntity<TransferResponse> sendBlindTransfer(TransferRequest request) throws HttpResponseException;
+
 
     ResponseEntity<DataResponse> sendNotification(NotificationRequest request);
 

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.Address;
-import com.ironhack.vbnk_dataservice.data.Money;
+import com.ironhack.vbnk_dataservice.utils.Money;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.CheckingAccount;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.CreditAccount;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.SavingsAccount;

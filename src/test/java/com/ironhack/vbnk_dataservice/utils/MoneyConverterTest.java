@@ -1,6 +1,5 @@
 package com.ironhack.vbnk_dataservice.utils;
 
-import com.ironhack.vbnk_dataservice.data.Money;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

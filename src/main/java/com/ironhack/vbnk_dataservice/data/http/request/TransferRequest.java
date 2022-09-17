@@ -17,5 +17,4 @@ public class TransferRequest {
     private  BigDecimal amount;
     private  Currency currency;
     private  String senderId;
-
 }

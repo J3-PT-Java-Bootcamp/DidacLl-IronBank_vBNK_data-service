@@ -1,7 +1,5 @@
 package com.ironhack.vbnk_dataservice.utils;
 
-import com.ironhack.vbnk_dataservice.data.Money;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

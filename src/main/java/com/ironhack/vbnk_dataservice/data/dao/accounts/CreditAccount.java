@@ -1,13 +1,11 @@
 package com.ironhack.vbnk_dataservice.data.dao.accounts;
 
-import com.ironhack.vbnk_dataservice.data.Money;
+import com.ironhack.vbnk_dataservice.utils.Money;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CreditDTO;
-import com.ironhack.vbnk_dataservice.utils.MoneyConverter;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;

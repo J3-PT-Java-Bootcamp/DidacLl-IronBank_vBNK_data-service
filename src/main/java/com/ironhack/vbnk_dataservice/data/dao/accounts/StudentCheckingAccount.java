@@ -1,6 +1,6 @@
 package com.ironhack.vbnk_dataservice.data.dao.accounts;
 
-import com.ironhack.vbnk_dataservice.data.Money;
+import com.ironhack.vbnk_dataservice.utils.Money;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.StudentCheckingDTO;
 import lombok.Getter;
 import lombok.Setter;

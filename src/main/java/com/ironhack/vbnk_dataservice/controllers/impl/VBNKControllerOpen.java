@@ -10,6 +10,7 @@ import org.apache.http.client.HttpResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,19 +22,19 @@ public class VBNKControllerOpen implements VBNKController {
 
     @Override
     @PostMapping("/tf/send")
-    public ResponseEntity<TransferResponse> transferFunds(TransferRequest request) {
+    public ResponseEntity<TransferResponse> transferFunds(@RequestBody TransferRequest request) {
         return service.transferFunds(request);
     }
 
     @Override
     @PostMapping("/tf/receive")
-    public ResponseEntity<TransferResponse> transferFunds_destinationLevel(TransferRequest request) throws HttpResponseException {
+    public ResponseEntity<TransferResponse> transferFunds_destinationLevel(@RequestBody TransferRequest request) throws HttpResponseException {
         return service.receiveTransfer(request);
     }
 
     @Override
     @PostMapping("/notif")
-    public ResponseEntity<DataResponse> sendNotification(NotificationRequest request) {
+    public ResponseEntity<DataResponse> sendNotification(@RequestBody NotificationRequest request) {
         return service.sendNotification(request);
     }
 

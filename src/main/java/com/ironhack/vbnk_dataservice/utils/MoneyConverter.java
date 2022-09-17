@@ -1,7 +1,5 @@
 package com.ironhack.vbnk_dataservice.utils;
 
-import com.ironhack.vbnk_dataservice.data.Money;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.math.BigDecimal;

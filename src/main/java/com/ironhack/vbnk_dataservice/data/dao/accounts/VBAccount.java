@@ -1,7 +1,7 @@
 package com.ironhack.vbnk_dataservice.data.dao.accounts;
 
 import com.ironhack.vbnk_dataservice.data.AccountState;
-import com.ironhack.vbnk_dataservice.data.Money;
+import com.ironhack.vbnk_dataservice.utils.Money;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.utils.CryptoConverter;
@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
