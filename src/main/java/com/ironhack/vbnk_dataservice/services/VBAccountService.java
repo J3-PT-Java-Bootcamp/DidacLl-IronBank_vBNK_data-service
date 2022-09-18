@@ -13,7 +13,7 @@ public interface VBAccountService {
 
     AccountDTO create(NewAccountRequest dto) throws HttpResponseException;
 
-    void update(AccountDTO dto, String id) throws HttpResponseException;
+    AccountDTO update(AccountDTO dto, String id) throws HttpResponseException;
 
     void delete(String id);
 

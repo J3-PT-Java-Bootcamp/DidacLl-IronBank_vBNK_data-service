@@ -15,9 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransferResponse {
+
     private TransferRequest request;
-    private boolean isSourceLevelOk;
-    private boolean isDestLevelOk;
-    private BigDecimal srcPreviousBalance, destPreviousBalance;
+    private boolean source, destination, srcAccountAvailable,dstAccountAvailable, enoughFounds;
+    private BigDecimal srcBalance,dstBalance;
     private List<VBError> errors;
+
 }

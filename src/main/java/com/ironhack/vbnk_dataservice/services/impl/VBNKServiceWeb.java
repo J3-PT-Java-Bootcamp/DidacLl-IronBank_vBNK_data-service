@@ -45,9 +45,9 @@ public class VBNKServiceWeb implements VBNKService {
                 if (prevSrcAmount.compareTo(request.getAmount()) >= 0) {
                     try {
                         response = transferFunds_receiveTransfer(response);
-                        accountService.update(sourceAccount.setAmount(prevSrcAmount
-                                .subtract(request.getAmount())), sourceAccount.getId());
-                        response.setSourceLevelOk(true).setSrcPreviousBalance(prevSrcAmount);
+                        prevSrcAmount= accountService.update(sourceAccount.setAmount(prevSrcAmount
+                                .subtract(request.getAmount())), sourceAccount.getId()).getAmount();
+                        response.setSource(true).setSrcBalance(prevSrcAmount);
 
                     } catch (HttpResponseException e) {
                         errors.add(VBError.FATAL_ERROR);
@@ -72,10 +72,10 @@ public class VBNKServiceWeb implements VBNKService {
             if (destAccount != null && destAccount.getState().equals(AccountState.ACTIVE)) {
                 //--------SUCCESS! -------//
                 var prevDestAmount = destAccount.getAmount();
-                response.setDestPreviousBalance(prevDestAmount);
-                accountService.update(destAccount.setAmount(prevDestAmount
-                        .add(request.getAmount())), destAccount.getId());
-                response.setDestLevelOk(true);
+                response.setDstBalance(prevDestAmount);
+                prevDestAmount= accountService.update(destAccount.setAmount(prevDestAmount
+                        .add(request.getAmount())), destAccount.getId()).getAmount();
+                response.setDestination(true).setDstBalance(prevDestAmount);
             }
         } else {
             // TODO: 13/09/2022  THIRD PARTY BLIND TRANSFER
