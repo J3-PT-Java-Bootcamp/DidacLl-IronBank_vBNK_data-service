@@ -18,7 +18,7 @@ import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 @Getter
 @Setter
 public class CreditDTO extends AccountDTO {
-    private final String  display_name = "Credit Account";
+    private static final String  display_name = "Credit Account";
 
     private BigDecimal creditLimit;
     private  BigDecimal interestRate;
@@ -34,7 +34,8 @@ public class CreditDTO extends AccountDTO {
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
                 .setAccountNumber(entity.getAccountNumber())
-                .setAdministratedBy(entity.getAdministratedBy());
+                .setAdministratedBy(entity.getAdministratedBy())
+                .setDisplayName(display_name);
         return dto;
     }
 

@@ -52,15 +52,26 @@ public class VBAccountServiceImpl implements VBAccountService {
     }
 
     @Override
-    public AccountDTO getAccount(String id) throws HttpResponseException {
-//        return AccountDTO.fromAnyAccountEntity(repository.findById(id).orElseThrow());
-        if (checkingRepository.existsById(id)) return CheckingDTO.fromEntity(checkingRepository.findById(id)
+    public AccountDTO getAccount(String ref) throws HttpResponseException {
+        if(ref.contains(VBNK_INT_ENTITY_CODE + VBNK_ENTITY_CODE)){
+            if (checkingRepository.existsByAccountNumber(ref)) return CheckingDTO.fromEntity(checkingRepository.findByAccountNumber(ref)
+                    .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
+            if (savingsAccountRepository.existsByAccountNumber(ref)) return SavingsDTO.fromEntity(savingsAccountRepository.findByAccountNumber(ref)
+                    .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
+            if (creditRepository.existsByAccountNumber(ref)) return CreditDTO.fromEntity(creditRepository.findByAccountNumber(ref)
+                    .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
+            if (studentRepository.existsByAccountNumber(ref)) return StudentCheckingDTO.fromEntity(studentRepository.findByAccountNumber(ref)
+                    .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
+            else throw new HttpResponseException(404, "ID NOK");
+        }
+//        return AccountDTO.fromAnyAccountEntity(repository.findById(ref).orElseThrow());
+        if (checkingRepository.existsById(ref)) return CheckingDTO.fromEntity(checkingRepository.findById(ref)
                 .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
-        if (savingsAccountRepository.existsById(id)) return SavingsDTO.fromEntity(savingsAccountRepository.findById(id)
+        if (savingsAccountRepository.existsById(ref)) return SavingsDTO.fromEntity(savingsAccountRepository.findById(ref)
                 .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
-        if (creditRepository.existsById(id)) return CreditDTO.fromEntity(creditRepository.findById(id)
+        if (creditRepository.existsById(ref)) return CreditDTO.fromEntity(creditRepository.findById(ref)
                 .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
-        if (studentRepository.existsById(id)) return StudentCheckingDTO.fromEntity(studentRepository.findById(id)
+        if (studentRepository.existsById(ref)) return StudentCheckingDTO.fromEntity(studentRepository.findById(ref)
                 .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
         else throw new HttpResponseException(404, "ID NOK");
     }

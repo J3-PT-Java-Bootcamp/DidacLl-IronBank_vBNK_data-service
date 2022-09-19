@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CreditAccountRepository extends JpaRepository<CreditAccount, String> {
@@ -14,4 +15,6 @@ public interface CreditAccountRepository extends JpaRepository<CreditAccount, St
     List<CreditAccount> findAllBySecondaryOwnerId(String userId);
 
     boolean existsByAccountNumber(String destinationAccountRef);
+
+    Optional<CreditAccount> findByAccountNumber(String ref);
 }

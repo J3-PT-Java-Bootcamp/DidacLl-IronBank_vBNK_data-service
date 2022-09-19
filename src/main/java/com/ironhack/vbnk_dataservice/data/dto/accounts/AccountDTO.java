@@ -1,7 +1,7 @@
 package com.ironhack.vbnk_dataservice.data.dto.accounts;
 
 import com.ironhack.vbnk_dataservice.data.AccountState;
-import com.ironhack.vbnk_dataservice.data.dao.accounts.VBAccount;
+import com.ironhack.vbnk_dataservice.data.dao.accounts.*;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import lombok.Getter;
@@ -27,7 +27,13 @@ public class AccountDTO {
     private VBAdmin administratedBy;
 
     public static AccountDTO fromAnyAccountEntity(VBAccount entity) {
-        return new AccountDTO().setId(entity.getId())
+        AccountDTO retVal = null;
+        if(entity instanceof CheckingAccount)retVal=new CheckingDTO().setDisplayName("Checking Account");
+        else if(entity instanceof CreditAccount)retVal=new CreditDTO().setDisplayName("Credit Account");
+        else if(entity instanceof SavingsAccount)retVal=new SavingsDTO().setDisplayName("Savings Account");
+        else if(entity instanceof StudentCheckingAccount)retVal=new StudentCheckingDTO().setDisplayName("Student Checking Account");
+        assert (retVal!=null);
+        retVal.setId(entity.getId())
                 .setAccountNumber(entity.getAccountNumber())
                 .setAmount(entity.getBalance().getAmount())
                 .setCurrency(entity.getBalance().getCurrency())
@@ -36,6 +42,7 @@ public class AccountDTO {
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
                 .setAdministratedBy(entity.getAdministratedBy());
+        return retVal;
     }
 
     public static CreditDTO convertToCreditDTO(AccountDTO accDTO) {

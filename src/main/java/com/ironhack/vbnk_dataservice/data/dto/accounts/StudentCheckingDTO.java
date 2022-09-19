@@ -15,7 +15,7 @@ import java.util.Currency;
 @Getter
 @Setter
 public class StudentCheckingDTO extends AccountDTO {
-    private final String  display_name = "Student Checking Account";
+    private static final String  display_name = "Student Checking Account";
 
 
     public static StudentCheckingDTO fromEntity(StudentCheckingAccount entity) {
@@ -28,7 +28,8 @@ public class StudentCheckingDTO extends AccountDTO {
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
                 .setAdministratedBy(entity.getAdministratedBy())
-                .setAccountNumber(entity.getAccountNumber());
+                .setAccountNumber(entity.getAccountNumber())
+                .setDisplayName(display_name);
         return dto;
     }
 

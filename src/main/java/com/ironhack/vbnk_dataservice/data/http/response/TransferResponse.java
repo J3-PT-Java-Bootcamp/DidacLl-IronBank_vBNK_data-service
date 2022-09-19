@@ -17,7 +17,7 @@ import java.util.List;
 public class TransferResponse {
 
     private TransferRequest request;
-    private boolean source, destination, srcAccountAvailable,dstAccountAvailable, enoughFounds;
+    private boolean source, destination;
     private BigDecimal srcBalance,dstBalance;
     private List<VBError> errors;
 

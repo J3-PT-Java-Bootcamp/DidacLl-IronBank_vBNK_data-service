@@ -18,11 +18,11 @@ import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 @Getter
 @Setter
 public class SavingsDTO extends AccountDTO {
-    private final String  display_name = "Savings Account";
+    private static final String  display_name = "Savings Account";
 
-    private BigDecimal minimumBalance;
-    private BigDecimal penaltyFee;
-    private BigDecimal interestRate;
+    private BigDecimal minimumBalance= new BigDecimal(VBNK_MAX_SAVINGS_MINIMUM_BALANCE);
+    private BigDecimal penaltyFee=VBNK_PENALTY_FEE;
+    private BigDecimal interestRate= new BigDecimal(VBNK_MIN_SAVINGS_INTEREST_RATE);
 
     public static SavingsDTO fromEntity(SavingsAccount entity) {
         SavingsDTO dto = new SavingsDTO().setMinimumBalance(entity.getMinimumBalance().getAmount())
@@ -36,7 +36,8 @@ public class SavingsDTO extends AccountDTO {
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
                 .setAdministratedBy(entity.getAdministratedBy())
-                .setAccountNumber(entity.getAccountNumber());
+                .setAccountNumber(entity.getAccountNumber())
+                .setDisplayName(display_name);
         return dto;
     }
 

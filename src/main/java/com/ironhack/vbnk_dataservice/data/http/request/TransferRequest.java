@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
 import java.util.Currency;
 
@@ -13,8 +14,13 @@ import java.util.Currency;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransferRequest {
-    private  String sourceAccountRef, sourceOwnerId, destinationAccountRef;
-    private  BigDecimal amount;
-    private  Currency currency;
-    private  String senderId;
+
+    private String fromAccount, orderingUserId, toAccount;
+    @DecimalMin("0.01")
+    private BigDecimal amount;
+    private Currency currency;
+    String senderDisplayName;
+    String concept;
+
+
 }

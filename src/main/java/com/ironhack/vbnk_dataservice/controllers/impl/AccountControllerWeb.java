@@ -68,7 +68,7 @@ public class AccountControllerWeb implements AccountController {
     @Override @PatchMapping("/auth/accounts/savings/new")
     public String createSavingsAccount(Authentication auth,@Valid  @RequestBody NewSavingsAccountRequest request) throws HttpResponseException {
         checkOwnerAndAdmin(auth, request);
-        return service.create(request).getId();
+        return service.create(request).getAccountNumber();
     }
     @Override @PatchMapping("/auth/accounts/checking/new")
     public String createChecking(Authentication auth,@Valid  @RequestBody NewCheckingAccountRequest request) throws HttpResponseException {

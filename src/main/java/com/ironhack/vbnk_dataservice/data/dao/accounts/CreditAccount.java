@@ -29,14 +29,14 @@ public class CreditAccount extends VBAccount {
     public static CreditAccount fromDTO(CreditDTO dto) {
         var retEntity = new CreditAccount().setCreditLimit(dto.getCreditLimit())
                 .setInterestRate(dto.getInterestRate());
-        retEntity.setId(dto.getId())
-
-                .setBalance(new Money(dto.getAmount(),dto.getCurrency()))
+        retEntity.setId(dto.getId());
+                retEntity.setBalance(new Money(dto.getAmount(),dto.getCurrency()))
                 .setState(dto.getState())
                 .setSecretKey(dto.getSecretKey())
                 .setPrimaryOwner(dto.getPrimaryOwner())
                 .setSecondaryOwner(dto.getSecondaryOwner())
-                .setAdministratedBy(dto.getAdministratedBy());
+                .setAdministratedBy(dto.getAdministratedBy())
+                .setAccountNumber(dto.getAccountNumber());
         return retEntity;
     }
 }

@@ -33,10 +33,10 @@ public class VBNKServiceWeb implements VBNKService {
     public ResponseEntity<TransferResponse> transferFunds(TransferRequest request) {
         var response = new TransferResponse().setRequest(request);
         List<VBError> errors = response.getErrors();
-        if (userService.existsById(request.getSourceOwnerId())) {
+        if (userService.existsById(request.getOrderingUserId())) {
             AccountDTO sourceAccount = null;
             try {
-                sourceAccount = accountService.getAccount(request.getSourceAccountRef());
+                sourceAccount = accountService.getAccount(request.getFromAccount());
             } catch (HttpResponseException e) {
                 errors.add(VBError.ACCOUNT_NOT_FOUND);
             }
@@ -66,9 +66,9 @@ public class VBNKServiceWeb implements VBNKService {
 
     private TransferResponse transferFunds_receiveTransfer(TransferResponse response) throws HttpResponseException {
         var request = response.getRequest();
-        if (accountService.exist(request.getDestinationAccountRef())) {
+        if (accountService.exist(request.getFromAccount())) {
             AccountDTO destAccount = null;
-            destAccount = accountService.getAccount(request.getDestinationAccountRef());
+            destAccount = accountService.getAccount(request.getToAccount());
             if (destAccount != null && destAccount.getState().equals(AccountState.ACTIVE)) {
                 //--------SUCCESS! -------//
                 var prevDestAmount = destAccount.getAmount();

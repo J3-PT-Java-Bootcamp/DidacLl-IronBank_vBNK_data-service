@@ -16,7 +16,7 @@ import java.util.Currency;
 @Getter
 @Setter
 public class CheckingDTO extends AccountDTO {
-    private final String  display_name = "Checking Account";
+    private static final String  display_name = "Checking Account";
     private BigDecimal minimumBalance;
     private BigDecimal penaltyFee;
     private BigDecimal monthlyMaintenanceFee;
@@ -33,7 +33,8 @@ public class CheckingDTO extends AccountDTO {
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
-                .setAdministratedBy(entity.getAdministratedBy());
+                .setAdministratedBy(entity.getAdministratedBy())
+                .setDisplayName(display_name);
         return dto;
     }
 

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface StudentCheckingAccountRepository extends JpaRepository<StudentCheckingAccount, String> {
@@ -14,4 +15,6 @@ public interface StudentCheckingAccountRepository extends JpaRepository<StudentC
     List<StudentCheckingAccount> findAllBySecondaryOwnerId(String userId);
 
     boolean existsByAccountNumber(String destinationAccountRef);
+
+    Optional<StudentCheckingAccount> findByAccountNumber(String ref);
 }

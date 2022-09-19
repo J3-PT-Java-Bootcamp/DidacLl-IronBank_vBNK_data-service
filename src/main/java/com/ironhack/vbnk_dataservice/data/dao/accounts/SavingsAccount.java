@@ -38,7 +38,8 @@ public class SavingsAccount extends VBAccount {
                 .setSecretKey(dto.getSecretKey())
                 .setPrimaryOwner(dto.getPrimaryOwner())
                 .setSecondaryOwner(dto.getSecondaryOwner())
-                .setAdministratedBy(dto.getAdministratedBy());
+                .setAdministratedBy(dto.getAdministratedBy())
+                .setAccountNumber(dto.getAccountNumber());
         return retEntity;
     }
 }
