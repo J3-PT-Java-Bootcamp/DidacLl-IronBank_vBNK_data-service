@@ -8,6 +8,7 @@ import com.ironhack.vbnk_dataservice.data.dto.NotificationDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.NotificationRequest;
 import com.ironhack.vbnk_dataservice.repositories.NotificationRepository;
 import com.ironhack.vbnk_dataservice.services.NotificationService;
+import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,11 @@ import java.util.stream.Collectors;
 @Service
 public class NotificationServiceImpl implements NotificationService {
     @Autowired
-    NotificationRepository repository;
+    private NotificationRepository repository;
     @Autowired
-    VBUserService userService;
+    private VBUserService userService;
+    @Autowired
+    private VBAccountService accountService;
 
     @Override
     public List<NotificationDTO> getAllPending(String userId) {
@@ -59,12 +62,14 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public NotificationDTO create(NotificationRequest dto) throws HttpResponseException {
+    public NotificationDTO create(NotificationRequest request) throws HttpResponseException {
+        if(!userService.existsById(request.getOwnerId()))
+            request.setOwnerId(accountService.getAccount(request.getOwnerId()).getPrimaryOwner().getId());
         return NotificationDTO.fromEntity(repository.save(
-                new Notification().setType(dto.getType())
-                        .setMessage(dto.getMessage()).setTitle(dto.getTitle())
+                new Notification().setType(request.getType())
+                        .setMessage(request.getMessage()).setTitle(request.getTitle())
                         .setState(NotificationState.PENDING)
-                        .setOwner(VBUser.fromUnknownDTO(userService.getUnknown(dto.getOwnerId())))));
+                        .setOwner(VBUser.fromUnknownDTO(userService.getUnknown(request.getOwnerId())))));
     }
 
     @Override

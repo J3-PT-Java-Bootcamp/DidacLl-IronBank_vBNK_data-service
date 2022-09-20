@@ -12,6 +12,7 @@ import com.ironhack.vbnk_dataservice.data.http.request.NewSavingsAccountRequest;
 import com.ironhack.vbnk_dataservice.data.http.views.AccountView;
 import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
+import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
 import org.apache.http.client.HttpResponseException;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
@@ -22,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.ServiceUnavailableException;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
@@ -82,9 +84,13 @@ public class AccountControllerWeb implements AccountController {
     }
 
    @Override @GetMapping("main/accounts/view")
-   public AccountView getAccountDetails(@RequestParam(name = "ref") String accountRef) throws HttpResponseException {
+   public AccountView getAccountDetails(@RequestParam(name = "ref") String accountRef, Authentication auth) throws HttpResponseException, ServiceUnavailableException {
         var acc= service.getAccount(accountRef);
-        return AccountView.fromDTO(acc,null);// TODO: 17/09/2022 CONNECT WITH TRANSACTION SERVICE
+        if(!(VBNKConfig.isAdmin(auth)
+                ||acc.getPrimaryOwner().getId().equalsIgnoreCase(VBNKConfig.getUserIdFromAuth(auth))
+                ||acc.getSecondaryOwner().getId().equalsIgnoreCase(VBNKConfig.getUserIdFromAuth(auth))))
+            throw new HttpResponseException(HttpStatus.FORBIDDEN.value(), "User not authorized for this account");
+        return AccountView.fromDTO(acc,service.getStatements(0,accountRef,auth ));
    }
 
     //------------------------------------------------------------------------------------------------UTILS
@@ -95,7 +101,9 @@ public class AccountControllerWeb implements AccountController {
             request.setAdministratedBy(userService.getAdminFromToken(accessToken).getId());
         }catch (Throwable ignored){
         }
-        if(!(userService.existsById(request.getPrimaryOwner())&& userService.existsById(request.getAdministratedBy())))throw new HttpResponseException(404,"USERS NOT FOUND");
+        if(!(userService.existsById(request.getPrimaryOwner())
+                && userService.existsById(request.getAdministratedBy())))
+            throw new HttpResponseException(404,"USERS NOT FOUND");
     }
     @GetMapping("/auth/accounts/{ping}")
     public String authPing(Authentication auth, @PathVariable(name = "ping") String ping)   {

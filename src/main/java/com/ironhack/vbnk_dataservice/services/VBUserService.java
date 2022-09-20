@@ -7,7 +7,6 @@ import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
 import org.apache.http.client.HttpResponseException;
 import org.keycloak.representations.AccessToken;
 
-import javax.net.ssl.SSLSession;
 import java.util.List;
 
 public interface VBUserService {
@@ -39,4 +38,6 @@ public interface VBUserService {
     boolean existsByUsername(String username);
 
     AdminDTO getAdminFromToken(AccessToken accessToken);
+
+    ThirdPartyDTO getThirdPartyFromAccountNumber(String accountNumber);
 }

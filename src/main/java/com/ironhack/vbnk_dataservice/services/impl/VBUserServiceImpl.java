@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class VBUserServiceImpl implements VBUserService {
+public class  VBUserServiceImpl implements VBUserService {
     final AccountHolderRepository accountHolderRepository;
     final AdminRepository adminRepository;
     final ThirdPartyRepository thirdPartyRepository;
@@ -151,16 +151,23 @@ public class VBUserServiceImpl implements VBUserService {
 
     }
 
+    @Override
+    public ThirdPartyDTO getThirdPartyFromAccountNumber(String accountNumber) {
+        var code= accountNumber.substring(0,8);
+        return getThirdParty(code);
+    }
+
     //-------------------------------------------------------------------------------------------------CREATE METHODS
     @Override
     public VBUserDTO create(VBUserDTO dto) throws HttpResponseException {
-        // TODO: 06/09/2022 Implement id from keycloak
         if (dto instanceof AccountHolderDTO)
             return AccountHolderDTO.fromEntity(accountHolderRepository.save(AccountHolder.fromDTO((AccountHolderDTO) dto)));
         else if (dto instanceof AdminDTO)
             return AdminDTO.fromEntity(adminRepository.save(VBAdmin.fromDTO((AdminDTO) dto)));
         else if (dto instanceof ThirdPartyDTO)
-            return ThirdPartyDTO.fromEntity(thirdPartyRepository.save(ThirdParty.fromDTO((ThirdPartyDTO) dto)));
+            return ThirdPartyDTO.fromEntity(thirdPartyRepository.save(ThirdParty.fromDTO(
+                    (ThirdPartyDTO) dto.setId(
+                            ((ThirdPartyDTO) dto).getInternationalCode()+((ThirdPartyDTO) dto).getEntityCode()))));
         else
             throw new HttpResponseException(HttpStatus.I_AM_A_TEAPOT.value(), HttpStatus.I_AM_A_TEAPOT.getReasonPhrase());
     }

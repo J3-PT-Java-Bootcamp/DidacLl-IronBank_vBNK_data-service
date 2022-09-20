@@ -24,13 +24,13 @@ public class Notification {
     NotificationType type;
     @Enumerated(EnumType.STRING)
     NotificationState state;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     VBUser owner;
 
-    public final Notification fromDTO(NotificationDTO entity) {
+    public final Notification fromDTO(NotificationDTO entity,VBUser owner) {
         return new Notification().setId(entity.getId())
                 .setType(entity.getType())
-                .setOwner(entity.getOwner())
+                .setOwner(owner)
                 .setState(entity.getState())
                 .setMessage(entity.getMessage())
                 .setTitle(entity.getTitle());

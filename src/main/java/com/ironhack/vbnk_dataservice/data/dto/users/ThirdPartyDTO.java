@@ -11,10 +11,16 @@ import lombok.Setter;
 public class ThirdPartyDTO extends VBUserDTO {
 
     private String hashKey;
-    private boolean trusted;
+    private String internationalCode,entityCode;
+    private String serverUrl;
+
 
     public static ThirdPartyDTO fromEntity(ThirdParty entity) {
-        return newThirdPartyDTO(entity.getUsername(), entity.getId()).setHashKey(entity.getHashKey()).setTrusted(entity.isTrusted());
+        return newThirdPartyDTO(entity.getUsername(), entity.getId()).setHashKey(entity.getHashKey())
+                .setHashKey(entity.getHashKey())
+                .setInternationalCode(entity.getInternationalCode())
+                .setEntityCode(entity.getEntityCode())
+                .setServerUrl(entity.getServerUrl());
     }
 
     public static ThirdPartyDTO newThirdPartyDTO(String name, String id) {

@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 public interface VBNKService {
 
 
-    ResponseEntity<TransferResponse> transferFunds(TransferRequest request);
+    ResponseEntity<TransferResponse> transferFunds(TransferRequest request) throws HttpResponseException;
 
     ResponseEntity<TransferResponse> receiveTransfer(TransferRequest request) throws HttpResponseException;
     ResponseEntity<TransferResponse> sendBlindTransfer(TransferRequest request) throws HttpResponseException;

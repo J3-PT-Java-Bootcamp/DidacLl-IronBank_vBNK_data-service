@@ -2,6 +2,8 @@ package com.ironhack.vbnk_dataservice.services.impl;
 
 import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.AccountDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
+import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.NotificationRequest;
 import com.ironhack.vbnk_dataservice.data.http.request.TransferRequest;
 import com.ironhack.vbnk_dataservice.data.http.response.DataResponse;
@@ -13,12 +15,16 @@ import com.ironhack.vbnk_dataservice.services.VBUserService;
 import com.ironhack.vbnk_dataservice.utils.VBError;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ironhack.vbnk_dataservice.data.NotificationType.INCOMING;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Service
 public class VBNKServiceWeb implements VBNKService {
@@ -30,10 +36,11 @@ public class VBNKServiceWeb implements VBNKService {
     private NotificationService notificationService;
 
     @Override
-    public ResponseEntity<TransferResponse> transferFunds(TransferRequest request) {
+    public ResponseEntity<TransferResponse> transferFunds(TransferRequest request) throws HttpResponseException {
         var response = new TransferResponse().setRequest(request);
-        List<VBError> errors = response.getErrors();
+        List<VBError> errors = response.getErrors()==null? new ArrayList<>():response.getErrors();
         if (userService.existsById(request.getOrderingUserId())) {
+            var sender= userService.getUnknown(request.getOrderingUserId());
             AccountDTO sourceAccount = null;
             try {
                 sourceAccount = accountService.getAccount(request.getFromAccount());
@@ -41,6 +48,8 @@ public class VBNKServiceWeb implements VBNKService {
                 errors.add(VBError.ACCOUNT_NOT_FOUND);
             }
             if (sourceAccount != null && sourceAccount.getState().equals(AccountState.ACTIVE)) {
+                if(!accountService.isOwnedBy(sourceAccount,sender.getId())&&!(sender instanceof AdminDTO))
+                    throw new HttpResponseException(FORBIDDEN.value(), FORBIDDEN.getReasonPhrase());
                 BigDecimal prevSrcAmount = sourceAccount.getAmount();
                 if (prevSrcAmount.compareTo(request.getAmount()) >= 0) {
                     try {
@@ -76,9 +85,32 @@ public class VBNKServiceWeb implements VBNKService {
                 prevDestAmount= accountService.update(destAccount.setAmount(prevDestAmount
                         .add(request.getAmount())), destAccount.getId()).getAmount();
                 response.setDestination(true).setDstBalance(prevDestAmount);
+                sendNotification(new NotificationRequest("New income",
+                        "You have a new income in your account.",
+                        INCOMING,
+                        destAccount.getPrimaryOwner().getId()));
             }
         } else {
-            // TODO: 13/09/2022  THIRD PARTY BLIND TRANSFER
+            ThirdPartyDTO tpUser = null;
+            try {
+                tpUser = userService.getThirdPartyFromAccountNumber(request.getFromAccount());
+            }catch (Throwable ignored){
+            }
+            if(tpUser==null)throw new HttpResponseException(HttpStatus.UNAUTHORIZED.value(), "Unknown third party service, first must be registered");
+            AccountDTO destAccount = null;
+            destAccount = accountService.getAccount(request.getToAccount());
+            if (destAccount != null && destAccount.getState().equals(AccountState.ACTIVE)) {
+                //--------SUCCESS! -------//
+                var prevDestAmount = destAccount.getAmount();
+                response.setDstBalance(prevDestAmount);
+                prevDestAmount= accountService.update(destAccount.setAmount(prevDestAmount
+                        .add(request.getAmount())), destAccount.getId()).getAmount();
+                response.setDestination(true).setDstBalance(prevDestAmount);
+                sendNotification(new NotificationRequest("New income",
+                        "You have a new income in your account.",
+                        INCOMING,
+                        destAccount.getPrimaryOwner().getId()));
+            }
         }
         return response;
     }
@@ -86,8 +118,6 @@ public class VBNKServiceWeb implements VBNKService {
     @Override
     public ResponseEntity<TransferResponse> receiveTransfer(TransferRequest request) throws HttpResponseException {
         var response = new TransferResponse().setRequest(request);
-        List<VBError> errors = response.getErrors();
-
         return ResponseEntity.ok(transferFunds_receiveTransfer(response));
     }
 

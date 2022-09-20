@@ -4,7 +4,6 @@ import com.ironhack.vbnk_dataservice.data.dto.accounts.AccountDTO;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CheckingDTO;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CreditDTO;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.SavingsDTO;
-import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
 import com.ironhack.vbnk_dataservice.data.http.request.NewCheckingAccountRequest;
 import com.ironhack.vbnk_dataservice.data.http.request.NewCreditAccountRequest;
 import com.ironhack.vbnk_dataservice.data.http.request.NewSavingsAccountRequest;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.naming.ServiceUnavailableException;
 import java.util.List;
 
 public interface AccountController {
@@ -48,5 +48,5 @@ public interface AccountController {
 
 
     @GetMapping("main/accounts/view")
-    AccountView getAccountDetails(@RequestParam String accountRef) throws HttpResponseException;
+    AccountView getAccountDetails(@RequestParam String accountRef, Authentication auth) throws HttpResponseException, ServiceUnavailableException;
 }

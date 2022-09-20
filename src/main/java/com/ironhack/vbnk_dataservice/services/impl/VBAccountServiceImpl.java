@@ -1,27 +1,28 @@
 package com.ironhack.vbnk_dataservice.services.impl;
 
-import com.ironhack.vbnk_dataservice.data.dao.accounts.CheckingAccount;
-import com.ironhack.vbnk_dataservice.data.dao.accounts.CreditAccount;
-import com.ironhack.vbnk_dataservice.data.dao.accounts.SavingsAccount;
-import com.ironhack.vbnk_dataservice.data.dao.accounts.StudentCheckingAccount;
+
+import com.ironhack.vbnk_dataservice.data.dao.accounts.*;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.*;
 import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
-import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
-import com.ironhack.vbnk_dataservice.data.http.request.NewCheckingAccountRequest;
-import com.ironhack.vbnk_dataservice.data.http.request.NewCreditAccountRequest;
-import com.ironhack.vbnk_dataservice.data.http.request.NewSavingsAccountRequest;
-import com.ironhack.vbnk_dataservice.repositories.accounts.CheckingAccountRepository;
-import com.ironhack.vbnk_dataservice.repositories.accounts.CreditAccountRepository;
-import com.ironhack.vbnk_dataservice.repositories.accounts.SavingsAccountRepository;
-import com.ironhack.vbnk_dataservice.repositories.accounts.StudentCheckingAccountRepository;
+import com.ironhack.vbnk_dataservice.data.http.request.*;
+import com.ironhack.vbnk_dataservice.data.http.views.StatementView;
+import com.ironhack.vbnk_dataservice.repositories.accounts.*;
 import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
+import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
 import org.apache.http.client.HttpResponseException;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
+import javax.naming.ServiceUnavailableException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,30 +31,35 @@ import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 import static org.springframework.http.HttpStatus.I_AM_A_TEAPOT;
 
 @Service
+@EnableEurekaClient
 public class VBAccountServiceImpl implements VBAccountService {
-    //    final VBAccountRepository repository;
-    final SavingsAccountRepository savingsAccountRepository;
-    final CheckingAccountRepository checkingRepository;
-    final CreditAccountRepository creditRepository;
-    final StudentCheckingAccountRepository studentRepository;
-    final VBUserService userService;
+
+    private static final String[] TRANSACTION_SERVICE = new String[]{"vbnk-transaction-service","/v1/trans/main/ping"};
+    final private SavingsAccountRepository savingsAccountRepository;
+    final private CheckingAccountRepository checkingRepository;
+    final private CreditAccountRepository creditRepository;
+    final private StudentCheckingAccountRepository studentRepository;
+    final private VBUserService userService;
+    final private DiscoveryClient discoveryClient;
+    private WebClient client;
 
     public VBAccountServiceImpl(
             SavingsAccountRepository savingsAccountRepository,
             CheckingAccountRepository checkingRepository,
             CreditAccountRepository creditRepository,
-            StudentCheckingAccountRepository studentRepository, VBUserService userService) {
+            StudentCheckingAccountRepository studentRepository, VBUserService userService, DiscoveryClient discoveryClient) {
 //        this.repository = repository;
         this.savingsAccountRepository = savingsAccountRepository;
         this.checkingRepository = checkingRepository;
         this.creditRepository = creditRepository;
         this.studentRepository = studentRepository;
         this.userService = userService;
+        this.discoveryClient = discoveryClient;
     }
 
     @Override
     public AccountDTO getAccount(String ref) throws HttpResponseException {
-        if(ref.contains(VBNK_INT_ENTITY_CODE + VBNK_ENTITY_CODE)){
+        if(ref.contains(VBNK_INTERNATIONAL_CODE + VBNK_ENTITY_CODE)){
             if (checkingRepository.existsByAccountNumber(ref)) return CheckingDTO.fromEntity(checkingRepository.findByAccountNumber(ref)
                     .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
             if (savingsAccountRepository.existsByAccountNumber(ref)) return SavingsDTO.fromEntity(savingsAccountRepository.findByAccountNumber(ref)
@@ -210,6 +216,36 @@ public class VBAccountServiceImpl implements VBAccountService {
 
     }
 
+    @Override
+    public boolean isOwnedBy(AccountDTO acc, String userID) {
+        return acc.getPrimaryOwner().getId().equalsIgnoreCase(userID)
+                ||acc.getSecondaryOwner().getId().equalsIgnoreCase(userID);
+    }
+    @Override
+    public boolean isOwnedBy(String accID, String userID) throws HttpResponseException {
+        var acc= getAccount(accID);
+        return acc.getPrimaryOwner().getId().equalsIgnoreCase(userID)
+                ||acc.getSecondaryOwner().getId().equalsIgnoreCase(userID);
+    }
+
+    @Override
+    public StatementView[] getStatements(int i, String accountRef, Authentication auth) throws ServiceUnavailableException, HttpResponseException {
+        try {
+            client= checkClientAvailable(TRANSACTION_SERVICE,client);
+        } catch (ServiceUnavailableException e) {
+            throw new ServiceUnavailableException();
+        }
+        if(accountRef.substring(0,8).equalsIgnoreCase(VBNK_INTERNATIONAL_CODE+VBNK_ENTITY_CODE))accountRef=getAccount(accountRef).getId();
+        var res = client.post()
+                .uri("/v1/trans/main/statements/0")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization","Bearer "+ VBNKConfig.getTokenFromAuth(auth))
+                .body(Mono.just(accountRef), String.class)
+                .retrieve().bodyToMono(StatementView[].class)
+                .block();
+        return res;
+    }
+
 
     public String createAccountNumber(AccountHolderDTO pOwner, AdminDTO admin) {
         Random rand = new Random();
@@ -222,10 +258,38 @@ public class VBAccountServiceImpl implements VBAccountService {
         val = rand.nextInt(4, userNumbers.toString().length());
         accountNumber += userNumbers.substring(val - 4, val);
         String securityCode = ((pOwner.getDateOfBirth().getDayOfYear() + 10) + " ").substring(0, 2);
-        String IBANNumber = VBNK_INT_ENTITY_CODE + VBNK_ENTITY_CODE + securityCode + accountNumber;
+        String IBANNumber = VBNK_INTERNATIONAL_CODE + VBNK_ENTITY_CODE + securityCode + accountNumber;
         if (exist(IBANNumber)) return createAccountNumber(pOwner, admin);
         return IBANNumber;
     }
 
-
+    private WebClient checkClientAvailable(String[] service, WebClient webClient) throws ServiceUnavailableException {
+        try {
+            try {
+                if (webClient == null) createClient(service[0]);
+                if (webClient.get()
+                        .uri(service[1])
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .block()
+                        != "pong")return createClient(service[0]);
+            } catch (Exception e) {
+                return createClient(service[0]);
+            }
+        }catch (Throwable err){
+            if(err instanceof ServiceUnavailableException)throw err;
+        }
+        return webClient;
+    }
+    private WebClient  createClient(String service) throws ServiceUnavailableException{
+        for (int i = 0; i < 3; i++) {
+            try {
+                var serviceInstanceList = discoveryClient.getInstances(service);
+                String clientURI = serviceInstanceList.get(0).getUri().toString();
+                return WebClient.create(clientURI);
+            } catch (Throwable ignored) {}
+            try {Thread.sleep(5000);} catch (InterruptedException ignored) {}
+        }
+        throw new ServiceUnavailableException();
+    }
 }
