@@ -6,6 +6,7 @@ import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.utils.CryptoConverter;
 import com.ironhack.vbnk_dataservice.utils.MoneyConverter;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Getter
 @Setter
+@Hidden
 public abstract class VBAccount {
     @Id
     @GeneratedValue(generator = "uuid2")

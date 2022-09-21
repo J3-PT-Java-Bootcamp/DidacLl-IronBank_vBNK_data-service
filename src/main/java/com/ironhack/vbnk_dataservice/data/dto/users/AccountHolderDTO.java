@@ -3,14 +3,15 @@ package com.ironhack.vbnk_dataservice.data.dto.users;
 import com.ironhack.vbnk_dataservice.data.Address;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.http.request.NewAccountHolderRequest;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Hidden
+@Getter @Setter
 @NoArgsConstructor
 public class AccountHolderDTO extends VBUserDTO {
     private String secretKey;

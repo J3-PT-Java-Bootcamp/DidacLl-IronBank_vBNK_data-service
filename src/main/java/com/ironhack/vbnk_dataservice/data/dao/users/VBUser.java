@@ -4,22 +4,20 @@ import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.VBUserDTO;
-import com.sun.istack.NotNull;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.http.client.HttpResponseException;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.http.HttpStatus;
 
 import javax.persistence.*;
 import java.time.Instant;
 
-@Entity
-@Getter
-@Setter
+@Entity @Hidden
+@Getter @Setter
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class VBUser {

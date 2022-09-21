@@ -13,6 +13,7 @@ import com.ironhack.vbnk_dataservice.data.http.views.AccountView;
 import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.apache.http.client.HttpResponseException;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
@@ -47,6 +48,7 @@ public class AccountControllerWeb implements AccountController {
     public ResponseEntity<List<AccountDTO>> getAllUserAccounts(@RequestParam String userId) {
         return ResponseEntity.ok(service.getAllUserAccounts(userId));
     }
+
     @Override @PatchMapping("/auth/accounts/savings")
     public void updateSavingsAccount(@RequestBody SavingsDTO dto, @RequestParam String id) throws HttpResponseException {
         service.update(dto, id);
@@ -105,6 +107,8 @@ public class AccountControllerWeb implements AccountController {
                 && userService.existsById(request.getAdministratedBy())))
             throw new HttpResponseException(404,"USERS NOT FOUND");
     }
+
+    @Hidden
     @GetMapping("/auth/accounts/{ping}")
     public String authPing(Authentication auth, @PathVariable(name = "ping") String ping)   {
         return ping.replace('i','o');

@@ -4,6 +4,7 @@ import com.ironhack.vbnk_dataservice.data.dto.users.*;
 import com.ironhack.vbnk_dataservice.data.http.request.*;
 import com.ironhack.vbnk_dataservice.repositories.users.AccountHolderRepository;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class UserControllerWeb {
 
 
     //------------------------------------------------------------------------------GET END POINTS
+    @Hidden
     @GetMapping("/client/test/{ping}")
     @ResponseStatus(HttpStatus.OK)
     String ping(@PathVariable("ping") String ping) {
@@ -38,12 +40,14 @@ public class UserControllerWeb {
         return new ResponseEntity<>(service.getUnknown(id), HttpStatus.FOUND);
     }
 
+    @Hidden
     @GetMapping("/dev/users/admin")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<AdminDTO> getAdmin(@RequestParam String id) {
         return new ResponseEntity<>(service.getAdmin(id), HttpStatus.FOUND);
     }
 
+    @Hidden
     @GetMapping("/auth/users/account-holder")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<AccountHolderDTO> getAccountHolder(@RequestParam String id) {
@@ -57,18 +61,21 @@ public class UserControllerWeb {
     }
     //------------------------------------------------------------------------------GET ALL END POINTS
 
+    @Hidden
     @GetMapping("/dev/users/admin/all")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<List<AdminDTO>> getAllAdmin() {
         return new ResponseEntity<>(service.getAllAdmin(), HttpStatus.FOUND);
     }
 
+    @Hidden
     @GetMapping("/dev/users/account-holder/all")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<List<AccountHolderDTO>> getAllAccountHolder() {
         return new ResponseEntity<>(service.getAllAccountHolder(), HttpStatus.FOUND);
     }
 
+    @Hidden
     @GetMapping("/dev/users/third-party/all")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<List<ThirdPartyDTO>> getThirdParty() {
@@ -83,7 +90,7 @@ public class UserControllerWeb {
         return service.create(AccountHolderDTO.fromRequest(request)).getId();
     }
 
-    @PostMapping("/client/users/new/admin")
+    @PostMapping("/dev/users/new/admin")
     @ResponseStatus(HttpStatus.CREATED)
     String createAdmin(@RequestBody NewAdminRequest request) throws HttpResponseException {
         if(service.existsById(request.getId())||service.existsByUsername(request.getUserName()))throw new HttpResponseException(409,"User already exists" );

@@ -5,6 +5,7 @@ import com.ironhack.vbnk_dataservice.data.Address;
 import com.ironhack.vbnk_dataservice.data.dao.Notification;
 import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.sun.istack.NotNull;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
+@Hidden
 public class AccountHolder extends VBUser {
     @NotNull
     @Column(columnDefinition = "DATE")

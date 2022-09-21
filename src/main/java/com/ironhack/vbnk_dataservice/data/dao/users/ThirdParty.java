@@ -1,6 +1,7 @@
 package com.ironhack.vbnk_dataservice.data.dao.users;
 
 import com.ironhack.vbnk_dataservice.data.dto.users.ThirdPartyDTO;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
 @Getter
 @NoArgsConstructor
 @Entity
+@Hidden
 public class ThirdParty extends VBUser {
     private String hashKey;
     private String internationalCode,entityCode;

@@ -4,6 +4,7 @@ import com.ironhack.vbnk_dataservice.controllers.NotificationController;
 import com.ironhack.vbnk_dataservice.data.dto.NotificationDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.NotificationRequest;
 import com.ironhack.vbnk_dataservice.services.NotificationService;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,24 +28,28 @@ public class NotificationControllerWeb implements NotificationController {
         return ResponseEntity.ok(service.getAllPending(getUserIdFromAuth(auth)));
     }
 
+    @Hidden
     @Override
     @GetMapping("/dev/notifications/incoming")
     public ResponseEntity<List<NotificationDTO>> getIncoming(@RequestParam String userId) {
         return ResponseEntity.ok(service.getIncomingNotifications(userId));
     }
 
+    @Hidden
     @Override
     @GetMapping("/dev/notifications/fraud")
     public ResponseEntity<List<NotificationDTO>> getFraud(@RequestParam String userId) {
         return ResponseEntity.ok(service.getFraudNotifications(userId));
     }
 
+    @Hidden
     @Override
     @GetMapping("/dev/notifications/payment")
     public ResponseEntity<List<NotificationDTO>> getPaymentConfirm(@RequestParam String userId) {
         return ResponseEntity.ok(service.getPaymentNotifications(userId));
     }
 
+    @Hidden
     @Override
     @PostMapping("/dev/notifications")
     public void createNotification(@RequestBody NotificationRequest request) throws HttpResponseException {
@@ -52,7 +57,7 @@ public class NotificationControllerWeb implements NotificationController {
     }
 
     @Override
-    @DeleteMapping("/dev/notifications")
+    @DeleteMapping("/main/notifications")
     public void delete(@RequestParam Long id) throws HttpResponseException {
         service.delete(id);
     }

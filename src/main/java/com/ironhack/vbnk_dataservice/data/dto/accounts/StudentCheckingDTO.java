@@ -5,6 +5,7 @@ import com.ironhack.vbnk_dataservice.data.dao.accounts.StudentCheckingAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.http.request.NewCheckingAccountRequest;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,8 +13,8 @@ import lombok.Setter;
 import java.util.Currency;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Getter @Setter
+@Hidden
 public class StudentCheckingDTO extends AccountDTO {
     private static final String  display_name = "Student Checking Account";
 

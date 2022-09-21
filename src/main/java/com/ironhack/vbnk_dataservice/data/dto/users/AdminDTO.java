@@ -2,7 +2,9 @@ package com.ironhack.vbnk_dataservice.data.dto.users;
 
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.http.request.NewAdminRequest;
+import io.swagger.v3.oas.annotations.Hidden;
 
+@Hidden
 public class AdminDTO extends VBUserDTO {
 
     public static AdminDTO fromEntity(VBAdmin entity) {

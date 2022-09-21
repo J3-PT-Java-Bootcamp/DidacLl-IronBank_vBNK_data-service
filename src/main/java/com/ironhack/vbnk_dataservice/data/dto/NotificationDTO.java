@@ -3,11 +3,12 @@ package com.ironhack.vbnk_dataservice.data.dto;
 import com.ironhack.vbnk_dataservice.data.NotificationState;
 import com.ironhack.vbnk_dataservice.data.NotificationType;
 import com.ironhack.vbnk_dataservice.data.dao.Notification;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Getter @Setter
+@Hidden
 public class NotificationDTO {
     private Long id;
     private String title;

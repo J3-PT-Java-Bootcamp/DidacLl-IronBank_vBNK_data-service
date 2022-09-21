@@ -4,6 +4,7 @@ import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.*;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,8 +13,8 @@ import java.math.BigDecimal;
 import java.util.Currency;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Getter @Setter
+@Hidden
 public class AccountDTO {
     private String displayName;
     private String id;

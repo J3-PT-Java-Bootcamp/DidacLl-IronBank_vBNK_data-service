@@ -4,16 +4,16 @@ import com.ironhack.vbnk_dataservice.data.NotificationState;
 import com.ironhack.vbnk_dataservice.data.NotificationType;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBUser;
 import com.ironhack.vbnk_dataservice.data.dto.NotificationDTO;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
+@Entity @Hidden
 @NoArgsConstructor
-@Getter
-@Setter
+@Getter @Setter
 public class Notification {
     @Id
     @GeneratedValue

@@ -5,6 +5,7 @@ import com.ironhack.vbnk_dataservice.data.dao.accounts.CheckingAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.http.request.NewCheckingAccountRequest;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +14,8 @@ import java.math.BigDecimal;
 import java.util.Currency;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Getter @Setter
+@Hidden
 public class CheckingDTO extends AccountDTO {
     private static final String  display_name = "Checking Account";
     private BigDecimal minimumBalance;

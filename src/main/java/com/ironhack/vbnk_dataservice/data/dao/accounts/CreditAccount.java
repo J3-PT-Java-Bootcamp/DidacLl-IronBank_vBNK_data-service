@@ -2,6 +2,7 @@ package com.ironhack.vbnk_dataservice.data.dao.accounts;
 
 import com.ironhack.vbnk_dataservice.utils.Money;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CreditDTO;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -17,6 +18,7 @@ import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 //@NoArgsConstructor
 @Getter
 @Setter
+@Hidden
 public class CreditAccount extends VBAccount {
 //    @Convert(converter = MoneyConverter.class)
     @ColumnDefault(VBNK_MIN_CREDIT_LIMIT)

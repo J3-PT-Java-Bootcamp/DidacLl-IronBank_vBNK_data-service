@@ -5,6 +5,7 @@ import com.ironhack.vbnk_dataservice.data.dao.accounts.SavingsAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.http.request.NewSavingsAccountRequest;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,8 +16,8 @@ import java.util.Currency;
 import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Getter @Setter
+@Hidden
 public class SavingsDTO extends AccountDTO {
     private static final String  display_name = "Savings Account";
 

@@ -3,6 +3,7 @@ package com.ironhack.vbnk_dataservice.data.dao.accounts;
 import com.ironhack.vbnk_dataservice.utils.Money;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.CheckingDTO;
 import com.ironhack.vbnk_dataservice.utils.MoneyConverter;
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
 @Entity
 @Getter
 @Setter
+@Hidden
 public class CheckingAccount extends VBAccount {
 
     @Convert(converter = MoneyConverter.class)
