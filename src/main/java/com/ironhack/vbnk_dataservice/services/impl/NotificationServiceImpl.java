@@ -14,18 +14,23 @@ import org.apache.http.client.HttpResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
-    @Autowired
-    private NotificationRepository repository;
-    @Autowired
-    private VBUserService userService;
-    @Autowired
-    private VBAccountService accountService;
+    private final NotificationRepository repository;
+    private final VBUserService userService;
+    private final VBAccountService accountService;
+
+    public NotificationServiceImpl(NotificationRepository repository, VBUserService userService, VBAccountService accountService) {
+        this.repository = repository;
+        this.userService = userService;
+        this.accountService = accountService;
+    }
 
     @Override
     public List<NotificationDTO> getAllPending(String userId) {
@@ -71,7 +76,17 @@ public class NotificationServiceImpl implements NotificationService {
                         .setState(NotificationState.PENDING)
                         .setOwner(VBUser.fromUnknownDTO(userService.getUnknown(request.getOwnerId())))));
     }
+    @Override
+    public void bankUpdateNotification(String userId){
+        var notifications= getAllPending(userId);
+        for (NotificationDTO note: notifications){
+            var exp= note.getType().getExpirationDays();
+            if(exp==0)break;
+            if(note.getCreationDate().plus(exp, ChronoUnit.DAYS).isBefore(Instant.now()))
+                delete(note.getId());
+        }
 
+    }
     @Override
     public void delete(Long id) {
         repository.deleteById(id);

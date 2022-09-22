@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Currency;
 
 @NoArgsConstructor
@@ -30,7 +31,8 @@ public class StudentCheckingDTO extends AccountDTO {
                 .setSecondaryOwner(entity.getSecondaryOwner())
                 .setAdministratedBy(entity.getAdministratedBy())
                 .setAccountNumber(entity.getAccountNumber())
-                .setDisplayName(display_name);
+                .setDisplayName(display_name)
+                .setLastBankUpdate(entity.getLastBankUpdate());
         return dto;
     }
 
@@ -43,7 +45,8 @@ public class StudentCheckingDTO extends AccountDTO {
                 .setSecretKey(request.getSecretKey())
                 .setAccountNumber(accountNumber)
                 .setAdministratedBy(admin)
-                .setPrimaryOwner(pOwner);
+                .setPrimaryOwner(pOwner)
+                .setLastBankUpdate(Instant.now());
         if(sOwner!=null)dto.setSecondaryOwner(sOwner);
         return dto;
     }

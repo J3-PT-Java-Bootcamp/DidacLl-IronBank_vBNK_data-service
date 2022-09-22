@@ -12,10 +12,9 @@ import org.apache.http.client.HttpResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.naming.ServiceUnavailableException;
 
 @RestController
 @RequestMapping("/v1/data")
@@ -39,9 +38,15 @@ public class VBNKControllerOpen implements VBNKController {
 
     @Hidden
     @Override
-    @PostMapping("client/notif")
+    @PostMapping("/client/notif")
     public ResponseEntity<DataResponse> sendNotification(@RequestBody NotificationRequest request) {
         return service.sendNotification(request);
     }
+    @Hidden @Override
+    @GetMapping("/client/update")
+    public void startBankUpdate() throws HttpResponseException, ServiceUnavailableException {
+        service.bankUpdateUsers();
+    }
+
 
 }

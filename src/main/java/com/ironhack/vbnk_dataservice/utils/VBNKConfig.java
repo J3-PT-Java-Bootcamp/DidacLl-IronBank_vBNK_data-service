@@ -24,7 +24,9 @@ public class VBNKConfig {
     public static final String VBNK_MIN_SAVINGS_MINIMUM_BALANCE = "100.00";
     public static final String VBNK_MIN_SAVINGS_INTEREST_RATE = "0.0025";
     public static final String VBNK_MAX_CREDIT_LIMIT = "100000.00";
+    public static final String VBNK_ENTITY_NAME = "vBNK.sys";
 
+    private static final String VBNK_MAIN_ACCOUNT = "vbnk_main";
     public static List<Character> getNumbersFromId(String userId){
         var chrLst= userId.trim().toCharArray();
         var retVal= new ArrayList<Character>();

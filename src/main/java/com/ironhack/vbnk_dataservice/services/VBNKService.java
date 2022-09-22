@@ -7,6 +7,8 @@ import com.ironhack.vbnk_dataservice.data.http.response.TransferResponse;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.http.ResponseEntity;
 
+import javax.naming.ServiceUnavailableException;
+
 public interface VBNKService {
 
 
@@ -15,6 +17,8 @@ public interface VBNKService {
     ResponseEntity<TransferResponse> receiveTransfer(TransferRequest request) throws HttpResponseException;
     ResponseEntity<TransferResponse> sendBlindTransfer(TransferRequest request) throws HttpResponseException;
 
+
+    void bankUpdateUsers() throws HttpResponseException, ServiceUnavailableException;
 
     ResponseEntity<DataResponse> sendNotification(NotificationRequest request);
 

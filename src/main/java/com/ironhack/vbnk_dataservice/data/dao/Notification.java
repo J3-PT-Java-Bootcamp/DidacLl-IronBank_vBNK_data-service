@@ -8,8 +8,10 @@ import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Entity @Hidden
 @NoArgsConstructor
@@ -26,6 +28,9 @@ public class Notification {
     NotificationState state;
     @ManyToOne(fetch = FetchType.LAZY)
     VBUser owner;
+    @CreationTimestamp
+    @Column(updatable = false)
+    Instant creationDate;
 
     public final Notification fromDTO(NotificationDTO entity,VBUser owner) {
         return new Notification().setId(entity.getId())

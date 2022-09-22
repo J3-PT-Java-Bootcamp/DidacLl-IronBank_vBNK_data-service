@@ -27,4 +27,6 @@ public interface VBAccountService {
     boolean isOwnedBy(String accID, String userID) throws HttpResponseException;
 
     StatementView[] getStatements(int i, String accountRef, Authentication auth) throws ServiceUnavailableException, HttpResponseException;
+
+    void bankUpdateAccounts(String id) throws HttpResponseException, ServiceUnavailableException;
 }

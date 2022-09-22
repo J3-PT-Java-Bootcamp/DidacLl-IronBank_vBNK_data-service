@@ -1,7 +1,10 @@
 package com.ironhack.vbnk_dataservice.services.impl;
 
 
-import com.ironhack.vbnk_dataservice.data.dao.accounts.*;
+import com.ironhack.vbnk_dataservice.data.dao.accounts.CheckingAccount;
+import com.ironhack.vbnk_dataservice.data.dao.accounts.CreditAccount;
+import com.ironhack.vbnk_dataservice.data.dao.accounts.SavingsAccount;
+import com.ironhack.vbnk_dataservice.data.dao.accounts.StudentCheckingAccount;
 import com.ironhack.vbnk_dataservice.data.dao.users.AccountHolder;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBAdmin;
 import com.ironhack.vbnk_dataservice.data.dto.accounts.*;
@@ -9,7 +12,10 @@ import com.ironhack.vbnk_dataservice.data.dto.users.AccountHolderDTO;
 import com.ironhack.vbnk_dataservice.data.dto.users.AdminDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.*;
 import com.ironhack.vbnk_dataservice.data.http.views.StatementView;
-import com.ironhack.vbnk_dataservice.repositories.accounts.*;
+import com.ironhack.vbnk_dataservice.repositories.accounts.CheckingAccountRepository;
+import com.ironhack.vbnk_dataservice.repositories.accounts.CreditAccountRepository;
+import com.ironhack.vbnk_dataservice.repositories.accounts.SavingsAccountRepository;
+import com.ironhack.vbnk_dataservice.repositories.accounts.StudentCheckingAccountRepository;
 import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
@@ -23,8 +29,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import javax.naming.ServiceUnavailableException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.*;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
@@ -34,7 +46,7 @@ import static org.springframework.http.HttpStatus.I_AM_A_TEAPOT;
 @EnableEurekaClient
 public class VBAccountServiceImpl implements VBAccountService {
 
-    private static final String[] TRANSACTION_SERVICE = new String[]{"vbnk-transaction-service","/v1/trans/main/ping"};
+    private static final String[] TRANSACTION_SERVICE = new String[]{"vbnk-transaction-service", "/v1/trans/main/ping"};
     final private SavingsAccountRepository savingsAccountRepository;
     final private CheckingAccountRepository checkingRepository;
     final private CreditAccountRepository creditRepository;
@@ -59,22 +71,27 @@ public class VBAccountServiceImpl implements VBAccountService {
 
     @Override
     public AccountDTO getAccount(String ref) throws HttpResponseException {
-        if(ref.contains(VBNK_INTERNATIONAL_CODE + VBNK_ENTITY_CODE)){
-            if (checkingRepository.existsByAccountNumber(ref)) return CheckingDTO.fromEntity(checkingRepository.findByAccountNumber(ref)
-                    .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
-            if (savingsAccountRepository.existsByAccountNumber(ref)) return SavingsDTO.fromEntity(savingsAccountRepository.findByAccountNumber(ref)
-                    .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
-            if (creditRepository.existsByAccountNumber(ref)) return CreditDTO.fromEntity(creditRepository.findByAccountNumber(ref)
-                    .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
-            if (studentRepository.existsByAccountNumber(ref)) return StudentCheckingDTO.fromEntity(studentRepository.findByAccountNumber(ref)
-                    .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
+        if (ref.contains(VBNK_INTERNATIONAL_CODE + VBNK_ENTITY_CODE)) {
+            if (checkingRepository.existsByAccountNumber(ref))
+                return CheckingDTO.fromEntity(checkingRepository.findByAccountNumber(ref)
+                        .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
+            if (savingsAccountRepository.existsByAccountNumber(ref))
+                return SavingsDTO.fromEntity(savingsAccountRepository.findByAccountNumber(ref)
+                        .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
+            if (creditRepository.existsByAccountNumber(ref))
+                return CreditDTO.fromEntity(creditRepository.findByAccountNumber(ref)
+                        .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
+            if (studentRepository.existsByAccountNumber(ref))
+                return StudentCheckingDTO.fromEntity(studentRepository.findByAccountNumber(ref)
+                        .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
             else throw new HttpResponseException(404, "ID NOK");
         }
 //        return AccountDTO.fromAnyAccountEntity(repository.findById(ref).orElseThrow());
         if (checkingRepository.existsById(ref)) return CheckingDTO.fromEntity(checkingRepository.findById(ref)
                 .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
-        if (savingsAccountRepository.existsById(ref)) return SavingsDTO.fromEntity(savingsAccountRepository.findById(ref)
-                .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
+        if (savingsAccountRepository.existsById(ref))
+            return SavingsDTO.fromEntity(savingsAccountRepository.findById(ref)
+                    .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
         if (creditRepository.existsById(ref)) return CreditDTO.fromEntity(creditRepository.findById(ref)
                 .orElseThrow(() -> new HttpResponseException(404, "FATAL ERR")));
         if (studentRepository.existsById(ref)) return StudentCheckingDTO.fromEntity(studentRepository.findById(ref)
@@ -107,7 +124,7 @@ public class VBAccountServiceImpl implements VBAccountService {
     public AccountDTO create(NewAccountRequest request) throws HttpResponseException {
         var owner = userService.getAccountHolder(request.getPrimaryOwner());
         if (owner == null) throw new HttpResponseException(404, "Wrong User Id");
-        if(request.getCurrency()==null)request.setCurrency(VBNK_CURRENCY_DEF);
+        if (request.getCurrency() == null) request.setCurrency(VBNK_CURRENCY_DEF);
         var admin = (request.getAdministratedBy() == null
                 || request.getAdministratedBy().equals("")
                 || request.getAdministratedBy().equals(" ")) ?
@@ -117,45 +134,51 @@ public class VBAccountServiceImpl implements VBAccountService {
         AccountHolderDTO sOwner = null;
         try {
             sOwner = userService.getAccountHolder(request.getSecondaryOwner());
-        }catch (Throwable ignored){}
+        } catch (Throwable ignored) {
+        }
         request.setPrimaryOwner(owner.getId()).setAdministratedBy(admin.getId());
-        return switch (request.getClass().getSimpleName()) {
-            case "NewCheckingAccountRequest" ->
-                    (owner.getDateOfBirth().plusYears(24).isAfter(LocalDate.now())) ?
-                            StudentCheckingDTO.fromEntity(
-                                    studentRepository.save(
-                                            StudentCheckingAccount.fromDTO(
-                                                    StudentCheckingDTO.fromRequest((NewCheckingAccountRequest) request,
-                                                    AccountHolder.fromDTO(owner),
-                                                    sOwner==null?null:AccountHolder.fromDTO(sOwner),
-                                                    VBAdmin.fromDTO(admin),
-                                                    createAccountNumber(owner, admin)))))
-                            :
-                            CheckingDTO.fromEntity(checkingRepository.save(
-                                    CheckingAccount.fromDTO(
-                                            CheckingDTO.fromRequest((NewCheckingAccountRequest) request,
-                                            AccountHolder.fromDTO(owner),
-                                            sOwner==null?null:AccountHolder.fromDTO(sOwner),
-                                            VBAdmin.fromDTO(admin),
-                                            createAccountNumber(owner, admin)))));
+        switch (request.getClass().getSimpleName()) {
+            case "NewCheckingAccountRequest" -> {
+                return (owner.getDateOfBirth().plusYears(24).isAfter(LocalDate.now())) ?
+                        StudentCheckingDTO.fromEntity(
+                                studentRepository.save(
+                                        StudentCheckingAccount.fromDTO(
+                                                StudentCheckingDTO.fromRequest((NewCheckingAccountRequest) request,
+                                                        AccountHolder.fromDTO(owner),
+                                                        sOwner == null ? null : AccountHolder.fromDTO(sOwner),
+                                                        VBAdmin.fromDTO(admin),
+                                                        createAccountNumber(owner, admin)))))
+                        :
+                        CheckingDTO.fromEntity(checkingRepository.save(
+                                CheckingAccount.fromDTO(
+                                        CheckingDTO.fromRequest((NewCheckingAccountRequest) request,
+                                                AccountHolder.fromDTO(owner),
+                                                sOwner == null ? null : AccountHolder.fromDTO(sOwner),
+                                                VBAdmin.fromDTO(admin),
+                                                createAccountNumber(owner, admin)))));
+            }
 
-            case "NewSavingsAccountRequest" -> SavingsDTO.fromEntity(
-                    savingsAccountRepository.save(SavingsAccount.fromDTO(
-                            SavingsDTO.fromRequest((NewSavingsAccountRequest) request,
-                                    AccountHolder.fromDTO(owner),
-                                    sOwner==null?null:AccountHolder.fromDTO(sOwner),
-                                    VBAdmin.fromDTO(admin),
-                                    createAccountNumber(owner, admin)))));
-            case "NewCreditAccountRequest" -> CreditDTO.fromEntity(
+            case "NewSavingsAccountRequest" -> {
+                return SavingsDTO.fromEntity(
+                        savingsAccountRepository.save(SavingsAccount.fromDTO(
+                                SavingsDTO.fromRequest((NewSavingsAccountRequest) request,
+                                        AccountHolder.fromDTO(owner),
+                                        sOwner == null ? null : AccountHolder.fromDTO(sOwner),
+                                        VBAdmin.fromDTO(admin),
+                                        createAccountNumber(owner, admin)))));
+            }
+            case "NewCreditAccountRequest" -> {
+                request.setInitialAmount(((NewCreditAccountRequest)request).getCreditLimit());
+                return CreditDTO.fromEntity(
                     creditRepository.save(CreditAccount.fromDTO(
                             CreditDTO.fromRequest((NewCreditAccountRequest) request,
                                     AccountHolder.fromDTO(owner),
-                                    sOwner==null?null:AccountHolder.fromDTO(sOwner),
+                                    sOwner == null ? null : AccountHolder.fromDTO(sOwner),
                                     VBAdmin.fromDTO(admin),
                                     createAccountNumber(owner, admin)))));
-            default ->
-                    throw new HttpResponseException(I_AM_A_TEAPOT.value(), I_AM_A_TEAPOT.getReasonPhrase());
-        };
+            }
+            default -> throw new HttpResponseException(I_AM_A_TEAPOT.value(), I_AM_A_TEAPOT.getReasonPhrase());
+        }
     }
 
     @Override
@@ -192,7 +215,7 @@ public class VBAccountServiceImpl implements VBAccountService {
             var save = (StudentCheckingDTO) original;
             return AccountDTO.fromAnyAccountEntity(studentRepository.save(StudentCheckingAccount.fromDTO(save)));
         }
-        throw new HttpResponseException(I_AM_A_TEAPOT.value(),I_AM_A_TEAPOT.getReasonPhrase());
+        throw new HttpResponseException(I_AM_A_TEAPOT.value(), I_AM_A_TEAPOT.getReasonPhrase());
     }
 
     @Override
@@ -219,35 +242,130 @@ public class VBAccountServiceImpl implements VBAccountService {
     @Override
     public boolean isOwnedBy(AccountDTO acc, String userID) {
         return acc.getPrimaryOwner().getId().equalsIgnoreCase(userID)
-                ||acc.getSecondaryOwner().getId().equalsIgnoreCase(userID);
+                || acc.getSecondaryOwner().getId().equalsIgnoreCase(userID);
     }
+
     @Override
     public boolean isOwnedBy(String accID, String userID) throws HttpResponseException {
-        var acc= getAccount(accID);
+        var acc = getAccount(accID);
         return acc.getPrimaryOwner().getId().equalsIgnoreCase(userID)
-                ||acc.getSecondaryOwner().getId().equalsIgnoreCase(userID);
+                || acc.getSecondaryOwner().getId().equalsIgnoreCase(userID);
     }
 
     @Override
     public StatementView[] getStatements(int i, String accountRef, Authentication auth) throws ServiceUnavailableException, HttpResponseException {
         try {
-            client= checkClientAvailable(TRANSACTION_SERVICE,client);
+            client = checkClientAvailable(TRANSACTION_SERVICE, client);
         } catch (ServiceUnavailableException e) {
             throw new ServiceUnavailableException();
         }
-        if(accountRef.substring(0,8).equalsIgnoreCase(VBNK_INTERNATIONAL_CODE+VBNK_ENTITY_CODE))accountRef=getAccount(accountRef).getId();
+        if (accountRef.substring(0, 8).equalsIgnoreCase(VBNK_INTERNATIONAL_CODE + VBNK_ENTITY_CODE))
+            accountRef = getAccount(accountRef).getId();
         var res = client.post()
                 .uri("/v1/trans/main/statements/0")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization","Bearer "+ VBNKConfig.getTokenFromAuth(auth))
+                .header("Authorization", "Bearer " + VBNKConfig.getTokenFromAuth(auth))
                 .body(Mono.just(accountRef), String.class)
                 .retrieve().bodyToMono(StatementView[].class)
                 .block();
         return res;
     }
 
+    @Override
+    public void bankUpdateAccounts(String userID) throws HttpResponseException, ServiceUnavailableException {
+        client = checkClientAvailable(TRANSACTION_SERVICE, client);
+        var accList = getAllUserAccounts(userID);
+        for (var acc : accList) {
+            if (acc instanceof CreditDTO) {
+                //---------------------------------------Apply Monthly interests
+                if (acc.getLastBankUpdate().plus(1, ChronoUnit.MONTHS).isBefore(Instant.now()))
+                    if (acc.getAmount().compareTo(BigDecimal.ZERO) < 0) {
+                        BigDecimal interest = (((CreditDTO) acc).getInterestRate()
+                                .divide(BigDecimal.valueOf(12), RoundingMode.UP))
+                                .multiply(((CreditDTO) acc).getCreditLimit()
+                                        .subtract(acc.getAmount()));
+                        creditRepository.save(
+                                CreditAccount.fromDTO((CreditDTO) acc.setLastBankUpdate(Instant.now())
+                                        .setAmount(acc.getAmount().subtract(
+                                                interest))));
+                        var res= client.post()
+                                .uri("/v1/trans/client/update")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .body(Mono.just(new UpdateTransactionRequest(
+                                        true,
+                                        interest,
+                                        acc.getAmount(),
+                                        "Monthly used credit interests",
+                                        acc.getId(),
+                                        acc.getCurrency()
+                                )), UpdateTransactionRequest.class).retrieve().toBodilessEntity();
+                    }
 
-    public String createAccountNumber(AccountHolderDTO pOwner, AdminDTO admin) {
+            } else if (acc instanceof CheckingDTO) {
+                //------------------------------------------------------Apply penaltyFee
+                if (acc.getAmount().compareTo(((CheckingDTO) acc).getMinimumBalance()) < 0) {
+                    BigDecimal fee = ((CheckingDTO) acc).getPenaltyFee();
+                    checkingRepository.save(
+                            CheckingAccount.fromDTO((CheckingDTO) acc.setAmount(
+                                    acc.getAmount().subtract(fee))));
+                    var res= client.post()
+                            .uri("/v1/trans/client/update")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(Mono.just(new UpdateTransactionRequest(
+                                    true,
+                                    fee,
+                                    acc.getAmount(),
+                                    "Monthly used credit interests",
+                                    acc.getId(),
+                                    acc.getCurrency()
+                            )), UpdateTransactionRequest.class).retrieve().toBodilessEntity();
+                }
+
+            } else if (acc instanceof SavingsDTO) {
+                //----------------------------------------------------Apply penaltyFee
+                if (acc.getAmount().compareTo(((SavingsDTO) acc).getMinimumBalance()) < 0) {
+                    BigDecimal fee = ((SavingsDTO) acc).getPenaltyFee();
+                    savingsAccountRepository.save(
+                            SavingsAccount.fromDTO((SavingsDTO) acc.setAmount(
+                                    acc.getAmount().subtract(fee))));
+                    var res=client.post()
+                            .uri("/v1/trans/client/update")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(Mono.just(new UpdateTransactionRequest(
+                                    true,
+                                    fee,
+                                    acc.getAmount(),
+                                    "Monthly used credit interests",
+                                    acc.getId(),
+                                    acc.getCurrency()
+                            )), UpdateTransactionRequest.class).retrieve().toBodilessEntity();
+                }
+                //-------------------------------------------------------Apply annual interests
+                if (acc.getLastBankUpdate().plus(1, ChronoUnit.YEARS).isBefore(Instant.now())) {
+                    BigDecimal interest = acc.getAmount()
+                            .multiply(((SavingsDTO) acc).getInterestRate());
+                    savingsAccountRepository.save(
+                            SavingsAccount.fromDTO((SavingsDTO) acc.setLastBankUpdate(Instant.now())
+                                    .setAmount(acc.getAmount()
+                                            .add(interest))));
+                    var res= client.post()
+                            .uri("/v1/trans/client/update")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .body(Mono.just(new UpdateTransactionRequest(
+                                    false,
+                                    interest,
+                                    acc.getAmount(),
+                                    "Annual savings interests",
+                                    acc.getId(),
+                                    acc.getCurrency()
+
+                            )), UpdateTransactionRequest.class).retrieve().toBodilessEntity();
+                }
+            }
+        }
+    }
+
+    private String createAccountNumber(AccountHolderDTO pOwner, AdminDTO admin) {
         Random rand = new Random();
         StringBuilder userNumbers = new StringBuilder();
         for (Character num : getNumbersFromId(pOwner.getId())) userNumbers.append(num);
@@ -272,23 +390,28 @@ public class VBAccountServiceImpl implements VBAccountService {
                         .retrieve()
                         .bodyToMono(String.class)
                         .block()
-                        != "pong")return createClient(service[0]);
+                        != "pong") return createClient(service[0]);
             } catch (Exception e) {
                 return createClient(service[0]);
             }
-        }catch (Throwable err){
-            if(err instanceof ServiceUnavailableException)throw err;
+        } catch (Throwable err) {
+            if (err instanceof ServiceUnavailableException) throw err;
         }
         return webClient;
     }
-    private WebClient  createClient(String service) throws ServiceUnavailableException{
+
+    private WebClient createClient(String service) throws ServiceUnavailableException {
         for (int i = 0; i < 3; i++) {
             try {
                 var serviceInstanceList = discoveryClient.getInstances(service);
                 String clientURI = serviceInstanceList.get(0).getUri().toString();
                 return WebClient.create(clientURI);
-            } catch (Throwable ignored) {}
-            try {Thread.sleep(5000);} catch (InterruptedException ignored) {}
+            } catch (Throwable ignored) {
+            }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException ignored) {
+            }
         }
         throw new ServiceUnavailableException();
     }

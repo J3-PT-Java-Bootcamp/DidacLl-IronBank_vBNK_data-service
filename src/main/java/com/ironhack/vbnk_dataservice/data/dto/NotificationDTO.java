@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.Hidden;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter @Setter
 @Hidden
 public class NotificationDTO {
@@ -16,6 +18,7 @@ public class NotificationDTO {
     private NotificationType type;
     private  NotificationState state;
     private String ownerID;
+    private Instant creationDate;
 
 
     public static NotificationDTO fromEntity(Notification entity) {
@@ -24,6 +27,7 @@ public class NotificationDTO {
                 .setOwnerID(entity.getOwner().getId())
                 .setState(entity.getState())
                 .setMessage(entity.getMessage())
-                .setTitle(entity.getTitle());
+                .setTitle(entity.getTitle())
+                .setCreationDate(entity.getCreationDate());
     }
 }

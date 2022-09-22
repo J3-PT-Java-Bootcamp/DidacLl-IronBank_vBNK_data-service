@@ -17,5 +17,7 @@ public interface NotificationService {
 
     NotificationDTO create(NotificationRequest dto) throws HttpResponseException;
 
+    void bankUpdateNotification(String userId);
+
     void delete(Long id);
 }

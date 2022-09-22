@@ -14,6 +14,7 @@ import com.ironhack.vbnk_dataservice.repositories.users.ThirdPartyRepository;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import org.apache.http.client.HttpResponseException;
 import org.keycloak.representations.AccessToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -186,12 +187,6 @@ public class  VBUserServiceImpl implements VBUserService {
         else return ThirdParty.fromDTO((ThirdPartyDTO) dto);
     }
 
-//    private UserRepository switchRepository(VBUserDTO dto){
-//
-//        if(dto instanceof AccountHolderDTO)return accountHolderRepository;
-//        else if (dto instanceof AdminDTO) return adminRepository;
-//        else return thirdPartyRepository;
-//    }
 
 
 }

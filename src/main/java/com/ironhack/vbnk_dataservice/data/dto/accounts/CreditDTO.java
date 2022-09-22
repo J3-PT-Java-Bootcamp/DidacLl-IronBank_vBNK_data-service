@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Currency;
 
 import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.*;
@@ -36,7 +37,8 @@ public class CreditDTO extends AccountDTO {
                 .setSecondaryOwner(entity.getSecondaryOwner())
                 .setAccountNumber(entity.getAccountNumber())
                 .setAdministratedBy(entity.getAdministratedBy())
-                .setDisplayName(display_name);
+                .setDisplayName(display_name)
+                .setLastBankUpdate(entity.getLastBankUpdate());
         return dto;
     }
 
@@ -56,7 +58,8 @@ public class CreditDTO extends AccountDTO {
                 .setPrimaryOwner(pOwner)
                 .setSecondaryOwner(sOwner)
                 .setAccountNumber(accountNumber)
-                .setAdministratedBy(admin);
+                .setAdministratedBy(admin)
+                .setLastBankUpdate(Instant.now());
         return dto;
     }
 }

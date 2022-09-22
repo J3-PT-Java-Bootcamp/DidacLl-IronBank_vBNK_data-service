@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.naming.ServiceUnavailableException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +127,14 @@ public class VBNKServiceWeb implements VBNKService {
         // TODO: 17/09/2022
         return null;
     }
-
+    @Override
+    public void bankUpdateUsers() throws HttpResponseException, ServiceUnavailableException {
+        var monsterList= userService.getAllAccountHolder();
+        for(var user: monsterList){
+            notificationService.bankUpdateNotification(user.getId());
+            accountService.bankUpdateAccounts(user.getId());
+        }
+    }
     @Override
     public ResponseEntity<DataResponse> sendNotification(NotificationRequest request) {
         var response = new DataResponse();

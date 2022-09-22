@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Currency;
 
 @NoArgsConstructor
@@ -26,7 +27,7 @@ public class AccountDTO {
     private AccountHolder secondaryOwner;
     private AccountState state;
     private VBAdmin administratedBy;
-
+    Instant lastBankUpdate;
     public static AccountDTO fromAnyAccountEntity(VBAccount entity) {
         AccountDTO retVal = null;
         if(entity instanceof CheckingAccount)retVal=new CheckingDTO().setDisplayName("Checking Account");
@@ -42,7 +43,8 @@ public class AccountDTO {
                 .setSecretKey(entity.getSecretKey())
                 .setPrimaryOwner(entity.getPrimaryOwner())
                 .setSecondaryOwner(entity.getSecondaryOwner())
-                .setAdministratedBy(entity.getAdministratedBy());
+                .setAdministratedBy(entity.getAdministratedBy())
+                .setLastBankUpdate(entity.getLastBankUpdate());
         return retVal;
     }
 
@@ -71,7 +73,8 @@ public class AccountDTO {
                 .setPrimaryOwner(src.getPrimaryOwner())
                 .setSecondaryOwner(src.getSecondaryOwner())
                 .setSecretKey(src.getSecretKey())
-                .setId(src.getId());
+                .setId(src.getId())
+                .setLastBankUpdate(src.lastBankUpdate);
     }
 
 }

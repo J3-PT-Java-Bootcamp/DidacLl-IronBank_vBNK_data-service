@@ -50,7 +50,7 @@ public abstract class VBAccount {
     @CreationTimestamp
     @Column(updatable = false)
     Instant creationDate;
-
+    Instant lastBankUpdate;
     @UpdateTimestamp
     Instant updateDate;
 
