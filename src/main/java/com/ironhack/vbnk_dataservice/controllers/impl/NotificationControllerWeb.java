@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.ServiceUnavailableException;
 import java.util.List;
 
 import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.getUserIdFromAuth;
@@ -66,7 +67,7 @@ public class NotificationControllerWeb implements NotificationController {
     }
 
     @Override
-    public void confirmNotification(Authentication auth,String sK,Long id) throws HttpResponseException {
+    public void confirmNotification(Authentication auth,String sK,Long id) throws HttpResponseException, ServiceUnavailableException {
         service.confirmNotification(auth,sK,id);
     }
 }

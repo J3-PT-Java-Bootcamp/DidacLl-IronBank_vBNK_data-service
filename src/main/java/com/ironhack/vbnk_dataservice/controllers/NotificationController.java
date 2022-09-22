@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.naming.ServiceUnavailableException;
 import java.util.List;
 @Tag(name = "Notification Services",description = "Notifications data manipulation")
 public interface NotificationController {
@@ -35,5 +36,5 @@ public interface NotificationController {
 
     @Tag(name = "Main operations")
     @Operation(summary = "CONFIRM NOTIFICATION")
-    public void confirmNotification(Authentication auth,String sK,Long id) throws HttpResponseException;
+    public void confirmNotification(Authentication auth,String sK,Long id) throws HttpResponseException, ServiceUnavailableException;
 }
