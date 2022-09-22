@@ -6,14 +6,19 @@ import com.ironhack.vbnk_dataservice.data.dao.Notification;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBUser;
 import com.ironhack.vbnk_dataservice.data.dto.NotificationDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.NotificationRequest;
+import com.ironhack.vbnk_dataservice.data.http.request.TransferRequest;
 import com.ironhack.vbnk_dataservice.repositories.NotificationRepository;
 import com.ironhack.vbnk_dataservice.services.NotificationService;
 import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import org.apache.http.client.HttpResponseException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
+import org.keycloak.representations.AccessToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
+import javax.naming.ServiceUnavailableException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -68,13 +73,14 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public NotificationDTO create(NotificationRequest request) throws HttpResponseException {
-        if(!userService.existsById(request.getOwnerId()))
-            request.setOwnerId(accountService.getAccount(request.getOwnerId()).getPrimaryOwner().getId());
+        if(!userService.existsById(request.getAccountRef()))
+            request.setAccountRef(accountService.getAccount(request.getAccountRef()).getPrimaryOwner().getId());
         return NotificationDTO.fromEntity(repository.save(
                 new Notification().setType(request.getType())
                         .setMessage(request.getMessage()).setTitle(request.getTitle())
                         .setState(NotificationState.PENDING)
-                        .setOwner(VBUser.fromUnknownDTO(userService.getUnknown(request.getOwnerId())))));
+                        .setOwner(VBUser.fromUnknownDTO(userService.getUnknown(request.getAccountRef())))
+                        .setTransactionId(request.getTransactionId())));
     }
     @Override
     public void bankUpdateNotification(String userId){
@@ -90,5 +96,22 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public void confirmNotification(Authentication auth, String sK, Long id) throws ServiceUnavailableException {
+        var notif= repository.findById(id).orElseThrow();
+        RefreshableKeycloakSecurityContext context = (RefreshableKeycloakSecurityContext) auth.getCredentials();
+        AccessToken accessToken = context.getToken();
+        var owner = userService.getOwnerFromToken(accessToken,true);
+        if(notif.getOwner().getId().equalsIgnoreCase(owner.getId())){
+            accountService.getTransactionClient().post().uri("/v1/trans/main/cnf")
+                    .header("Authorization","Bearer "+ context.getTokenString())
+                    .body(Mono.just(notif.getTransactionId()),String.class)
+                    .retrieve().toBodilessEntity()
+                    .block();
+
+        }
+
     }
 }

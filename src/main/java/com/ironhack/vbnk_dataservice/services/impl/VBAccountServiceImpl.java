@@ -380,7 +380,10 @@ public class VBAccountServiceImpl implements VBAccountService {
         if (exist(IBANNumber)) return createAccountNumber(pOwner, admin);
         return IBANNumber;
     }
-
+    @Override
+    public WebClient getTransactionClient() throws ServiceUnavailableException {
+        return client=checkClientAvailable(TRANSACTION_SERVICE,client);
+    }
     private WebClient checkClientAvailable(String[] service, WebClient webClient) throws ServiceUnavailableException {
         try {
             try {

@@ -14,7 +14,6 @@ import com.ironhack.vbnk_dataservice.repositories.users.ThirdPartyRepository;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import org.apache.http.client.HttpResponseException;
 import org.keycloak.representations.AccessToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -149,6 +148,17 @@ public class  VBUserServiceImpl implements VBUserService {
         if(byId.isPresent()) return AdminDTO.fromEntity(byId.get());
         Optional<VBAdmin> byUsername = adminRepository.findByUsername(name);
         return AdminDTO.fromEntity(byUsername.orElseThrow());
+
+    }
+
+    @Override
+    public AccountHolderDTO getOwnerFromToken(AccessToken accessToken, boolean primary) {
+        var id= accessToken.getSubject();
+        var name= accessToken.getPreferredUsername();
+        Optional<AccountHolder> byId = accountHolderRepository.findById(id);
+        if(byId.isPresent()) return AccountHolderDTO.fromEntity(byId.get());
+        Optional<AccountHolder> byUsername = accountHolderRepository.findByUsername(name);
+        return AccountHolderDTO.fromEntity(byUsername.orElseThrow());
 
     }
 

@@ -14,6 +14,8 @@ import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 import org.apache.http.client.HttpResponseException;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
@@ -24,6 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.Name;
 import javax.naming.ServiceUnavailableException;
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -44,7 +47,7 @@ public class AccountControllerWeb implements AccountController {
     public ResponseEntity<AccountDTO> getAccount(@RequestParam String id) throws HttpResponseException {
         return ResponseEntity.ok(service.getAccount(id));
     }
-    @Override @GetMapping("/auth/accounts/all")
+    @Override @GetMapping("/main/accounts/all")
     public ResponseEntity<List<AccountDTO>> getAllUserAccounts(@RequestParam String userId) {
         return ResponseEntity.ok(service.getAllUserAccounts(userId));
     }

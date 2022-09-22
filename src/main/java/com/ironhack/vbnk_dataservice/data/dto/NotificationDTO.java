@@ -19,6 +19,7 @@ public class NotificationDTO {
     private  NotificationState state;
     private String ownerID;
     private Instant creationDate;
+    String transactionId;
 
 
     public static NotificationDTO fromEntity(Notification entity) {
@@ -28,6 +29,7 @@ public class NotificationDTO {
                 .setState(entity.getState())
                 .setMessage(entity.getMessage())
                 .setTitle(entity.getTitle())
+                .setTransactionId(entity.getTransactionId())
                 .setCreationDate(entity.getCreationDate());
     }
 }

@@ -31,6 +31,7 @@ public class Notification {
     @CreationTimestamp
     @Column(updatable = false)
     Instant creationDate;
+    String transactionId;
 
     public final Notification fromDTO(NotificationDTO entity,VBUser owner) {
         return new Notification().setId(entity.getId())
@@ -38,6 +39,7 @@ public class Notification {
                 .setOwner(owner)
                 .setState(entity.getState())
                 .setMessage(entity.getMessage())
+                .setTransactionId(entity.getTransactionId())
                 .setTitle(entity.getTitle());
     }
 }

@@ -19,8 +19,11 @@ import static com.ironhack.vbnk_dataservice.utils.VBNKConfig.getUserIdFromAuth;
 @RestController
 @RequestMapping(path = "/v1/data")
 public class NotificationControllerWeb implements NotificationController {
-    @Autowired
-    NotificationService service;
+    private final NotificationService service;
+
+    public NotificationControllerWeb(NotificationService service) {
+        this.service = service;
+    }
 
     @Override
     @GetMapping("/main/notifications/all")
@@ -51,7 +54,7 @@ public class NotificationControllerWeb implements NotificationController {
 
     @Hidden
     @Override
-    @PostMapping("/dev/notifications")
+    @PostMapping("/client/notifications")
     public void createNotification(@RequestBody NotificationRequest request) throws HttpResponseException {
         service.create(request);
     }
@@ -60,5 +63,10 @@ public class NotificationControllerWeb implements NotificationController {
     @DeleteMapping("/main/notifications")
     public void delete(@RequestParam Long id) throws HttpResponseException {
         service.delete(id);
+    }
+
+    @Override
+    public void confirmNotification(Authentication auth,String sK,Long id) throws HttpResponseException {
+        service.confirmNotification(auth,sK,id);
     }
 }

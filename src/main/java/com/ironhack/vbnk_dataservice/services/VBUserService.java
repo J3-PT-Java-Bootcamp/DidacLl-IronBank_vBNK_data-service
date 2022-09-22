@@ -38,6 +38,7 @@ public interface VBUserService {
     boolean existsByUsername(String username);
 
     AdminDTO getAdminFromToken(AccessToken accessToken);
+    AccountHolderDTO getOwnerFromToken(AccessToken accessToken, boolean primary);
 
     ThirdPartyDTO getThirdPartyFromAccountNumber(String accountNumber);
 }

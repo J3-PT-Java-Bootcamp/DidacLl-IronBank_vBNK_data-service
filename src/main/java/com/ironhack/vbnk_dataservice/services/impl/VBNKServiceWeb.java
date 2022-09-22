@@ -86,10 +86,7 @@ public class VBNKServiceWeb implements VBNKService {
                 prevDestAmount= accountService.update(destAccount.setAmount(prevDestAmount
                         .add(request.getAmount())), destAccount.getId()).getAmount();
                 response.setDestination(true).setDstBalance(prevDestAmount);
-                sendNotification(new NotificationRequest("New income",
-                        "You have a new income in your account.",
-                        INCOMING,
-                        destAccount.getPrimaryOwner().getId()));
+
             }
         } else {
             ThirdPartyDTO tpUser = null;
@@ -107,10 +104,6 @@ public class VBNKServiceWeb implements VBNKService {
                 prevDestAmount= accountService.update(destAccount.setAmount(prevDestAmount
                         .add(request.getAmount())), destAccount.getId()).getAmount();
                 response.setDestination(true).setDstBalance(prevDestAmount);
-                sendNotification(new NotificationRequest("New income",
-                        "You have a new income in your account.",
-                        INCOMING,
-                        destAccount.getPrimaryOwner().getId()));
             }
         }
         return response;

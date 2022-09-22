@@ -5,6 +5,7 @@ import com.ironhack.vbnk_dataservice.data.http.request.NewAccountRequest;
 import com.ironhack.vbnk_dataservice.data.http.views.StatementView;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.naming.ServiceUnavailableException;
 import java.util.List;
@@ -29,4 +30,6 @@ public interface VBAccountService {
     StatementView[] getStatements(int i, String accountRef, Authentication auth) throws ServiceUnavailableException, HttpResponseException;
 
     void bankUpdateAccounts(String id) throws HttpResponseException, ServiceUnavailableException;
+
+    WebClient getTransactionClient() throws ServiceUnavailableException;
 }

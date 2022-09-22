@@ -12,5 +12,6 @@ public class NotificationRequest {
     private String title;
     private  String message;
     private NotificationType type;
-    private  String ownerId;
+    private  String accountRef;
+    private String transactionId;
 }
