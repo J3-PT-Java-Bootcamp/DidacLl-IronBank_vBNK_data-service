@@ -1,6 +1,7 @@
 package com.ironhack.vbnk_dataservice.services.impl;
 
 
+import com.ironhack.vbnk_dataservice.data.AccountState;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.CheckingAccount;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.CreditAccount;
 import com.ironhack.vbnk_dataservice.data.dao.accounts.SavingsAccount;
@@ -22,6 +23,7 @@ import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -384,6 +386,22 @@ public class VBAccountServiceImpl implements VBAccountService {
     public WebClient getTransactionClient() throws ServiceUnavailableException {
         return client=checkClientAvailable(TRANSACTION_SERVICE,client);
     }
+
+    @Override
+    public void toggleFreezeAccount(String accountRef) throws HttpResponseException {
+        var acc= getAccount(accountRef);
+        if(acc!=null) {
+            if(acc.getState().equals(AccountState.ACTIVE)) acc.setState(AccountState.FROZEN);
+            else if(acc.getState().equals(AccountState.FROZEN)) acc.setState(AccountState.ACTIVE);
+            else throw new HttpResponseException(I_AM_A_TEAPOT.value(), I_AM_A_TEAPOT.getReasonPhrase());
+            if(acc instanceof CheckingDTO) checkingRepository.save(CheckingAccount.fromDTO((CheckingDTO)acc));
+            else if(acc instanceof SavingsDTO) savingsAccountRepository.save(SavingsAccount.fromDTO((SavingsDTO)acc));
+            else if(acc instanceof CreditDTO) creditRepository.save(CreditAccount.fromDTO((CreditDTO)acc));
+            else if(acc instanceof StudentCheckingDTO) studentRepository.save(StudentCheckingAccount.fromDTO((StudentCheckingDTO)acc));
+            else throw new HttpResponseException(I_AM_A_TEAPOT.value(), I_AM_A_TEAPOT.getReasonPhrase());
+        }
+    }
+
     private WebClient checkClientAvailable(String[] service, WebClient webClient) throws ServiceUnavailableException {
         try {
             try {

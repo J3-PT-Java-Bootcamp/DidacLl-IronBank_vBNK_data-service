@@ -29,12 +29,15 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Service
 public class VBNKServiceWeb implements VBNKService {
-    @Autowired
-    private VBUserService userService;
-    @Autowired
-    private VBAccountService accountService;
-    @Autowired
-    private NotificationService notificationService;
+    private final VBUserService userService;
+    private final VBAccountService accountService;
+    private final NotificationService notificationService;
+
+    public VBNKServiceWeb(VBUserService userService, VBAccountService accountService, NotificationService notificationService) {
+        this.userService = userService;
+        this.accountService = accountService;
+        this.notificationService = notificationService;
+    }
 
     @Override
     public ResponseEntity<TransferResponse> transferFunds(TransferRequest request) throws HttpResponseException {
@@ -117,8 +120,32 @@ public class VBNKServiceWeb implements VBNKService {
 
     @Override
     public ResponseEntity<TransferResponse> sendBlindTransfer(TransferRequest request) throws HttpResponseException {
-        // TODO: 17/09/2022
-        return null;
+        var response = new TransferResponse().setRequest(request);
+        List<VBError> errors = response.getErrors()==null? new ArrayList<>():response.getErrors();
+            AccountDTO sourceAccount = null;
+            try {
+                sourceAccount = accountService.getAccount(request.getFromAccount());
+            } catch (HttpResponseException e) {
+                errors.add(VBError.ACCOUNT_NOT_FOUND);
+            }
+            if (sourceAccount != null && sourceAccount.getState().equals(AccountState.ACTIVE)) {
+                BigDecimal prevSrcAmount = sourceAccount.getAmount();
+                if (prevSrcAmount.compareTo(request.getAmount()) >= 0) {
+                    try {
+                        prevSrcAmount= accountService.update(sourceAccount.setAmount(prevSrcAmount
+                                .subtract(request.getAmount())), sourceAccount.getId()).getAmount();
+                        response.setSource(true).setSrcBalance(prevSrcAmount);
+                        // TODO: 22/09/2022 Connexion with third party service
+                    } catch (HttpResponseException e) {
+                        errors.add(VBError.FATAL_ERROR);
+                    }
+                } else errors.add(VBError.NOT_ENOUGH_FOUNDS);
+            } else {
+                errors.add(VBError.UNAVAILABLE_ACCOUNT);
+            }
+
+        response.setErrors(errors);
+        return ResponseEntity.ok(response);
     }
     @Override
     public void bankUpdateUsers() throws HttpResponseException, ServiceUnavailableException {

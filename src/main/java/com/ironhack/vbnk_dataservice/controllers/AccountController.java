@@ -16,6 +16,7 @@ import org.apache.http.client.HttpResponseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,6 +36,11 @@ public interface AccountController {
     @Tag(name = "Main operations")
     @Operation(summary = "GET USER ACCOUNTS: Get all user accounts by it's ID or AccountNumber")
     ResponseEntity<List<AccountDTO>> getAllUserAccounts(String userId);
+
+    @Tag(name = "Admin operations")
+    @Operation(summary = "TOGGLE FROZEN ACCOUNT: Toggle account state between frozen and active")
+    @PostMapping("/auth/state")
+    void toggleFreezeAccount(@RequestBody String accountRef) throws HttpResponseException;
 
     //------------------------------------------------------------------------------CREATE END POINTS
     @Tag(name = "Admin operations")

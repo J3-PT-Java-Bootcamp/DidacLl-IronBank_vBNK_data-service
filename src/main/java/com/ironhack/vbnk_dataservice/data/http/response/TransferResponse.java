@@ -2,6 +2,8 @@ package com.ironhack.vbnk_dataservice.data.http.response;
 
 import com.ironhack.vbnk_dataservice.data.http.request.TransferRequest;
 import com.ironhack.vbnk_dataservice.utils.VBError;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Hidden
+@Schema(hidden = true)
 public class TransferResponse {
 
     private TransferRequest request;

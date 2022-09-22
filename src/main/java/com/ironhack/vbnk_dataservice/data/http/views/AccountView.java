@@ -1,6 +1,8 @@
 package com.ironhack.vbnk_dataservice.data.http.views;
 
 import com.ironhack.vbnk_dataservice.data.dto.accounts.AccountDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +10,9 @@ import lombok.Setter;
 
 @Getter @Setter
 @NoArgsConstructor
+
+@Schema(name = "Account View")
+@Tag(name = "HTTP Views")
 public class AccountView {
     private String accountNumber,currentBalance,accountType,accountId,accountState;
     private StatementView[] statements;

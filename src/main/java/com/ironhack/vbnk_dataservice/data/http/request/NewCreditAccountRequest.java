@@ -1,6 +1,8 @@
 package com.ironhack.vbnk_dataservice.data.http.request;
 
 import com.ironhack.vbnk_dataservice.data.dao.accounts.CreditAccount;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
+@Schema(name = "New Credit Account Request")
+@Tag(name = "HTTP Requests")
 public class NewCreditAccountRequest extends NewAccountRequest {
     @DecimalMax(value = "100000.00",message = "Credit Limit must be between 100,000.00 and 100.00")
     @DecimalMin(value = "100",message = "Credit Limit must be between 100,000.00 and 100.00")

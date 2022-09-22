@@ -1,5 +1,6 @@
 package com.ironhack.vbnk_dataservice.data.http.request;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.Currency;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Hidden
 public class TransferRequest {
 
     private String fromAccount, orderingUserId, toAccount;

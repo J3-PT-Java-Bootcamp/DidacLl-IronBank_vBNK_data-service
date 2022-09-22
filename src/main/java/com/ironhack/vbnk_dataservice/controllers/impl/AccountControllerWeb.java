@@ -14,8 +14,6 @@ import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
 import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.tags.Tags;
 import org.apache.http.client.HttpResponseException;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
@@ -26,7 +24,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.Name;
 import javax.naming.ServiceUnavailableException;
 import javax.validation.Valid;
 import java.math.BigDecimal;
@@ -37,10 +34,13 @@ import java.util.List;
 @Validated
 public class AccountControllerWeb implements AccountController {
 
-    @Autowired
-    VBAccountService service;
-    @Autowired
-    VBUserService userService;
+    private final VBAccountService service;
+    private final VBUserService userService;
+
+    public AccountControllerWeb(VBAccountService service, VBUserService userService) {
+        this.service = service;
+        this.userService = userService;
+    }
 
 
     @Override @GetMapping("/auth/accounts")
@@ -70,8 +70,13 @@ public class AccountControllerWeb implements AccountController {
         service.delete(id);
     }
 
-
+    @Override @PostMapping("/auth/state")
+    public void toggleFreezeAccount(@RequestBody String accountRef) throws HttpResponseException {
+     service.toggleFreezeAccount(accountRef);
+    }
     //------------------------------------------------------------------------------------------------NEW METHODS
+
+
     @Override @PatchMapping("/auth/accounts/savings/new")
     public String createSavingsAccount(Authentication auth,@Valid  @RequestBody NewSavingsAccountRequest request) throws HttpResponseException {
         checkOwnerAndAdmin(auth, request);

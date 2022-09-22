@@ -8,6 +8,7 @@ import com.ironhack.vbnk_dataservice.data.http.response.DataResponse;
 import com.ironhack.vbnk_dataservice.data.http.response.TransferResponse;
 import com.ironhack.vbnk_dataservice.services.VBNKService;
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,25 +20,39 @@ import javax.naming.ServiceUnavailableException;
 @RestController
 @RequestMapping("/v1/data")
 public class VBNKControllerOpen implements VBNKController {
-    @Autowired
-    VBNKService service;
+    private final VBNKService service;
 
-    @Hidden
-    @Override
+    public VBNKControllerOpen(VBNKService service) {
+        this.service = service;
+    }
+
+    @Hidden @Override
     @PostMapping("/main/tf/send")
     public ResponseEntity<TransferResponse> transferFunds(Authentication auth, @RequestBody TransferRequest request) throws HttpResponseException {
         return service.transferFunds(request);
     }
 
-    @Hidden
-    @Override
+    @Hidden    @Override
     @PostMapping("/client/tf/receive")
     public ResponseEntity<TransferResponse> transferFunds_destinationLevel(@RequestBody ThirdPartyTransferRequest request) throws HttpResponseException {
         return service.receiveTransfer(request);
     }
 
-    @Hidden
-    @Override
+
+    @PostMapping("/auth/in")
+    @Override @Tag(name = "Admin operations")
+    public ResponseEntity<TransferResponse> transferFundsFromBank(@RequestBody TransferRequest request) throws HttpResponseException {
+        // TODO: 22/09/2022
+        return service.receiveTransfer(request);
+    }
+    @Override @Tag(name = "Admin operations")
+    @PostMapping("/auth/out")
+    public ResponseEntity<TransferResponse> transferFundsToBank(@RequestBody TransferRequest request) throws HttpResponseException {
+        // TODO: 22/09/2022
+        return service.sendBlindTransfer(request);
+    }
+
+    @Hidden @Override
     @PostMapping("/client/notif")
     public ResponseEntity<DataResponse> sendNotification(@RequestBody NotificationRequest request) {
         return service.sendNotification(request);

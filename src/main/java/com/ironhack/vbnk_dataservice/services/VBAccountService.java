@@ -32,4 +32,6 @@ public interface VBAccountService {
     void bankUpdateAccounts(String id) throws HttpResponseException, ServiceUnavailableException;
 
     WebClient getTransactionClient() throws ServiceUnavailableException;
+
+    void toggleFreezeAccount(String accountRef) throws HttpResponseException;
 }
