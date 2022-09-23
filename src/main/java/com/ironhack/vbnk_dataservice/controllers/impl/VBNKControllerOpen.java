@@ -10,7 +10,6 @@ import com.ironhack.vbnk_dataservice.services.VBNKService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.http.client.HttpResponseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -59,8 +58,8 @@ public class VBNKControllerOpen implements VBNKController {
     }
     @Hidden @Override
     @GetMapping("/client/update")
-    public void startBankUpdate() throws HttpResponseException, ServiceUnavailableException {
-        service.bankUpdateUsers();
+    public String startBankUpdate() throws HttpResponseException, ServiceUnavailableException {
+        return service.bankUpdateUsers();
     }
 
 

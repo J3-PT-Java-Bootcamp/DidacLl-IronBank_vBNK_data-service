@@ -29,6 +29,5 @@ public interface VBNKController {
     ResponseEntity<DataResponse> sendNotification(NotificationRequest request);
 
     @Hidden
-    @PostMapping("client/update")
-    void startBankUpdate() throws HttpResponseException, ServiceUnavailableException;
+    String startBankUpdate() throws HttpResponseException, ServiceUnavailableException;
 }

@@ -6,7 +6,6 @@ import com.ironhack.vbnk_dataservice.data.dao.Notification;
 import com.ironhack.vbnk_dataservice.data.dao.users.VBUser;
 import com.ironhack.vbnk_dataservice.data.dto.NotificationDTO;
 import com.ironhack.vbnk_dataservice.data.http.request.NotificationRequest;
-import com.ironhack.vbnk_dataservice.data.http.request.TransferRequest;
 import com.ironhack.vbnk_dataservice.repositories.NotificationRepository;
 import com.ironhack.vbnk_dataservice.services.NotificationService;
 import com.ironhack.vbnk_dataservice.services.VBAccountService;
@@ -101,7 +100,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void confirmNotification(Authentication auth, String sK, Long id) throws ServiceUnavailableException {
+    public void confirmNotification(Authentication auth, Long id) throws ServiceUnavailableException {
         var notif= repository.findById(id).orElseThrow();
         RefreshableKeycloakSecurityContext context = (RefreshableKeycloakSecurityContext) auth.getCredentials();
         AccessToken accessToken = context.getToken();

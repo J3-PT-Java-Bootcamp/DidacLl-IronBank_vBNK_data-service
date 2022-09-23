@@ -36,5 +36,5 @@ public interface NotificationController {
 
     @Tag(name = "Main operations")
     @Operation(summary = "CONFIRM NOTIFICATION")
-    public void confirmNotification(Authentication auth,String sK,Long id) throws HttpResponseException, ServiceUnavailableException;
+    void confirmNotification(Authentication auth,Long id) throws HttpResponseException, ServiceUnavailableException;
 }

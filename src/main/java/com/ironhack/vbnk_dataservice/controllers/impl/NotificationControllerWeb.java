@@ -66,7 +66,8 @@ public class NotificationControllerWeb implements NotificationController {
     }
 
     @Override
-    public void confirmNotification(Authentication auth,String sK,Long id) throws HttpResponseException, ServiceUnavailableException {
-        service.confirmNotification(auth,sK,id);
+    @GetMapping("/main/notifications/conf")
+    public void confirmNotification(Authentication auth,@RequestParam Long id) throws HttpResponseException, ServiceUnavailableException {
+        service.confirmNotification(auth,id);
     }
 }

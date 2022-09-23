@@ -23,5 +23,5 @@ public interface NotificationService {
 
     void delete(Long id);
 
-    void confirmNotification(Authentication auth, String sK, Long id) throws ServiceUnavailableException;
+    void confirmNotification(Authentication auth, Long id) throws ServiceUnavailableException;
 }

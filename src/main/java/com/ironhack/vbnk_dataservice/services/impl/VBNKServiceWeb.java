@@ -14,7 +14,6 @@ import com.ironhack.vbnk_dataservice.services.VBNKService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
 import com.ironhack.vbnk_dataservice.utils.VBError;
 import org.apache.http.client.HttpResponseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ironhack.vbnk_dataservice.data.NotificationType.INCOMING;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Service
@@ -148,11 +146,16 @@ public class VBNKServiceWeb implements VBNKService {
         return ResponseEntity.ok(response);
     }
     @Override
-    public void bankUpdateUsers() throws HttpResponseException, ServiceUnavailableException {
-        var monsterList= userService.getAllAccountHolder();
-        for(var user: monsterList){
-            notificationService.bankUpdateNotification(user.getId());
-            accountService.bankUpdateAccounts(user.getId());
+    public String bankUpdateUsers() throws HttpResponseException, ServiceUnavailableException {
+        try {
+            var monsterList = userService.getAllAccountHolder();
+            for (var user : monsterList) {
+                notificationService.bankUpdateNotification(user.getId());
+                accountService.bankUpdateAccounts(user.getId());
+            }
+            return "OK";
+        }catch (Throwable err){
+            return err.getMessage();
         }
     }
     @Override

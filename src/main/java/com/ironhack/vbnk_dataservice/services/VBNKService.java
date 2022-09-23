@@ -18,7 +18,7 @@ public interface VBNKService {
     ResponseEntity<TransferResponse> sendBlindTransfer(TransferRequest request) throws HttpResponseException;
 
 
-    void bankUpdateUsers() throws HttpResponseException, ServiceUnavailableException;
+    String bankUpdateUsers() throws HttpResponseException, ServiceUnavailableException;
 
     ResponseEntity<DataResponse> sendNotification(NotificationRequest request);
 

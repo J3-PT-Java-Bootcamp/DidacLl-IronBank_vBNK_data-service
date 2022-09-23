@@ -19,6 +19,7 @@ import com.ironhack.vbnk_dataservice.repositories.accounts.SavingsAccountReposit
 import com.ironhack.vbnk_dataservice.repositories.accounts.StudentCheckingAccountRepository;
 import com.ironhack.vbnk_dataservice.services.VBAccountService;
 import com.ironhack.vbnk_dataservice.services.VBUserService;
+import com.ironhack.vbnk_dataservice.utils.Money;
 import com.ironhack.vbnk_dataservice.utils.VBNKConfig;
 import org.apache.http.client.HttpResponseException;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -321,7 +322,7 @@ public class VBAccountServiceImpl implements VBAccountService {
 
             } else if (acc instanceof CheckingDTO) {
                 //------------------------------------------------------Apply penaltyFee
-                if (acc.getAmount().compareTo(((CheckingDTO) acc).getMinimumBalance()) < 0) {
+                if (acc.getAmount().compareTo(VBNK_CHECKING_MIN_BALANCE.getAmount()) < 0) {
                     BigDecimal fee = ((CheckingDTO) acc).getPenaltyFee();
                     checkingRepository.save(
                             CheckingAccount.fromDTO((CheckingDTO) acc.setAmount(
@@ -341,6 +342,9 @@ public class VBAccountServiceImpl implements VBAccountService {
 
             } else if (acc instanceof SavingsDTO) {
                 //----------------------------------------------------Apply penaltyFee
+                if(((SavingsDTO) acc).getMinimumBalance()==null)
+                    ((SavingsDTO) acc).setMinimumBalance(new BigDecimal(VBNK_MAX_SAVINGS_MINIMUM_BALANCE));
+
                 if (acc.getAmount().compareTo(((SavingsDTO) acc).getMinimumBalance()) < 0) {
                     BigDecimal fee = ((SavingsDTO) acc).getPenaltyFee();
                     savingsAccountRepository.save(
