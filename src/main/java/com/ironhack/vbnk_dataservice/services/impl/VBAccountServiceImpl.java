@@ -37,6 +37,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -244,7 +245,7 @@ public class VBAccountServiceImpl implements VBAccountService {
     @Override
     public boolean isOwnedBy(AccountDTO acc, String userID) {
         return acc.getPrimaryOwner().getId().equalsIgnoreCase(userID)
-                || acc.getSecondaryOwner().getId().equalsIgnoreCase(userID);
+                || (acc.getSecondaryOwner()!=null&&acc.getSecondaryOwner().getId().equalsIgnoreCase(userID));
     }
 
     @Override
@@ -261,16 +262,31 @@ public class VBAccountServiceImpl implements VBAccountService {
         } catch (ServiceUnavailableException e) {
             throw new ServiceUnavailableException();
         }
+        String accID="";
         if (accountRef.substring(0, 8).equalsIgnoreCase(VBNK_INTERNATIONAL_CODE + VBNK_ENTITY_CODE))
-            accountRef = getAccount(accountRef).getId();
-        var res = client.post()
+            accID = getAccount(accountRef).getId();
+        else{
+            accID=accountRef;
+            accountRef=getAccount(accountRef).getAccountNumber();
+        }
+        StatementView[] res,res2;
+        res = client.post()
                 .uri("/v1/trans/main/statements/0")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + VBNKConfig.getTokenFromAuth(auth))
                 .body(Mono.just(accountRef), String.class)
                 .retrieve().bodyToMono(StatementView[].class)
                 .block();
-        return res;
+        res2 = client.post()
+                .uri("/v1/trans/main/statements/0")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + VBNKConfig.getTokenFromAuth(auth))
+                .body(Mono.just(accID), String.class)
+                .retrieve().bodyToMono(StatementView[].class)
+                .block();
+        var list= List.of(res);
+        Collections.addAll(list, res2);
+        return list.toArray(new StatementView[0]);
     }
 
     @Override

@@ -66,21 +66,17 @@ public interface UserController {
 
     //------------------------------------------------------------------------------CREATE END POINTS
     @Hidden
-    @PostMapping("/client/users/new/account-holder")
     @ResponseStatus(HttpStatus.CREATED)
     String createAccountHolder(@RequestBody NewAccountHolderRequest request) throws HttpResponseException;
 
     @Hidden
-    @PostMapping("/dev/users/new/admin")
     @ResponseStatus(HttpStatus.CREATED)
     String createAdmin(@RequestBody NewAdminRequest request) throws HttpResponseException;
 
     @Operation(summary = "CREATE THIRD PARTY: Create new ThirdParty user")
-    @PostMapping("/auth/users/new/third-party")
     @ResponseStatus(HttpStatus.CREATED)
     void createThirdParty(@RequestBody ThirdPartyDTO dto, @RequestParam String id) throws HttpResponseException;
 
-    @PatchMapping("/dev/users/update/admin")
     @ResponseStatus(HttpStatus.OK)
     void updateAdmin(@RequestParam String id, @RequestBody AdminDTO dto) throws HttpResponseException;
 

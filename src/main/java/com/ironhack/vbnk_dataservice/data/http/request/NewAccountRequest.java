@@ -23,5 +23,4 @@ public abstract class NewAccountRequest {
     private String secondaryOwner;
     private String administratedBy;
 
-
 }

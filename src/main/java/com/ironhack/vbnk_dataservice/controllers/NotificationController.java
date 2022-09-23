@@ -27,7 +27,7 @@ public interface NotificationController {
     ResponseEntity<List<NotificationDTO>> getPaymentConfirm(String id);
 
     //------------------------------------------------------------------------------CREATE END POINTS
-    void createNotification(@RequestBody NotificationRequest dto) throws HttpResponseException;
+    String createNotification(@RequestBody NotificationRequest dto) throws HttpResponseException;
 
     //------------------------------------------------------------------------------DELETE END POINTS
     @Tag(name = "Main operations")

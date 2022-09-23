@@ -7,7 +7,6 @@ import com.ironhack.vbnk_dataservice.services.NotificationService;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpResponseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -56,8 +55,8 @@ public class NotificationControllerWeb implements NotificationController {
     @Hidden
     @Override
     @PostMapping("/client/notifications")
-    public void createNotification(@RequestBody NotificationRequest request) throws HttpResponseException {
-        service.create(request);
+    public String createNotification(@RequestBody NotificationRequest request) throws HttpResponseException {
+        return service.create(request).getTitle();
     }
 
     @Override

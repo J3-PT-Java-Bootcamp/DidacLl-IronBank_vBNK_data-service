@@ -23,6 +23,4 @@ public class TransferRequest {
     private Currency currency;
     String senderDisplayName;
     String concept;
-
-
 }

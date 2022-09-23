@@ -12,7 +12,7 @@ import lombok.Setter;
 public class NotificationRequest {
     private String title;
     private  String message;
-    private NotificationType type;
+    private String type;
     private  String accountRef;
     private String transactionId;
 }

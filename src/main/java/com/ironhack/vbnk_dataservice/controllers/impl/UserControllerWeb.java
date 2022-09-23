@@ -105,7 +105,7 @@ public class UserControllerWeb implements UserController {
         return service.create(AccountHolderDTO.fromRequest(request)).getId();
     }
     @Hidden @Override
-    @PostMapping("/dev/users/new/admin")
+    @PostMapping("/client/users/new/admin")
     @ResponseStatus(HttpStatus.CREATED)
     public String createAdmin(@RequestBody NewAdminRequest request) throws HttpResponseException {
         if(service.existsById(request.getId())||service.existsByUsername(request.getUserName()))throw new HttpResponseException(409,"User already exists" );

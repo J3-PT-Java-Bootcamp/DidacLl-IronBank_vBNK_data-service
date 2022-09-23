@@ -76,7 +76,9 @@ public class NotificationServiceImpl implements NotificationService {
         if(!userService.existsById(request.getAccountRef()))
             request.setAccountRef(accountService.getAccount(request.getAccountRef()).getPrimaryOwner().getId());
         return NotificationDTO.fromEntity(repository.save(
-                new Notification().setType(request.getType())
+
+
+                new Notification().setType(NotificationType.valueOf(request.getType()))
                         .setMessage(request.getMessage()).setTitle(request.getTitle())
                         .setState(NotificationState.PENDING)
                         .setOwner(VBUser.fromUnknownDTO(userService.getUnknown(request.getAccountRef())))
